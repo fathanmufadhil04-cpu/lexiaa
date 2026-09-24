@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090d"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Lexiaa — Ruang Pribadimu v20</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08090d;--panel:rgba(20,22,31,.68);--panel2:rgba(255,255,255,.055);--text:#f5f7fb;--muted:#8e96a8;--line:rgba(255,255,255,.09);--accent:#9d8cff;--accent2:#6ddcff;--danger:#ff6f91;--shadow:0 22px 70px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"DM Sans",ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--text)}body{overflow-x:hidden}button,input,textarea,select{font:inherit}button{cursor:pointer}.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(circle at 20% 10%,rgba(125,100,255,.16),transparent 30%),radial-gradient(circle at 90% 65%,rgba(70,210,255,.11),transparent 28%)}.orb{position:absolute;width:45vw;height:45vw;border-radius:50%;filter:blur(75px);opacity:.2;animation:float 18s ease-in-out infinite alternate}.o1{background:#765cff;left:-15vw;top:-15vw}.o2{background:#35c8ff;right:-18vw;bottom:-12vw;animation-delay:-8s}@keyframes float{to{transform:translate(5vw,3vw) scale(1.08)}}
+.app{max-width:1120px;margin:auto;padding:20px 18px 36px}.top{height:62px;display:flex;align-items:center;justify-content:space-between}.brand{position:relative;font-family:"Outfit",sans-serif;font-weight:800;letter-spacing:-.055em;font-size:28px;background:linear-gradient(100deg,#fff 5%,#bda9ff 42%,#73e4ff 72%,#fff 95%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:brandShimmer 5s linear infinite;text-shadow:0 0 28px rgba(157,140,255,.28)}.brand span{color:#a98cff;opacity:1;text-shadow:0 0 14px rgba(157,140,255,.9)}.brand:after{content:"✦";position:absolute;right:-17px;top:-9px;font-size:10px;color:#8feaff;animation:twinkle 2.2s ease-in-out infinite}@keyframes brandShimmer{to{background-position:220% center}}@keyframes twinkle{50%{transform:scale(1.6) rotate(18deg);opacity:.45}}.profileBtn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.055);min-width:44px;height:42px;border-radius:999px;overflow:hidden;padding:0 14px;color:#f7f8fb;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:650;font-size:13px;letter-spacing:-.01em;box-shadow:0 8px 30px rgba(0,0,0,.12);transition:.2s ease;backdrop-filter:blur(18px)}.profileBtn:hover{transform:translateY(-1px);background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2)}.profileBtn img{width:30px;height:30px;border-radius:50%;object-fit:cover;margin:-8px}.profileLabel{white-space:nowrap}.profileDot{width:7px;height:7px;border-radius:50%;background:#9ca3af;box-shadow:0 0 0 3px rgba(156,163,175,.12)}.hero{padding:68px 0 48px;max-width:850px}.hero:after{content:"";display:block;width:110px;height:1px;margin-top:34px;background:linear-gradient(90deg,rgba(255,255,255,.3),transparent) }.eyebrow{color:#aeb6c9;font-size:12px;letter-spacing:.16em;text-transform:uppercase}.hero h1{font-family:"Outfit",sans-serif;font-weight:700;background:linear-gradient(105deg,#fff 15%,#d8ceff 48%,#8beaff 82%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 10px 45px rgba(130,110,255,.14);font-size:clamp(42px,8vw,78px);line-height:.94;letter-spacing:-.065em;margin:14px 0 16px;max-width:780px}.hero p{max-width:580px;color:var(--muted);font-size:16px;line-height:1.65;margin:0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{position:relative;min-height:190px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));backdrop-filter:blur(20px);border-radius:30px;padding:26px;box-shadow:var(--shadow);overflow:hidden;transition:.25s transform,.25s border-color;isolation:isolate}.card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0,rgba(255,255,255,.08),transparent 34%);pointer-events:none;z-index:-1}.card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.17)}.card.wide{grid-column:1/-1;min-height:160px}.icon{font-size:28px;margin-bottom:28px}.card h2{font-family:"Outfit",sans-serif;font-weight:600;margin:0;font-size:25px;letter-spacing:-.035em}.card .icon{filter:drop-shadow(0 0 12px rgba(150,130,255,.28))}.card p{color:var(--muted);margin:8px 0 0;line-height:1.5;font-size:13px}.arrow{position:absolute;right:22px;bottom:20px;color:#aeb6c9}.nav{display:flex;gap:7px;margin-top:28px;padding:5px;border:1px solid var(--line);background:rgba(10,11,16,.55);border-radius:18px;width:max-content}.nav button{border:0;background:transparent;color:var(--muted);padding:10px 14px;border-radius:13px}.nav button.active{background:rgba(255,255,255,.08);color:var(--text)}
+.view{display:none}.view.active{display:block}.viewHead{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:30px 0 18px}.viewHead h2{font-size:34px;letter-spacing:-.05em;margin:0}.viewHead p{color:var(--muted);margin:6px 0 0;font-size:13px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);border-radius:13px;padding:10px 13px}.btn.primary{background:var(--text);color:#0a0b0f;border-color:transparent;font-weight:700}.btn.danger{color:#ff9eb2}.btn:disabled{opacity:.45;cursor:not-allowed}.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.photo{aspect-ratio:1;border-radius:17px;overflow:hidden;background:#11141b;position:relative}.photo img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}.photo .dl{position:absolute;left:7px;top:7px;width:30px;height:30px;border:0;border-radius:50%;background:#0009;color:#fff;text-decoration:none;display:grid;place-items:center}.photo .x{position:absolute;right:7px;top:7px;width:30px;height:30px;border:0;border-radius:50%;background:#0009;color:#fff}.empty{min-height:250px;grid-column:1/-1;display:grid;place-items:center;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:22px;padding:30px}.list{display:grid;gap:10px}.musicItem{display:flex;align-items:center;gap:13px;border:1px solid var(--line);background:var(--panel);padding:13px;border-radius:17px}.musicIcon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--panel2)}.musicInfo{min-width:0;flex:1}.musicInfo b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.musicInfo small{color:var(--muted)}.play{border:0;border-radius:12px;background:rgba(255,255,255,.08);color:#fff;width:42px;height:42px}.games{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.game{border:1px solid var(--line);background:var(--panel);border-radius:24px;padding:22px}.gameScore{font-size:48px;font-weight:800;letter-spacing:-.06em}.game button{margin-top:15px}.coinPill{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid rgba(255,215,100,.18);background:rgba(255,200,70,.07);border-radius:999px;color:#ffe7a0;font-weight:700;font-size:12px}.gameHero{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center;margin-bottom:18px}.characterStage{height:150px;border-radius:28px;border:1px solid rgba(180,160,255,.18);background:radial-gradient(circle at 50% 25%,rgba(180,160,255,.2),transparent 55%),linear-gradient(145deg,#171927,#0c0e15);display:grid;place-items:center;box-shadow:inset 0 1px rgba(255,255,255,.06),0 25px 60px rgba(0,0,0,.25)}.characterFace{font-size:76px;filter:drop-shadow(0 15px 24px rgba(0,0,0,.35))}.gameStats{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.avatarShop{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.avatarCard{position:relative;border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:18px;padding:12px;text-align:center;color:#fff;cursor:pointer;transition:.2s}.avatarCard:hover{transform:translateY(-3px);border-color:rgba(180,160,255,.32)}.avatarCard.selected{border-color:rgba(157,220,255,.6);box-shadow:0 0 0 2px rgba(157,220,255,.1),0 15px 40px rgba(0,0,0,.22)}.avatarEmoji{font-size:42px;line-height:1.1;margin-bottom:7px}.avatarName{font-size:12px;font-weight:700}.avatarPrice{font-size:11px;color:#aeb6c9;margin-top:4px}.avatarLock{position:absolute;top:8px;right:8px;font-size:12px}.gameNote{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5}.profile{display:grid;grid-template-columns:260px 1fr;gap:18px}.profileCard,.settings{border:1px solid var(--line);background:var(--panel);border-radius:24px;padding:22px}.avatarBig{width:110px;height:110px;border-radius:50%;object-fit:cover;background:#161925;display:block;margin-bottom:16px}.field{display:grid;gap:7px;margin:13px 0}.field label{font-size:12px;color:var(--muted)}.field input,.field select{width:100%;padding:12px 13px;border-radius:13px;border:1px solid var(--line);background:#0d0f15;color:#fff;outline:none}.themeGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.theme{height:72px;border-radius:16px;border:1px solid var(--line);padding:8px;text-align:left;color:#fff}.theme small{display:block;margin-top:28px}.t-obsidian{background:#090a0f}.t-aurora{background:linear-gradient(135deg,#0c1020,#27215b)}.t-pearl{background:#e9ebf0;color:#101217}.t-midnight{background:#081325}.t-rosewood{background:#211017}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal.open{display:flex}.lightbox img{max-width:92vw;max-height:78vh;object-fit:contain;border-radius:18px}.lightbox .modalCard{width:min(1100px,96vw);background:#08090d;padding:12px}.lightboxActions{display:flex;justify-content:center;gap:8px;margin-top:10px}.modalCard{width:min(460px,100%);border:1px solid var(--line);background:#11131b;border-radius:25px;padding:24px;box-shadow:0 30px 100px #000b}.modalCard h2{margin:0 0 6px}.muted{color:var(--muted);font-size:13px}.close{float:right;border:0;background:transparent;color:var(--muted);font-size:22px}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#f5f7fb;color:#090a0d;padding:11px 15px;border-radius:14px;font-size:13px;z-index:30;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+body{transition:background .55s ease,color .35s ease}body .bg,body .orb,body .card,body .profileBtn,body .game,body .settings,body .profileCard{transition:background .65s ease,border-color .5s ease,box-shadow .65s ease,color .35s ease}body.pearl{--bg:#eef0f4;--text:#11131a;--muted:#646b78;--line:rgba(0,0,0,.1);--panel:rgba(255,255,255,.76);--panel2:rgba(0,0,0,.045);--accent:#6f5cff;--accent2:#21b9e8}body.pearl .bg{background:radial-gradient(circle at 18% 12%,rgba(111,92,255,.24),transparent 30%),radial-gradient(circle at 88% 68%,rgba(30,200,240,.2),transparent 30%)}body.pearl .orb{opacity:.28;filter:blur(85px)}body.pearl .modalCard{background:#fff;color:#111}body.pearl .field input,body.pearl .field select,body.pearl .tool textarea{background:#f4f5f7;color:#111}body.pearl .theme{color:#111}body.aurora{--accent:#8b7cff;--accent2:#55e7ff}body.aurora .bg{background:radial-gradient(circle at 15% 10%,rgba(70,90,255,.34),transparent 32%),radial-gradient(circle at 78% 42%,rgba(190,70,255,.25),transparent 30%),radial-gradient(circle at 85% 90%,rgba(40,220,255,.18),transparent 30%)}body.aurora .orb{opacity:.3;animation-duration:12s}body.aurora .card{box-shadow:0 22px 70px rgba(75,70,190,.22),inset 0 1px rgba(255,255,255,.08)}body.midnight{--accent:#4ea7ff;--accent2:#65d8ff}body.midnight .bg{background:radial-gradient(circle at 15% 5%,rgba(30,100,220,.28),transparent 30%),radial-gradient(circle at 90% 75%,rgba(20,190,255,.16),transparent 30%)}body.midnight .hero h1{background:linear-gradient(105deg,#fff 10%,#a9d6ff 55%,#5fe7ff 90%);-webkit-background-clip:text;background-clip:text}body.midnight .orb{opacity:.26}body.rosewood{--accent:#e48ba9;--accent2:#ffb0c8}body.rosewood .bg{background:radial-gradient(circle at 12% 8%,rgba(205,60,110,.3),transparent 30%),radial-gradient(circle at 82% 72%,rgba(245,100,150,.18),transparent 30%)}body.rosewood .card{box-shadow:0 22px 70px rgba(120,25,65,.25),inset 0 1px rgba(255,255,255,.06)}body.rosewood .hero h1{background:linear-gradient(105deg,#fff 10%,#ffd0df 55%,#ff91b6 90%);-webkit-background-clip:text;background-clip:text}body.theme-switching .bg{animation:themePulse .8s ease}@keyframes themePulse{0%{opacity:.55;transform:scale(.98)}55%{opacity:1;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
+@media(max-width:720px){.app{padding:12px 12px 28px}.hero{padding:45px 0 28px}.grid,.games{grid-template-columns:1fr}.card.wide{grid-column:auto}.gallery{grid-template-columns:repeat(2,1fr)}.profile{grid-template-columns:1fr}.themeGrid{grid-template-columns:repeat(2,1fr)}.avatarShop{grid-template-columns:repeat(2,1fr)}.gameHero{grid-template-columns:1fr}.nav{width:100%;justify-content:space-between}.nav button{flex:1;padding:9px 7px}.viewHead{align-items:start;flex-direction:column}.top{height:55px}}
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--display:'Space Grotesk',system-ui,sans-serif;--body:'DM Sans',system-ui,sans-serif;--glow:rgba(154,126,255,.34)}
+html,body{font-family:var(--body)}
+body{background:#05060a}
+.bg{background:radial-gradient(900px 500px at 8% -5%,rgba(116,91,255,.23),transparent 62%),radial-gradient(800px 500px at 96% 18%,rgba(57,211,255,.15),transparent 62%),radial-gradient(700px 500px at 48% 110%,rgba(196,74,255,.10),transparent 62%)}
+.bg:before,.bg:after{content:"";position:absolute;border-radius:50%;pointer-events:none}.bg:before{width:2px;height:2px;left:13%;top:22%;background:#fff;box-shadow:18vw 8vh #fff,34vw -4vh #fff,51vw 16vh #fff,72vw 5vh #fff,86vw 28vh #fff,24vw 62vh #fff,62vw 70vh #fff;opacity:.45}.bg:after{inset:0;background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,.018),transparent 45%);mix-blend-mode:screen}
+.app{max-width:1180px;padding:22px 20px 44px}
+.top{height:66px;position:sticky;top:0;z-index:5}
+.top:before{content:"";position:absolute;inset:-22px -20px;background:linear-gradient(180deg,rgba(5,6,10,.88),rgba(5,6,10,.5),transparent);backdrop-filter:blur(12px);z-index:-1}
+.brand{font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:-.075em;position:relative;color:#fff;text-shadow:0 0 30px rgba(150,120,255,.22)}
+.brand:after{content:"";position:absolute;left:2px;right:8px;bottom:-5px;height:2px;border-radius:99px;background:linear-gradient(90deg,#a88cff,#66ddff,transparent);filter:blur(.3px);animation:brandPulse 4s ease-in-out infinite}
+@keyframes brandPulse{50%{opacity:.45;transform:scaleX(.72);transform-origin:left}}
+.profileBtn{color:#f7f8fb !important;height:44px;padding:0 15px;border-radius:14px;background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.13);box-shadow:0 8px 40px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.07)}
+.profileBtn:hover{transform:translateY(-2px);box-shadow:0 12px 45px rgba(93,74,200,.2)}
+.hero{padding:92px 0 58px;position:relative}
+.hero:before{content:"";position:absolute;width:420px;height:260px;left:-80px;top:50px;background:radial-gradient(circle,rgba(132,104,255,.18),transparent 68%);filter:blur(22px);pointer-events:none}
+.eyebrow{font-family:var(--display);color:#b9b4d7;letter-spacing:.22em;font-size:11px;font-weight:600}
+.hero h1{font-family:var(--display);font-size:clamp(52px,8.7vw,108px);line-height:.86;letter-spacing:-.085em;margin:18px 0 24px;position:relative;z-index:1;background:linear-gradient(100deg,#fff 0%,#ddd9ff 34%,#a58bff 58%,#75e1ff 86%,#fff 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:titleShimmer 7s linear infinite}
+@keyframes titleShimmer{to{background-position:-220% center}}
+.hero h1 br{display:block}.hero p{font-size:16px;max-width:560px;color:#9da4b7}
+.grid{gap:16px}.card{min-height:205px;border-radius:28px;padding:28px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018));border-color:rgba(255,255,255,.085);box-shadow:0 28px 80px rgba(0,0,0,.25),inset 0 1px rgba(255,255,255,.045);transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s}
+.card:after{content:"";position:absolute;width:180px;height:180px;right:-70px;top:-80px;background:radial-gradient(circle,rgba(130,108,255,.22),transparent 68%);transition:.4s}.card:hover{transform:translateY(-7px) scale(1.01);border-color:rgba(177,157,255,.3);box-shadow:0 35px 90px rgba(0,0,0,.32),0 0 0 1px rgba(147,121,255,.06),inset 0 1px rgba(255,255,255,.08)}.card:hover:after{transform:scale(1.35)}.icon{font-size:27px;margin-bottom:32px;color:#d9d2ff;text-shadow:0 0 22px rgba(156,125,255,.55)}.card h2,.viewHead h2{font-family:var(--display);font-weight:600}.card h2{font-size:27px}.nav{background:rgba(8,9,14,.55);backdrop-filter:blur(18px);box-shadow:inset 0 1px rgba(255,255,255,.05),0 15px 40px rgba(0,0,0,.16)}
+.nav button{font-family:var(--display);color:#dfe4ef}
+.viewHead{margin:30px 0 22px}.viewHead h2{font-size:40px}.viewHead .backBtn{margin-bottom:12px}
+.backBtn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.045);color:#dce1ed;border-radius:12px;padding:8px 11px;font-size:12px;transition:.2s}.backBtn:hover{background:rgba(255,255,255,.085);transform:translateX(-2px)}
+.btn{font-family:var(--display);transition:.2s}.btn:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.18)}
+.modalCard{box-shadow:0 40px 120px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.04);background:linear-gradient(145deg,#151720,#0d0e14)}
+.viewHead{align-items:flex-end}.viewHead>div:first-child{display:flex;align-items:flex-end}.viewHeadMain{min-width:0}.viewHeadMain h2{margin:0}.viewHead>div:first-child:has(.backBtn){display:block;align-self:flex-start}.viewHead:has(.backBtn){display:grid;grid-template-columns:auto 1fr auto;align-items:end}.viewHead:has(.backBtn) .backBtn{margin:0 0 4px}.viewHead:has(.backBtn) .viewHeadMain p{margin-bottom:0}@media(max-width:720px){.viewHead:has(.backBtn){display:grid;grid-template-columns:1fr}.viewHead>div:first-child:has(.backBtn){margin-bottom:2px}.hero h1{font-family:"Outfit",sans-serif;font-weight:700;background:linear-gradient(105deg,#fff 15%,#d8ceff 48%,#8beaff 82%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 10px 45px rgba(130,110,255,.14);font-size:clamp(48px,14vw,78px)}.brand{font-size:26px}}
+/* Lexiaa Signature UI */
+.hero{position:relative}.hero:before{content:"✦  Ruangmu. Gayamu. Semua milikmu.";display:inline-flex;align-items:center;padding:8px 13px;border:1px solid rgba(160,140,255,.18);background:rgba(120,100,255,.06);border-radius:999px;color:#bcb4da;font-size:11px;letter-spacing:.04em;box-shadow:0 0 30px rgba(120,100,255,.08);margin-bottom:18px}.card{box-shadow:0 24px 80px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.05)}.card:after{content:"";position:absolute;left:-20%;top:-35%;width:55%;height:80%;background:radial-gradient(circle,rgba(180,160,255,.12),transparent 65%);transform:rotate(18deg);pointer-events:none}.eyebrow{font-family:"Outfit",sans-serif;font-weight:600}.viewHead h2,.modalCard h2{font-family:"Outfit",sans-serif;font-weight:650}.btn,.profileBtn,.nav button,.backBtn{font-family:"DM Sans",sans-serif;font-weight:600}
+
+/* Lexiaa v6.2 — visible card typography + reliable interactions */
+.card{color:#f7f8ff !important;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;appearance:none;outline:none}
+.card h2{color:#ffffff !important;background:linear-gradient(100deg,#ffffff 0%,#ddd5ff 48%,#9feaff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 22px rgba(157,140,255,.16)}
+.card p{color:#aeb6c9 !important}
+.card .arrow{color:#d9d2ff !important;text-shadow:0 0 12px rgba(157,140,255,.45)}
+.card:focus-visible{border-color:rgba(177,157,255,.55);box-shadow:0 0 0 3px rgba(157,140,255,.16),0 30px 90px rgba(0,0,0,.35)}
+.card:active h2{filter:brightness(1.25)}
+/* Lexiaa v6 — cinematic motion system */
+#boot{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#07080d;overflow:hidden;transition:opacity .65s ease,visibility .65s ease;animation:bootAutoHide .65s ease 3.25s forwards}
+#boot.hide{opacity:0;visibility:hidden;pointer-events:none}
+.bootAura{position:absolute;width:70vmax;height:70vmax;border-radius:50%;background:conic-gradient(from 120deg,rgba(157,140,255,.0),rgba(157,140,255,.22),rgba(109,220,255,.18),rgba(157,140,255,0));filter:blur(45px);animation:bootSpin 9s linear infinite}
+.bootCore{position:relative;text-align:center;z-index:2}.bootLogo{font-family:"Outfit",sans-serif;font-size:clamp(56px,14vw,105px);font-weight:800;letter-spacing:-.075em;background:linear-gradient(110deg,#fff 12%,#c9b8ff 40%,#73e7ff 68%,#fff 90%);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:brandShimmer 2.5s linear infinite,bootPulse 1.8s ease-in-out infinite alternate;text-shadow:0 0 55px rgba(157,140,255,.25)}
+.bootSpark{display:inline-block;color:#9cecff;font-size:.24em;vertical-align:top;margin:12px 0 0 7px;animation:twinkle 1.7s ease-in-out infinite}
+.bootTag{margin-top:12px;color:#8e96a8;font-size:11px;letter-spacing:.28em;text-transform:uppercase}.bootBar{width:150px;height:2px;margin:24px auto 0;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden}.bootBar i{display:block;width:35%;height:100%;background:linear-gradient(90deg,#9d8cff,#6ddcff);box-shadow:0 0 15px #9d8cff;animation:bootLoad 1.45s ease-in-out infinite}
+@keyframes bootAutoHide{to{opacity:0;visibility:hidden;pointer-events:none}}@keyframes bootSpin{to{transform:rotate(360deg) scale(1.08)}}@keyframes bootPulse{to{transform:scale(1.035)}}@keyframes bootLoad{0%{transform:translateX(-110%)}100%{transform:translateX(430%)}}
+.view{display:none}.view.active{display:block;animation:viewIn .55s cubic-bezier(.2,.8,.2,1) both}.view.leaving{animation:viewOut .22s ease both}
+@keyframes viewIn{from{opacity:0;transform:translateY(16px) scale(.985);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}@keyframes viewOut{to{opacity:0;transform:translateY(-7px);filter:blur(3px)}}
+.card{transform-style:preserve-3d;will-change:transform}.card .icon{transition:transform .35s cubic-bezier(.2,.8,.2,1),filter .35s}.card:hover .icon{transform:translate3d(0,-4px,16px) scale(1.12) rotate(-3deg);filter:drop-shadow(0 0 24px rgba(157,140,255,.65))}.card:active{transform:translateY(-1px) scale(.985)!important;transition-duration:.08s}.card .arrow{transition:transform .3s ease}.card:hover .arrow{transform:translate(4px,-4px)}
+.card::marker{display:none}.ripple{position:absolute;border-radius:50%;transform:scale(0);background:rgba(255,255,255,.22);pointer-events:none;animation:ripple .65s ease-out}.card .ripple{background:rgba(180,165,255,.18)}@keyframes ripple{to{transform:scale(7);opacity:0}}
+.btn,.profileBtn,.nav button{transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease}.btn:hover,.profileBtn:hover,.nav button:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.18)}.btn:active,.profileBtn:active{transform:scale(.97)}
+.top{position:sticky;top:0;z-index:50}.top:after{content:"";position:absolute;inset:0 -20px;background:linear-gradient(180deg,rgba(8,9,13,.78),rgba(8,9,13,0));backdrop-filter:blur(7px);z-index:-1;pointer-events:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Runner game v8 */
+.runnerWrap{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;margin-top:14px}
+.runnerPanel,.shopPanel,.leaderPanel{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));border-radius:26px;padding:16px;box-shadow:0 25px 70px rgba(0,0,0,.18)}
+.runnerTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.runnerMeters{display:flex;gap:7px;flex-wrap:wrap}.runnerMeter{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(0,0,0,.18);font-size:12px;font-weight:800}.runnerMeter b{font-size:15px}
+.runnerCanvasWrap{position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:#080a12;box-shadow:inset 0 1px rgba(255,255,255,.08),0 20px 60px rgba(0,0,0,.3)}
+#runnerCanvas{width:100%;height:300px;display:block;touch-action:none}.runnerOverlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}.runnerOverlayCard{padding:18px 22px;border-radius:20px;background:rgba(5,7,12,.74);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);text-align:center}.runnerOverlayCard h3{margin:0 0 6px;font-size:24px}.runnerOverlayCard p{margin:0;color:#aeb6c9;font-size:12px}.runnerControls{display:flex;gap:9px;align-items:center;margin-top:12px}.jumpBtn{flex:1;min-height:52px;font-size:15px;font-weight:900}.skillControls{margin-top:8px;align-items:stretch}.skillBtn{min-height:46px;min-width:145px;font-weight:900;background:linear-gradient(135deg,rgba(124,92,255,.24),rgba(139,234,255,.12));border-color:rgba(139,234,255,.24)}.skillBtn.ready{box-shadow:0 0 0 1px rgba(139,234,255,.22),0 10px 30px rgba(124,92,255,.18)}.skillBtn:disabled{opacity:.48;cursor:not-allowed}.skillHint{display:flex;align-items:center;color:var(--muted);font-size:11px;line-height:1.35}.runnerHint{font-size:11px;color:var(--muted);line-height:1.45}.shopHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}.shopHeader h3{margin:0}.shopSub{color:var(--muted);font-size:12px;margin:4px 0 0}.avatarShop{grid-template-columns:repeat(2,1fr)}
+.avatarCard{overflow:hidden}.avatarArt{height:92px;border-radius:15px;margin-bottom:9px;display:grid;place-items:center;background:radial-gradient(circle at 50% 30%,rgba(155,220,255,.2),transparent 58%),linear-gradient(145deg,#151827,#0a0d14);position:relative}.avatarArt svg{width:82px;height:82px;filter:drop-shadow(0 12px 16px rgba(0,0,0,.4));animation:avatarFloat 2.8s ease-in-out infinite}.avatarCard:nth-child(2) .avatarArt svg{animation-delay:-.5s}.avatarCard:nth-child(3) .avatarArt svg{animation-delay:-1s}.avatarCard:nth-child(4) .avatarArt svg{animation-delay:-1.5s}.avatarCard:nth-child(5) .avatarArt svg{animation-delay:-2s}.avatarCard:nth-child(6) .avatarArt svg{animation-delay:-2.5s}@keyframes avatarFloat{0%,100%{transform:translateY(2px) rotate(-1deg)}50%{transform:translateY(-5px) rotate(1deg)}}
+.avatarSkill{margin-top:6px;font-size:10px;font-weight:900;color:#dcd4ff}.avatarSkillDesc{margin-top:3px;min-height:28px;font-size:9px;line-height:1.35;color:var(--muted)}.shopPrice{display:flex;justify-content:space-between;align-items:center;margin-top:8px}.buyBadge{font-size:10px;padding:5px 7px;border-radius:999px;background:rgba(255,210,90,.09);color:#ffe6a0;border:1px solid rgba(255,210,90,.16)}
+.leaderPanel{margin-top:14px}.leaderTitle{display:flex;justify-content:space-between;align-items:center;gap:8px}.leaderTitle h3{margin:0}.leaderList{display:grid;gap:7px;margin-top:10px}.leaderRow{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;padding:10px 11px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}.leaderRank{font-weight:900;text-align:center}.leaderName{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.leaderTime{font-size:12px;font-weight:900;color:#d8ceff}.youMark{font-size:9px;color:#8beaff;margin-left:5px}
+.characterStage{position:relative}.characterStage svg{width:120px;height:120px;animation:avatarFloat 2.4s ease-in-out infinite}.characterStage:after{content:'';position:absolute;width:75px;height:12px;bottom:24px;border-radius:50%;background:rgba(0,0,0,.32);filter:blur(8px);animation:shadowPulse 2.4s ease-in-out infinite}@keyframes shadowPulse{0%,100%{transform:scale(.9);opacity:.5}50%{transform:scale(1.05);opacity:.28}}
+@media(max-width:900px){.runnerWrap{grid-template-columns:1fr}.runnerCanvasWrap #runnerCanvas{height:270px}}
+.soundBtn{min-width:145px;border-color:rgba(120,220,255,.18);background:rgba(30,40,65,.45)}.soundBtn.off{opacity:.7}.skillControls{align-items:center;gap:10px;flex-wrap:wrap}.skillHint{flex:1;min-width:180px}</style>
+<style id="install-style">
+.installAppBtn{position:fixed;left:14px;top:50%;transform:translateY(-50%);z-index:9999;display:none;align-items:center;gap:8px;border:1px solid rgba(130,230,255,.25);background:rgba(13,18,28,.88);color:#fff;padding:10px 13px;border-radius:999px;box-shadow:0 14px 45px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(18px);font:600 12px/1 'DM Sans',sans-serif;cursor:pointer;transition:.2s ease}
+.installAppBtn.show{display:flex}.installAppBtn:hover{transform:translateY(-50%) translateX(2px);border-color:rgba(130,230,255,.5)}.installAppIcon{font-size:16px}.installAppBtn small{display:block;color:#9da8bd;font-size:10px;margin-top:2px;font-weight:500}
+@media(max-width:520px){.installAppBtn{left:8px;padding:9px 11px}.installAppBtn .installText{display:none}.installAppIcon{font-size:18px}}
+</style>
+
+<style id="v17-controls-style">
+.topQuick{position:relative;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 14px;z-index:60}
+.quickBtn{border:1px solid rgba(130,230,255,.25);background:rgba(13,18,28,.9);color:#fff;padding:9px 12px;border-radius:999px;box-shadow:0 12px 36px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(16px);font:700 12px/1 'DM Sans',sans-serif;cursor:pointer}
+.quickBtn:hover{border-color:rgba(130,230,255,.5);transform:translateY(-1px)}
+.quickBtn.install{background:linear-gradient(135deg,rgba(30,100,120,.92),rgba(20,40,65,.92))}
+.themePanel{position:absolute;top:calc(100% + 8px);left:0;z-index:9997;width:min(330px,calc(100vw - 28px));padding:14px;border:1px solid var(--line);background:rgba(10,12,18,.96);backdrop-filter:blur(22px);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.45);display:none}
+.themePanel.open{display:block}.themePanel h3{margin:0 0 3px;font-size:16px}.themePanel p{margin:0 0 12px;color:var(--muted);font-size:11px}.themePanel .themeGrid{grid-template-columns:repeat(2,1fr)}
+body.pearl .themePanel{background:rgba(255,255,255,.97);color:#111}body.pearl .quickBtn{background:rgba(255,255,255,.94);color:#111}
+@media(max-width:520px){.quickBtn{padding:9px 10px;font-size:11px}.themePanel{left:0}}
+</style>
+<style id="v19-controls-style">
+.topQuick{position:relative!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;display:flex!important;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 16px;padding:0;z-index:60}
+.themePanel{position:absolute!important;top:calc(100% + 8px)!important;left:0!important;right:auto!important;z-index:9997!important;display:none!important;margin:0!important}
+.themePanel.open{display:block!important}
+.quickBtn{pointer-events:auto!important;touch-action:manipulation}
+@media(max-width:520px){.topQuick{margin:8px 0 14px}.themePanel{width:min(320px,calc(100vw - 24px))!important}.quickBtn{padding:9px 11px}}
+</style><style id="v19-controls-fix">
+.topQuick{position:relative!important;display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important;z-index:100!important}
+.themePanel{position:absolute!important;top:calc(100% + 8px)!important;left:0!important;display:none!important;z-index:10001!important}
+.themePanel.open{display:block!important}
+.installAppBtn{position:relative!important;left:auto!important;top:auto!important;transform:none!important}
+.installAppBtn:hover{transform:translateY(-1px)!important}
+</style></head>
+<body class="obsidian"><div id="boot"><div class="bootAura"></div><div class="bootCore"><div class="bootLogo">Lexiaa<span class="bootSpark">✦</span></div><div class="bootTag">Ruangmu. Gayamu. Semua milikmu.</div><div class="bootBar"><i></i></div></div></div>
+<div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
+<div class="app">
+<header class="top"><div class="brand">Lexiaa<span>✦</span></div><button id="profileBtn" class="profileBtn" aria-label="Profile"><span class="profileDot"></span><span class="profileLabel">Profil</span></button></header>
+<div class="topQuick" id="topQuick"><button class="quickBtn install" id="installAppBtn" type="button">📲 Instal App</button><button class="quickBtn" id="themeMenuBtn" type="button" aria-expanded="false">🎨 Tema</button>
+<div class="themePanel" id="themePanel" aria-hidden="true"><h3>Pilih Tema</h3><p>Tema Lexiaa berdiri sendiri, nggak perlu buka Profil.</p><div class="themeGrid"><button class="theme t-obsidian" type="button" data-theme="obsidian">Obsidian<small>dark premium</small></button><button class="theme t-aurora" type="button" data-theme="aurora">Aurora<small>blue / purple</small></button><button class="theme t-pearl" type="button" data-theme="pearl">Pearl<small>light minimal</small></button><button class="theme t-midnight" type="button" data-theme="midnight">Midnight<small>navy dark</small></button><button class="theme t-rosewood" type="button" data-theme="rosewood">Rosewood<small>soft pink</small></button></div></div></div>
+<main>
+<section id="home" class="view active"><div class="hero"><div class="eyebrow">RUANG PRIBADI & KOMUNITAS</div><h1>Semua yang kamu butuhkan,<br>ada di satu tempat.</h1><p>Simpan foto, dengarkan musik, main game, dan kelola ruang pribadimu dengan mudah.</p></div>
+<div class="grid"><button class="card" data-view="photo"><div class="icon">◉</div><h2>Foto</h2><p>Simpan kenangan foto pribadi dengan aman di akunmu.</p><span class="arrow">↗</span></button><button class="card" data-view="music"><div class="icon">♪</div><h2>Musik</h2><p>Simpan lagu favorit dan buat koleksi musikmu sendiri.</p><span class="arrow">↗</span></button><button class="card" data-view="games"><div class="icon">♢</div><h2>Game</h2><p>Lari melewati rintangan, kumpulkan koin, dan kejar rekor waktu terbaikmu.</p><span class="arrow">↗</span></button><button class="card" data-view="activity"><div class="icon">◌</div><h2>Aktivitas</h2><p>Lihat kegiatan terbarumu di Lexiaa.</p><span class="arrow">↗</span></button></div>
+<div class="nav"><button class="active" data-view="home">Home</button><button data-view="explore">Explore</button><button data-view="activity">Activity</button></div></section>
+<section id="photo" class="view"><div class="viewHead"><div><button class="backBtn" onclick="showView('home')">← Kembali</button></div><div class="viewHeadMain"><div><h2>Photo</h2><p>Galeri foto pribadimu. Hanya akunmu yang dapat mengaksesnya.</p></div></div><div class="actions"><label class="btn primary">+ Tambah foto<input id="photoInput" type="file" accept="image/*" multiple hidden></label></div></div><div id="gallery" class="gallery"><div class="empty">Masuk untuk melihat dan menyimpan koleksi fotomu.</div></div></section>
+<section id="music" class="view"><div class="viewHead"><div><button class="backBtn" onclick="showView('home')">← Kembali</button></div><div class="viewHeadMain"><div><h2>Music</h2><p>Koleksi musik pribadimu tersimpan di akunmu.</p></div><label class="btn primary">+ Tambah musik<input id="musicInput" type="file" accept="audio/*" multiple hidden></label></div><div id="musicList" class="list"><div class="empty">Masuk untuk melihat koleksi musikmu.</div></div></section>
+
+<section id="games" class="view"><div class="viewHead"><div><button class="backBtn" onclick="showView('home')">← Kembali</button></div><div class="viewHeadMain"><div><h2>Runner</h2><p>Lari sejauh mungkin, hindari rintangan, dan ambil koin di perjalanan.</p></div></div></div><div class="gameHero"><div class="characterStage"><div id="selectedAvatarFace" class="characterFace"></div></div><div><div class="eyebrow">KARAKTER AKTIF</div><h3 id="selectedAvatarName" style="font-size:28px;margin:4px 0">Nova</h3><p class="muted" id="selectedAvatarDesc">Karakter awal gratis.</p><div class="gameStats"><span class="coinPill">🪙 <span id="coinBalance">0</span> koin</span><span class="coinPill" style="background:rgba(255,255,255,.05);color:#dce1ed;border-color:var(--line)">🏆 Rekor <span id="highScore">0:00</span></span></div></div></div><div class="runnerWrap"><div class="runnerPanel"><div class="runnerTop"><div><b>Lari Tanpa Batas</b><div class="runnerHint">Semakin jauh, semakin cepat dan banyak rintangan.</div></div><div class="runnerMeters"><span class="runnerMeter">⏱ <b id="runnerTime">0:00</b></span><span class="runnerMeter">🪙 <b id="runnerRunCoins">0</b></span><span class="runnerMeter">⚡ <b id="runnerLevel">1</b></span></div></div><div class="runnerCanvasWrap"><canvas id="runnerCanvas"></canvas><div id="runnerOverlay" class="runnerOverlay"><div class="runnerOverlayCard"><h3>Siap berlari?</h3><p>Tap layar atau tombol LOMPAT untuk menghindari rintangan.</p></div></div></div><div class="runnerControls"><button class="btn primary jumpBtn" id="runnerStartBtn" onclick="startRunner()">▶ Mulai Lari</button><button class="btn jumpBtn" id="runnerJumpBtn" onclick="jumpRunner()">↑ LOMPAT</button></div><div class="runnerControls skillControls"><button class="btn skillBtn" id="runnerSkillBtn" onclick="activateRunnerSkill()">✦ SKILL <span id="runnerSkillText">—</span></button><button class="btn soundBtn" id="runnerSoundBtn" onclick="toggleRunnerSound()">🔊 Backsound ON</button><span class="skillHint" id="runnerSkillHint">Pakai karakter berbayar untuk kemampuan khusus.</span></div><div class="gameNote">Koin yang kamu ambil di perjalanan langsung masuk ke saldo akun. Rekor leaderboard dihitung dari waktu bertahan terlama.</div></div><div><div class="shopPanel"><div class="shopHeader"><div><h3>Character Shop</h3><div class="shopSub">Karakter punya bentuk dan animasi unik.</div></div><span class="coinPill">🪙 <span id="shopCoinBalance">0</span></span></div><div id="avatarShop" class="avatarShop"></div></div><div class="leaderPanel"><div class="leaderTitle"><h3>🏆 Leaderboard</h3><button class="btn" onclick="loadLeaderboard()">↻</button></div><div class="shopSub">Siapa yang paling lama bertahan?</div><div id="leaderList" class="leaderList"><div class="empty" style="min-height:100px;padding:15px">Masuk untuk melihat leaderboard.</div></div></div></div></div></section>
+<section id="explore" class="view"><div class="viewHead"><div><button class="backBtn" onclick="showView('home')">← Kembali</button></div><div class="viewHeadMain"><div><h2>Explore</h2><p>Temukan berbagai fitur yang tersedia di Lexiaa.</p></div></div><div class="grid"><button class="card" data-view="games"><div class="icon">♢</div><h2>Games</h2><p>Lari sejauh mungkin, buka karakter, kumpulkan koin, dan lihat leaderboard.</p><span class="arrow">↗</span></button><button class="card" data-view="activity"><div class="icon">◌</div><h2>Aktivitas</h2><p>Lihat kegiatan bermain dan progres akunmu.</p><span class="arrow">↗</span></button></div></section>
+<section id="activity" class="view"><div class="viewHead"><div><button class="backBtn" onclick="showView('home')">← Kembali</button></div><div class="viewHeadMain"><div><h2>Activity</h2><p>Aktivitas akunmu tetap bersifat pribadi.</p></div></div><div id="activityList" class="list"><div class="empty">Masuk untuk melihat aktivitasmu.</div></div></section>
+<section id="profile" class="view"><div class="viewHead"><div><button class="backBtn" onclick="showView('home')">← Kembali</button></div><div class="viewHeadMain"><div><h2>Profile</h2><p>Atur akun, foto profil, dan tampilan Lexiaa.</p></div><button class="btn danger" id="logoutBtn">Keluar</button></div><div class="profile"><div class="profileCard"><img id="avatarBig" class="avatarBig" alt="Profile photo"><label class="btn">Ganti foto<input id="avatarInput" type="file" accept="image/*" hidden></label><div id="accountEmail" class="muted" style="margin-top:15px">Belum masuk</div><div id="adminEntry" style="margin-top:14px;display:none"><a class="btn" href="admin.html" style="display:inline-flex;text-decoration:none">⚙ Admin Panel</a></div></div><div class="settings"><div class="field"><label>Nama tampilan</label><input id="displayName" placeholder="Nama kamu"></div><div class="field"><label>Nama pengguna</label><input id="username" placeholder="@namapengguna"></div><button class="btn primary" id="saveProfile">Simpan profil</button></div></div></section>
+</main></div>
+<div id="authModal" class="modal"><div class="modalCard"><button class="close" onclick="closeAuth()">×</button><h2>Selamat datang di Lexiaa</h2><p class="muted">Masuk atau buat akun untuk memakai fitur pribadimu.</p><div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>Kata sandi</label><input id="password" type="password" autocomplete="current-password"></div><button class="btn primary" id="loginBtn" style="width:100%">Masuk</button><button class="btn" id="signupBtn" style="width:100%;margin-top:8px">Buat akun</button><p id="authMsg" class="muted"></p></div></div>
+<div id="toast" class="toast"></div><div id="lightbox" class="modal"><div class="modalCard lightbox"><button class="close" onclick="closeLightbox()">×</button><img id="lightboxImg" alt="Photo preview"><div class="lightboxActions"><a id="downloadPhoto" class="btn primary" download>Download</a></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+const CONFIG={url:window.LEXIAA_SUPABASE?.url||localStorage.getItem('lexiaa_supabase_url')||'',anonKey:window.LEXIAA_SUPABASE?.publishableKey||localStorage.getItem('lexiaa_supabase_anon')||''};
+let sb=null,user=null,profileData=null,photoUrls=[],musicRows=[],gameScore=0,gameCoins=0,selectedAvatar="nova",unlockedAvatars=[];
+const GAME_AVATARS=[
+{id:"nova",name:"Nova",price:0,desc:"Pelari awal gratis.",skill:"Tidak ada skill khusus",skillDesc:"Karakter dasar untuk mulai mengumpulkan koin.",color:"#8beaff",accent:"#7c5cff",shape:"round"},
+{id:"byte",name:"Byte",price:25,desc:"Robot mini dengan lari stabil.",skill:"PERISAI",skillDesc:"Menahan 1 tabrakan. Cooldown 18 detik.",color:"#8effc1",accent:"#2c8cff",shape:"robot",cooldown:18},
+{id:"ember",name:"Ember",price:60,desc:"Pelari api dengan energi tinggi.",skill:"KOIN x2",skillDesc:"Koin yang diambil bernilai 2x selama 8 detik. Cooldown 20 detik.",color:"#ff9d67",accent:"#ff3f6c",shape:"flame",cooldown:20},
+{id:"frost",name:"Frost",price:120,desc:"Pelari es yang dingin dan langka.",skill:"BEKU",skillDesc:"Memperlambat rintangan selama 6 detik. Cooldown 22 detik.",color:"#c9f6ff",accent:"#7a9cff",shape:"ice",cooldown:22},
+{id:"shadow",name:"Shadow",price:250,desc:"Pelari bayangan misterius.",skill:"FASE",skillDesc:"Kebal rintangan selama 3 detik. Cooldown 25 detik.",color:"#c6b7ff",accent:"#6d4dff",shape:"shadow",cooldown:25},
+{id:"royal",name:"Royal",price:500,desc:"Karakter kolektor premium.",skill:"MAGNET",skillDesc:"Menarik koin dari jarak jauh selama 8 detik. Cooldown 18 detik.",color:"#ffe28a",accent:"#b67a24",shape:"royal",cooldown:18}
+]
+const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function openAuth(){if(user){showView('profile');return}$('#authModal').classList.add('open')} function closeAuth(){$('#authModal').classList.remove('open')}
+let currentView='home', transitioning=false, historyReady=false, allowExit=false;
+
+function syncViewHistory(id, replace=false){
+ const state={lexiaa:true,view:id};
+ if(replace) history.replaceState(state,'',location.href);
+ else history.pushState(state,'',location.href);
+}
+
+function showView(id, fromHistory=false){
+ if(transitioning || id===currentView)return;
+ const current=document.getElementById(currentView), next=document.getElementById(id); if(!next)return;
+ transitioning=true;
+ if(current){current.classList.add('leaving');setTimeout(()=>current.classList.remove('active','leaving'),210)}
+ next.classList.remove('leaving');next.classList.add('active');currentView=id;
+ if(historyReady && !fromHistory)syncViewHistory(id);
+ $$('[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===id));
+ window.scrollTo({top:0,behavior:'smooth'});
+ setTimeout(()=>{transitioning=false},560);
+ if(id==='photo')loadPhotos();if(id==='music')loadMusic();if(id==='activity')loadActivity();if(id==='profile')loadProfile();if(id==='games'){setTimeout(()=>runnerResize(),80);if(user)loadLeaderboard()}
+}
+
+// Tombol kembali Android/browser: dari halaman fitur kembali ke Home, bukan langsung keluar.
+// Saat sudah di Home, satu tekan pertama ditahan agar aplikasi tidak langsung tertutup.
+history.replaceState({lexiaa:true,view:'home'},'',location.href);
+historyReady=true;
+window.addEventListener('popstate',e=>{
+ const state=e.state;
+ if(state?.lexiaa){
+   allowExit=false;
+   if(state.view && state.view!==currentView) showView(state.view,true);
+   return;
+ }
+ if(!allowExit){
+   allowExit=true;
+   history.pushState({lexiaa:true,view:currentView},'',location.href);
+   toast('Tekan kembali sekali lagi untuk keluar dari Lexiaa.');
+ }
+});
+$$('[data-view]').forEach(el=>el.addEventListener('click',()=>showView(el.dataset.view)));
+$('#profileBtn').onclick=()=>{if(user){showView('profile')}else{openAuth()}}; $('#logoutBtn').onclick=async()=>{if(sb){await sb.auth.signOut();showView('home');toast('Logged out')}};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});$('#lightbox').addEventListener('click',e=>{if(e.target.id==='lightbox')closeLightbox()});
+function requireMasuk(){if(!user){openAuth();toast('Masuk diperlukan untuk fitur ini.');return false}return true}
+async function init(){
+ if(!CONFIG.url||!CONFIG.anonKey){toast('Supabase belum dikonfigurasi.');return}
+ sb=supabase.createClient(CONFIG.url,CONFIG.anonKey); const {data}=await sb.auth.getSession(); user=data.session?.user||null; await refresh(); sb.auth.onAuthStateChange(async(_e,s)=>{user=s?.user||null;await refresh()});
+}
+async function refresh(){
+ if(user){$('#profileBtn').innerHTML='<span class="profileDot" style="background:#7ee2a8;box-shadow:0 0 0 3px rgba(126,226,168,.12)"></span><span class="profileLabel">Profil</span>'; await loadProfile(); await loadGame();} else {$('#profileBtn').innerHTML='<span class="profileDot"></span><span class="profileLabel">Profil</span>';$('#accountEmail').textContent='Belum masuk';$('#gallery').innerHTML='<div class="empty">Masuk untuk melihat dan menyimpan koleksi fotomu.</div>';$('#musicList').innerHTML='<div class="empty">Masuk untuk melihat koleksi musikmu.</div>';$('#activityList').innerHTML='<div class="empty">Masuk untuk melihat aktivitasmu.</div>';$('#highScore').textContent='—'} }
+async function loadProfile(){if(!user||!sb)return;const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();if(error)return;profileData=data||{};try{const {data:isAdmin}=await sb.rpc('is_admin');$('#adminEntry').style.display=isAdmin?'block':'none'}catch(e){$('#adminEntry').style.display='none'}$('#displayName').value=profileData.display_name||'';$('#username').value=profileData.username||'';$('#accountEmail').textContent=user.email||'';applyTema(profileData.theme||'obsidian');if(profileData.avatar_path){const {data:s}=await sb.storage.from('avatars').createSignedUrl(profileData.avatar_path,3600);$('#avatarBig').src=s?.signedUrl||'';$('#profileBtn').innerHTML=s?.signedUrl?`<img src="${s.signedUrl}"><span class="profileLabel">Profil</span>`:'<span class="profileDot"></span><span class="profileLabel">Profil</span>'}else{$('#avatarBig').src='';$('#profileBtn').innerHTML='<span class="profileDot"></span><span class="profileLabel">Profil</span>'}}
+$('#saveProfile').onclick=async()=>{if(!requireMasuk())return;const payload={id:user.id,display_name:$('#displayName').value.trim(),username:$('#username').value.trim().replace(/^@/,''),theme:document.body.className||'obsidian',updated_at:new Date().toISOString()};const {error}=await sb.from('profiles').upsert(payload);if(error)toast(error.message);else{toast('Profile saved');loadProfile()}};
+$('#avatarInput').onchange=async e=>{if(!requireMasuk()||!e.target.files[0])return;const f=e.target.files[0];if(f.size>5e6)return toast('Maksimum foto profil 5 MB');const ext=(f.name.split('.').pop()||'jpg').toLowerCase(); const path=user.id+'/avatar-'+Date.now()+'.'+ext;const {error}=await sb.storage.from('avatars').upload(path,f,{upsert:false,contentType:f.type});if(error)return toast(error.message);const {error:pe}=await sb.from('profiles').update({avatar_path:path,updated_at:new Date().toISOString()}).eq('id',user.id);if(pe)return toast(pe.message);toast('Foto profil diperbarui');loadProfile()};
+function applyTema(t){const allowed=['obsidian','aurora','pearl','midnight','rosewood'];if(!allowed.includes(t))t='obsidian';document.body.classList.remove('obsidian','aurora','pearl','midnight','rosewood','theme-switching');document.body.classList.add(t);document.documentElement.dataset.theme=t;localStorage.setItem('lexiaa_theme',t);requestAnimationFrame(()=>{document.body.classList.add('theme-switching');setTimeout(()=>document.body.classList.remove('theme-switching'),850)})}applyTema(localStorage.getItem('lexiaa_theme')||'obsidian');
+$('#photoInput').onchange=async e=>{if(!requireMasuk())return;for(const f of [...e.target.files]){if(!f.type.startsWith('image/'))continue;const path=user.id+'/'+crypto.randomUUID()+'-'+f.name.replace(/[^a-zA-Z0-9._-]/g,'_');const {error}=await sb.storage.from('photos').upload(path,f,{cacheControl:'3600',upsert:false});if(error)toast(error.message);else { const ins=await sb.from('photos').insert({user_id:user.id,storage_path:path,file_name:f.name,mime_type:f.type,size_bytes:f.size}); if(!ins.error) await sb.from('activity').insert({user_id:user.id,action:'Added photo: '+f.name}); }}e.target.value='';loadPhotos()};
+async function loadPhotos(){if(!user||!sb)return;const {data,error}=await sb.from('photos').select('*').order('created_at',{ascending:false});if(error)return toast(error.message);const g=$('#gallery');if(!data?.length){g.innerHTML='<div class="empty">Belum ada foto.<br>Tambahkan foto pertama kamu.</div>';return}const out=[];for(const p of data){const {data:s}=await sb.storage.from('photos').createSignedUrl(p.storage_path,3600);out.push(`<div class="photo" data-photo-id="${p.id}"><img src="${s?.signedUrl||''}" loading="lazy" onclick="openLightbox('${s?.signedUrl||''}')"><a class="dl" href="${s?.signedUrl||'#'}" download title="Download">↓</a><button class="x" onclick="deletePhoto('${p.id}','${p.storage_path}')">×</button></div>`)}g.innerHTML=out.join('')}
+async function openLightbox(url){if(!url)return;$('#lightboxImg').src=url;$('#downloadPhoto').href=url;$('#lightbox').classList.add('open')}function closeLightbox(){$('#lightbox').classList.remove('open');$('#lightboxImg').src=''}async function deletePhoto(id,path){if(!requireMasuk()||!confirm('Hapus foto ini?'))return;const card=document.querySelector(`.photo[data-photo-id="${id}"]`);const {error}=await sb.from('photos').delete().eq('id',id).eq('user_id',user.id);if(error)return toast(error.message);if(card)card.remove();const r=await sb.storage.from('photos').remove([path]);if(r.error)toast('Data foto sudah dihapus, tapi file penyimpanan gagal dihapus: '+r.error.message);else toast('Foto dihapus');if(!document.querySelector('#gallery .photo'))$('#gallery').innerHTML='<div class="empty">Belum ada foto.<br>Tambahkan foto pertama kamu.</div>';await sb.from('activity').insert({user_id:user.id,action:'Deleted a photo'});}
+$('#musicInput').onchange=async e=>{if(!requireMasuk())return;for(const f of [...e.target.files]){const path=user.id+'/'+crypto.randomUUID()+'-'+f.name.replace(/[^a-zA-Z0-9._-]/g,'_');const {error}=await sb.storage.from('music').upload(path,f,{upsert:false,contentType:f.type});if(error)toast(error.message);else { const ins=await sb.from('music').insert({user_id:user.id,storage_path:path,title:f.name,mime_type:f.type,size_bytes:f.size}); if(!ins.error) await sb.from('activity').insert({user_id:user.id,action:'Added music: '+f.name}); }}e.target.value='';loadMusic()};
+async function loadMusic(){if(!user||!sb)return;const {data,error}=await sb.from('music').select('*').order('created_at',{ascending:false});if(error)return toast(error.message);musicRows=data||[];const box=$('#musicList');if(!musicRows.length){box.innerHTML='<div class="empty">Belum ada musik.<br>Tambahkan file audio pertama kamu.</div>';return}box.innerHTML=musicRows.map((m,i)=>`<div class="musicItem"><div class="musicIcon">♪</div><div class="musicInfo"><b>${escapeHtml(m.title)}</b><small>Private collection</small></div><button class="play" onclick="playMusic(${i})">▶</button><button class="btn danger" onclick="deleteMusic('${m.id}','${m.storage_path}')">×</button></div>`).join('')}
+let audio=new Audio();async function playMusic(i){const m=musicRows[i];const {data}=await sb.storage.from('music').createSignedUrl(m.storage_path,3600);if(data?.signedUrl){audio.src=data.signedUrl;audio.play();toast('Playing: '+m.title)}}async function deleteMusic(id,path){if(!requireMasuk()||!confirm('Hapus musik ini?'))return;await sb.storage.from('music').remove([path]);const {error}=await sb.from('music').delete().eq('id',id).eq('user_id',user.id);if(error)toast(error.message);else{await sb.from('activity').insert({user_id:user.id,action:'Deleted music: '+(musicRows.find(x=>x.id===id)?.title||'track')});loadMusic()}}
+function avatarSvg(a, small=false){
+ const c=a.color, ac=a.accent;
+ const body=a.shape==='robot'?`<rect x="28" y="34" width="44" height="42" rx="12" fill="${c}"/><rect x="35" y="45" width="30" height="16" rx="6" fill="#111522"/><circle cx="44" cy="53" r="3" fill="${ac}"/><circle cx="56" cy="53" r="3" fill="${ac}"/><rect x="38" y="76" width="10" height="12" rx="5" fill="${ac}"/><rect x="52" y="76" width="10" height="12" rx="5" fill="${ac}"/>`:
+ a.shape==='flame'?`<path d="M50 13c10 11 20 17 18 31-1 8-7 13-18 13S31 52 31 42c0-10 8-15 12-25 3 5 7 8 7 15 5-5 6-11 0-19Z" fill="${ac}"/><circle cx="50" cy="48" r="13" fill="${c}"/>`:
+ a.shape==='ice'?`<path d="M50 12 68 31 62 58 50 78 38 58 32 31Z" fill="${c}"/><path d="M50 20v46M38 31l24 27M62 31 38 57" stroke="${ac}" stroke-width="5" stroke-linecap="round"/>`:
+ a.shape==='shadow'?`<path d="M50 10c18 0 29 13 29 31 0 22-12 37-29 37S21 63 21 41C21 23 32 10 50 10Z" fill="${c}" opacity=".95"/><path d="M29 39c10-14 32-14 42 0v21H29Z" fill="${ac}"/><circle cx="41" cy="42" r="4" fill="#0b0d14"/><circle cx="59" cy="42" r="4" fill="#0b0d14"/>`:
+ a.shape==='royal'?`<path d="M24 29 33 12l17 15 17-15 9 17-8 8H32Z" fill="${ac}"/><circle cx="50" cy="55" r="24" fill="${c}"/><path d="M38 55q12 10 24 0" fill="none" stroke="${ac}" stroke-width="4" stroke-linecap="round"/>`:
+ `<circle cx="50" cy="46" r="28" fill="${c}"/><path d="M28 39q22-28 44 0" fill="${ac}"/><circle cx="41" cy="47" r="4" fill="#10131c"/><circle cx="59" cy="47" r="4" fill="#10131c"/><path d="M41 59q9 7 18 0" fill="none" stroke="${ac}" stroke-width="4" stroke-linecap="round"/>`;
+ return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
+}
+function renderSelectedAvatar(){const a=GAME_AVATARS.find(x=>x.id===selectedAvatar)||GAME_AVATARS[0];$('#selectedAvatarFace').innerHTML=avatarSvg(a);$('#selectedAvatarName').textContent=a.name;$('#selectedAvatarDesc').textContent=a.price===0?a.desc:(a.desc+' · ✦ '+a.skill);updateRunnerSkillUI()}
+function renderAvatarShop(){const box=$('#avatarShop');if(!box)return;box.innerHTML=GAME_AVATARS.map(a=>{const owned=a.price===0||unlockedAvatars.includes(a.id);const selected=selectedAvatar===a.id;return `<button class="avatarCard ${selected?'selected':''}" onclick="handleAvatar('${a.id}')"><span class="avatarLock">${owned?'✓':'🔒'}</span><div class="avatarArt">${avatarSvg(a,true)}</div><div class="avatarName">${a.name}</div><div class="avatarSkill">✦ ${a.skill}</div><div class="avatarSkillDesc">${a.skillDesc}</div><div class="shopPrice"><span class="avatarPrice">${a.price===0?'Gratis':'🪙 '+a.price}</span><span class="buyBadge">${selected?'AKTIF':owned?'PAKAI':'BELI'}</span></div></button>`}).join('')}
+async function loadGame(){if(!user||!sb)return;const scoreRes=await sb.from('game_scores').select('high_score').eq('user_id',user.id).eq('game_key','runner').maybeSingle();$('#highScore').textContent=formatTime(scoreRes.data?.high_score||0);const gp=await sb.from('game_profiles').select('coins,selected_avatar').eq('user_id',user.id).maybeSingle();if(!gp.data){await sb.from('game_profiles').upsert({user_id:user.id,coins:0,selected_avatar:'nova'});gameCoins=0;selectedAvatar='nova'}else{gameCoins=gp.data.coins||0;selectedAvatar=gp.data.selected_avatar||'nova'}const unlocks=await sb.from('game_avatar_unlocks').select('avatar_id').eq('user_id',user.id);unlockedAvatars=(unlocks.data||[]).map(x=>x.avatar_id);$('#coinBalance').textContent=gameCoins;$('#shopCoinBalance').textContent=gameCoins;renderAvatarShop();renderSelectedAvatar();loadLeaderboard()}
+async function handleAvatar(id){if(!requireMasuk())return;const a=GAME_AVATARS.find(x=>x.id===id);if(!a)return;if(selectedAvatar===id)return;if(a.price===0||unlockedAvatars.includes(id)){selectedAvatar=id;await sb.from('game_profiles').update({selected_avatar:id,updated_at:new Date().toISOString()}).eq('user_id',user.id);renderAvatarShop();renderSelectedAvatar();toast(a.name+' dipakai');return}if(gameCoins<a.price)return toast('Koin belum cukup. Ambil lebih banyak koin saat berlari.');const {data,error}=await sb.rpc('purchase_game_avatar',{p_avatar_id:id,p_price:a.price});if(error)return toast(error.message);gameCoins=data?.coins??(gameCoins-a.price);unlockedAvatars=[...new Set([...unlockedAvatars,id])];selectedAvatar=id;await sb.from('game_profiles').update({selected_avatar:id,updated_at:new Date().toISOString()});$('#coinBalance').textContent=gameCoins;$('#shopCoinBalance').textContent=gameCoins;renderAvatarShop();renderSelectedAvatar();await sb.from('activity').insert({user_id:user.id,action:'Unlocked game character: '+a.name});toast(a.name+' berhasil dibuka!')}
+function formatTime(sec){sec=Math.max(0,Math.floor(sec||0));const m=Math.floor(sec/60),s=sec%60;return `${m}:${String(s).padStart(2,'0')}`}
+let runnerSound={enabled:true,ctx:null,master:null,timer:null,step:0};
+function initRunnerSound(){
+  if(runnerSound.ctx){if(runnerSound.ctx.state==='suspended')runnerSound.ctx.resume();return true}
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+  runnerSound.ctx=new AC();runnerSound.master=runnerSound.ctx.createGain();runnerSound.master.gain.value=.055;runnerSound.master.connect(runnerSound.ctx.destination);runnerSound.step=0;return true;
+}
+function runnerTone(freq,duration,type='sine',gain=.12,when=0){
+  if(!runnerSound.ctx||!runnerSound.master)return;
+  const o=runnerSound.ctx.createOscillator(),g=runnerSound.ctx.createGain(),t=runnerSound.ctx.currentTime+when;
+  o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,gain),t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(runnerSound.master);o.start(t);o.stop(t+duration+.03);
+}
+function runnerMusicTick(){
+  if(!runnerSound.enabled||!runnerSound.ctx)return;
+  const bass=[110,110,146.83,130.81][runnerSound.step%4], lead=[440,523.25,659.25,523.25,392,493.88,587.33,493.88][runnerSound.step%8];
+  runnerTone(bass,.20,'triangle',.42);runnerTone(lead,.10,'sine',.16,.08);runnerSound.step++;
+}
+function startRunnerSound(){if(!runnerSound.enabled)return;if(!initRunnerSound())return;if(runnerSound.timer)clearInterval(runnerSound.timer);runnerMusicTick();runnerSound.timer=setInterval(runnerMusicTick,250)}
+function stopRunnerSound(){if(runnerSound.timer){clearInterval(runnerSound.timer);runnerSound.timer=null}}
+function toggleRunnerSound(){runnerSound.enabled=!runnerSound.enabled;const b=$('#runnerSoundBtn');if(runnerSound.enabled){startRunnerSound();if(b){b.textContent='🔊 Backsound ON';b.classList.remove('off')}}else{stopRunnerSound();if(b){b.textContent='🔇 Backsound OFF';b.classList.add('off')}}}
+function runnerSfx(kind){if(!runnerSound.enabled||!initRunnerSound())return;if(kind==='jump')runnerTone(660,.09,'square',.18);if(kind==='coin'){runnerTone(880,.06,'sine',.2);runnerTone(1320,.08,'sine',.12,.05)}if(kind==='hit')runnerTone(90,.18,'sawtooth',.16)}
+
+let runner={running:false,raf:0,start:0,last:0,time:0,coins:0,speed:5,level:1,playerY:0,vy:0,jumpT:0,jumpDuration:.78,jumpHeight:112,obstacles:[],coinsOnTrack:[],spawn:0,coinSpawn:0,ground:0,ctx:null,w:0,h:0,dpr:1,jumping:false,skillReadyAt:0,skillActiveUntil:0,shield:false,coinBoost:false,slowUntil:0,phaseUntil:0,magnetUntil:0,invulnUntil:0};
+function runnerResize(){const c=$('#runnerCanvas');if(!c)return;const r=c.getBoundingClientRect();runner.dpr=Math.min(2,window.devicePixelRatio||1);c.width=Math.max(1,Math.floor(r.width*runner.dpr));c.height=Math.max(1,Math.floor(r.height*runner.dpr));runner.w=r.width;runner.h=r.height;runner.ctx=c.getContext('2d');runner.ctx.setTransform(runner.dpr,0,0,runner.dpr,0,0);runner.ground=runner.h-42;drawRunner()}
+window.addEventListener('resize',runnerResize);
+window.addEventListener('pointerdown',e=>{if(e.target&&e.target.id==='runnerCanvas'&&runner.running){e.preventDefault();runnerJump()}},{passive:false});
+
+function getRunnerAvatar(){return GAME_AVATARS.find(x=>x.id===selectedAvatar)||GAME_AVATARS[0]}
+function updateRunnerSkillUI(){
+ const a=getRunnerAvatar(),btn=$('#runnerSkillBtn'),txt=$('#runnerSkillText'),hint=$('#runnerSkillHint');
+ if(!btn)return;
+ if(!a.cooldown){btn.disabled=true;btn.classList.remove('ready');txt.textContent='—';hint.textContent='Nova adalah karakter gratis. Karakter berbayar punya skill khusus.';return}
+ const remain=Math.max(0,(runner.skillReadyAt-performance.now())/1000);
+ const active=Math.max(0,(runner.skillActiveUntil-performance.now())/1000);
+ btn.disabled=!runner.running || remain>0 || active>0;
+ btn.classList.toggle('ready',runner.running&&remain<=0&&active<=0);
+ if(active>0){txt.textContent='AKTIF '+active.toFixed(1)+'s';hint.textContent=a.skillDesc}
+ else if(remain>0){txt.textContent=Math.ceil(remain)+'s';hint.textContent=a.skillDesc}
+ else {txt.textContent='SIAP';hint.textContent=a.skillDesc}
+}
+
+function runnerJump(){
+ if(!runner.running||runner.jumping)return;
+ runner.jumping=true;
+ runner.jumpT=0;
+ runnerSfx('jump');
+ runner.playerY=0;
+ runner.vy=0;
+}
+function jumpRunner(){
+ if(!requireMasuk())return;
+ if(!runner.running){startRunner();return;}
+ runnerJump();
+}
+
+function activateRunnerSkill(){
+ if(!runner.running)return;
+ const a=getRunnerAvatar();
+ if(!a.cooldown)return;
+ const now=performance.now();
+ if(now<runner.skillReadyAt||now<runner.skillActiveUntil)return;
+ runner.skillActiveUntil=now+8000;
+ // Explicit durations per ability
+ if(a.id==='byte'){runner.shield=true;runner.invulnUntil=now+8000;runner.skillActiveUntil=now+8000;runner.skillReadyAt=now+a.cooldown*1000}
+ if(a.id==='ember'){runner.coinBoost=true;runner.skillActiveUntil=now+8000;runner.skillReadyAt=now+a.cooldown*1000}
+ if(a.id==='frost'){runner.slowUntil=now+6000;runner.skillActiveUntil=now+6000;runner.skillReadyAt=now+a.cooldown*1000}
+ if(a.id==='shadow'){runner.phaseUntil=now+3000;runner.skillActiveUntil=now+3000;runner.skillReadyAt=now+a.cooldown*1000}
+ if(a.id==='royal'){runner.magnetUntil=now+8000;runner.skillActiveUntil=now+8000;runner.skillReadyAt=now+a.cooldown*1000}
+ toast('✦ '+a.skill+' ativ!');
+ updateRunnerSkillUI();
+}
+
+function startRunner(){
+ if(!requireMasuk())return;
+ if(runner.running){runnerEnd();return;}
+ // Start must NEVER trigger a jump. Reset all physics before the first frame.
+ runnerResize();
+ runner.running=true;runner.start=performance.now();runner.last=runner.start;runner.time=0;runner.coins=0;runner.speed=5;runner.level=1;runner.playerY=0;runner.vy=0;runner.jumpT=0;runner.jumping=false;
+ runner.playerY=0;runner.vy=0;runner.jumpT=0;runner.jumping=false;runner.obstacles=[];runner.coinsOnTrack=[];runner.spawn=.9;runner.coinSpawn=.45;
+ runner.skillReadyAt=performance.now()+6000;runner.skillActiveUntil=0;runner.shield=false;runner.coinBoost=false;runner.slowUntil=0;runner.phaseUntil=0;runner.magnetUntil=0;runner.invulnUntil=0;
+ $('#runnerTime').textContent='0:00';$('#runnerRunCoins').textContent='0';$('#runnerLevel').textContent='1';$('#runnerOverlay').style.display='none';$('#runnerStartBtn').textContent='■ Berhenti';
+ updateRunnerSkillUI();
+ startRunnerSound(); runner.raf=requestAnimationFrame(runnerLoop)
+}
+function stopRunner(){runner.running=false;cancelAnimationFrame(runner.raf);stopRunnerSound();$('#runnerStartBtn').textContent='▶ Mulai Lari';$('#runnerOverlay').style.display='grid';updateRunnerSkillUI()}
+function runnerEnd(){
+ if(!runner.running)return;
+ runner.running=false;cancelAnimationFrame(runner.raf);stopRunnerSound();runner.vy=0;runner.playerY=0;runner.jumpT=0;runner.jumping=false;runner.invulnUntil=0;
+ $('#runnerStartBtn').textContent='↻ Coba Lagi';
+ const reason=runner.lastDeathReason||'Rintangan terkena';
+ $('#runnerOverlay').innerHTML=`<div class="runnerOverlayCard"><h3>Lari selesai</h3><p>${reason}<br>Bertahan <b>${formatTime(runner.time)}</b> · Ambil ${runner.coins} koin</p></div>`;
+ $('#runnerOverlay').style.display='grid';updateRunnerSkillUI();saveRunnerResult()
+}
+function saveRunnerResult(){
+ if(!user||!sb)return;
+ const t=Math.floor(runner.time),runCoins=runner.coins;
+ if(runCoins>0)sb.rpc('add_game_coins',{p_amount:runCoins}).then(({data,error})=>{if(!error){gameCoins=data?.coins??gameCoins;$('#coinBalance').textContent=gameCoins;$('#shopCoinBalance').textContent=gameCoins}});
+ sb.rpc('save_runner_score',{p_score:t}).then(({data,error})=>{if(!error&&data?.new_record){$('#highScore').textContent=formatTime(t);toast('Rekor baru! 🏆 '+formatTime(t));}loadLeaderboard()});
+ sb.from('activity').insert({user_id:user.id,action:`Runner: bertahan ${formatTime(t)}, ambil ${runCoins} koin`})
+}
+
+function runnerLoop(now){
+ if(!runner.running)return;
+ const dt=Math.min(.032,Math.max(.001,(now-runner.last)/1000));runner.last=now;runner.time=(now-runner.start)/1000;
+ // Expire temporary skill effects cleanly.
+ if(runner.skillActiveUntil>0 && now>=runner.skillActiveUntil){runner.skillActiveUntil=0;runner.shield=false;runner.coinBoost=false;}
+ if(runner.invulnUntil>0 && now>=runner.invulnUntil){runner.invulnUntil=0;}
+ runner.level=1+Math.floor(runner.time/12);
+ const baseSpeed=5+Math.min(8,runner.time*.17);
+ const worldSlow=now<runner.slowUntil?.55:1;
+ runner.speed=baseSpeed*worldSlow;
+
+ // Deterministic jump arc: no acceleration/velocity accumulation, so the character can never fly off-screen.
+ if(runner.jumping){
+   runner.jumpT+=dt;
+   const t=Math.min(1,runner.jumpT/runner.jumpDuration);
+   runner.playerY=runner.jumpHeight*4*t*(1-t);
+   if(t>=1){runner.playerY=0;runner.jumpT=0;runner.jumping=false;runner.vy=0}
+ }else{
+   runner.playerY=0;
+   runner.vy=0;
+ }
+ if(!Number.isFinite(runner.playerY)||runner.playerY<0||runner.playerY>runner.jumpHeight){runner.playerY=0;runner.jumpT=0;runner.jumping=false;runner.vy=0}
+
+ runner.spawn-=dt;runner.coinSpawn-=dt;
+ if(runner.spawn<=0){
+   const minGap=Math.max(.58,1.28-runner.time*.010);
+   runner.spawn=minGap+Math.random()*.48;
+   const tall=runner.time>25&&Math.random()<.34;
+   runner.obstacles.push({x:runner.w+35,w:tall?30:22,h:tall?62:38})
+ }
+ if(runner.coinSpawn<=0){
+   runner.coinSpawn=.58+Math.random()*.65;
+   runner.coinsOnTrack.push({x:runner.w+35,y:runner.ground-60-Math.random()*95,r:8,spin:0})
+ }
+ runner.obstacles.forEach(o=>o.x-=runner.speed*60*dt);
+ runner.coinsOnTrack.forEach(c=>{c.x-=runner.speed*60*dt;c.spin+=dt*8});
+ runner.obstacles=runner.obstacles.filter(o=>o.x>-80);
+ runner.coinsOnTrack=runner.coinsOnTrack.filter(c=>c.x>-60);
+
+ const px=70,py=runner.ground-58-runner.playerY;
+ for(const o of runner.obstacles){
+   const hit=px+18>o.x&&px-18<o.x+o.w&&py+52>runner.ground-o.h&&py+8<runner.ground;
+   if(hit){
+     // Any active invulnerability must win over normal collision.
+     if(now<runner.phaseUntil || now<runner.invulnUntil){
+       if(runner.shield){
+         // Byte: consume the shield on the first impact, remove the obstacle,
+         // and give a short grace window so the same frame cannot kill the run.
+         runner.shield=false;
+         runner.skillActiveUntil=0;
+         runner.invulnUntil=now+650;
+         o.x=-999;
+         runner.lastDeathReason='Perisai menahan tabrakan!';
+         toast('🛡️ Perisai menyelamatkanmu!');
+       }
+       continue;
+     }
+     if(runner.shield){
+       runner.shield=false;
+       runner.skillActiveUntil=0;
+       runner.invulnUntil=now+650;
+       o.x=-999;
+       runner.lastDeathReason='Perisai menahan tabrakan!';
+       toast('🛡️ Perisai menyelamatkanmu!');
+       continue;
+     }
+     runner.lastDeathReason='Menabrak rintangan';return runnerEnd()
+   }
+ }
+ for(let i=runner.coinsOnTrack.length-1;i>=0;i--){
+   const c=runner.coinsOnTrack[i];
+   const dist=Math.hypot(c.x-px,c.y-(py+25));
+   const magnet=now<runner.magnetUntil&&dist<170;
+   if(magnet){c.x+=(px-c.x)*Math.min(1,dt*7);c.y+=(py+25-c.y)*Math.min(1,dt*7)}
+   if(Math.hypot(c.x-px,c.y-(py+25))<30){
+     runner.coins+=runner.coinBoost?2:1;runner.coinsOnTrack.splice(i,1);runnerSfx('coin');$('#runnerRunCoins').textContent=runner.coins
+   }
+ }
+ $('#runnerTime').textContent=formatTime(runner.time);$('#runnerLevel').textContent=runner.level;updateRunnerSkillUI();drawRunner();runner.raf=requestAnimationFrame(runnerLoop)
+}
+function drawRunner(){
+ const ctx=runner.ctx;if(!ctx)return;const w=runner.w,h=runner.h,g=runner.ground;ctx.clearRect(0,0,w,h);
+ const grad=ctx.createLinearGradient(0,0,0,h);grad.addColorStop(0,'#0b1022');grad.addColorStop(1,'#070910');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+ ctx.fillStyle='rgba(255,255,255,.035)';for(let i=0;i<7;i++){const x=(i*170-(runner.time*runner.speed*18)%170);ctx.fillRect(x,35+i*18,80,1)}
+ ctx.fillStyle='#101421';ctx.fillRect(0,g,w,h-g);ctx.strokeStyle='rgba(139,234,255,.18)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,g+.5);ctx.lineTo(w,g+.5);ctx.stroke();
+ for(let x=-(runner.time*runner.speed*35%80);x<w;x+=80){ctx.fillStyle='rgba(255,255,255,.035)';ctx.fillRect(x,g+20,38,3)}
+ runner.obstacles.forEach(o=>{ctx.fillStyle='#ff4f75';ctx.shadowColor='rgba(255,79,117,.35)';ctx.shadowBlur=14;roundRect(ctx,o.x,g-o.h,o.w,o.h,7);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='rgba(255,255,255,.18)';ctx.fillRect(o.x+5,g-o.h+8,4,o.h-16)});
+ runner.coinsOnTrack.forEach(c=>{ctx.save();ctx.translate(c.x,c.y);ctx.rotate(Math.sin(c.spin)*.2);ctx.fillStyle='#ffd85a';ctx.shadowColor='rgba(255,216,90,.55)';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(0,0,c.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#9a6b12';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('L',0,1);ctx.restore()});
+ const a=getRunnerAvatar();drawRunnerCharacter(ctx,a,70,g-58-runner.playerY,runner.time);
+ // Active skill aura
+ const n=performance.now();
+ if(runner.running&&(n<runner.skillActiveUntil||runner.shield)){
+   ctx.save();ctx.globalAlpha=.35;ctx.strokeStyle=a.accent;ctx.lineWidth=3;ctx.shadowColor=a.accent;ctx.shadowBlur=18;ctx.beginPath();ctx.arc(70,g-30-runner.playerY,42+Math.sin(runner.time*12)*3,0,Math.PI*2);ctx.stroke();ctx.restore();
+ }
+}
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function drawRunnerCharacter(ctx,a,x,y,t){
+ ctx.save();const bob=runner.running?Math.sin(t*13)*2:0;ctx.translate(x,y+bob);const run=Math.sin(t*18)*7;
+ ctx.strokeStyle=a.accent;ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(0,38);ctx.lineTo(-9+run*.35,55);ctx.moveTo(5,38);ctx.lineTo(14-run*.35,55);ctx.stroke();
+ ctx.fillStyle=a.color;roundRect(ctx,-17,4,34,36,10);ctx.fill();ctx.fillStyle=a.accent;ctx.beginPath();ctx.arc(0,-2,17,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#10131c';ctx.beginPath();ctx.arc(-6,-3,3,0,Math.PI*2);ctx.arc(6,-3,3,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle=a.color;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-14,12);ctx.lineTo(-25+run*.3,26);ctx.moveTo(14,12);ctx.lineTo(25-run*.3,26);ctx.stroke();ctx.restore()
+}
+
+async function loadLeaderboard(){if(!user||!sb)return;const {data,error}=await sb.rpc('get_runner_leaderboard');if(error){$('#leaderList').innerHTML='<div class="empty" style="min-height:100px;padding:15px">Leaderboard belum tersedia. Jalankan GAME-UPDATE.sql terbaru.</div>';return}$('#leaderList').innerHTML=data?.length?data.map((r,i)=>`<div class="leaderRow"><div class="leaderRank">${i+1}</div><div class="leaderName">${escapeHtml(r.display_name||r.username||'Pemain')}${r.user_id===user.id?'<span class="youMark">KAMU</span>':''}</div><div class="leaderTime">${formatTime(r.high_score)}</div></div>`).join(''):'<div class="empty" style="min-height:100px;padding:15px">Belum ada rekor. Jadilah yang pertama!</div>'}
+async function loadActivity(){if(!user||!sb)return;const {data,error}=await sb.from('activity').select('*').order('created_at',{ascending:false}).limit(30);if(error)return;$('#activityList').innerHTML=data?.length?data.map(a=>`<div class="musicItem"><div class="musicIcon">◌</div><div class="musicInfo"><b>${escapeHtml(a.action)}</b><small>${new Date(a.created_at).toLocaleString()}</small></div></div>`).join(''):'<div class="empty">Belum ada aktivitas.</div>'}
+function escapeHtml(s=''){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+$('#loginBtn').onclick=async()=>{if(!sb)return toast('Konfigurasi Supabase dulu.');const {error}=await sb.auth.signInWithPassword({email:$('#email').value,password:$('#password').value});$('#authMsg').textContent=error?.message||'Masuk berhasil';if(!error)closeAuth()};$('#signupBtn').onclick=async()=>{if(!sb)return toast('Konfigurasi Supabase dulu.');const {data,error}=await sb.auth.signUp({email:$('#email').value,password:$('#password').value});$('#authMsg').textContent=error?.message||(data.session?'Akun dibuat.':'Cek email untuk verifikasi akun.');if(!error&&data.session)closeAuth()};
+init();
+
+// Cinematic card interaction: subtle tilt + ripple.
+$$('.card').forEach(card=>{
+ card.addEventListener('pointermove',e=>{if(window.matchMedia('(pointer:fine)').matches){const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(900px) rotateX(${(-y*4).toFixed(2)}deg) rotateY(${(x*5).toFixed(2)}deg) translateY(-7px) scale(1.01)`}});
+ card.addEventListener('pointerleave',()=>card.style.transform='');
+ card.addEventListener('pointerdown',e=>{const r=card.getBoundingClientRect(),s=document.createElement('span');s.className='ripple';const d=Math.max(r.width,r.height);s.style.width=s.style.height=d+'px';s.style.left=(e.clientX-r.left-d/2)+'px';s.style.top=(e.clientY-r.top-d/2)+'px';card.appendChild(s);setTimeout(()=>s.remove(),700)});
+});
+document.addEventListener('DOMContentLoaded',()=>{runnerResize();const c=$('#runnerCanvas');if(c){c.addEventListener('pointerdown',e=>{e.preventDefault();jumpRunner()});}});
+document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>$('#boot')?.classList.add('hide'),3300)});setTimeout(()=>document.getElementById('boot')?.classList.add('hide'),3800);
+let deferredInstallPrompt=null;
+const installBtn=document.getElementById('installAppBtn');
+const themeMenuBtn=document.getElementById('themeMenuBtn');
+const themePanel=document.getElementById('themePanel');
+
+function isStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+}
+function openInstallMenu(e){
+  if(e) e.preventDefault();
+  if(isStandalone()){ toast('Lexiaa sudah terpasang sebagai App di HP.'); return; }
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(choice=>{
+      deferredInstallPrompt=null;
+      if(choice.outcome==='accepted') toast('Lexiaa sedang dipasang ke beranda HP 🎉');
+      else toast('Pemasangan dibatalkan.');
+    });
+    return;
+  }
+  toast('Prompt instal belum tersedia. Di Chrome tekan ⋮ lalu pilih “Instal aplikasi” atau “Tambahkan ke layar utama”.');
+}
+function toggleThemePanel(e){
+  if(e) e.preventDefault();
+  if(!themePanel) return;
+  const open=!themePanel.classList.contains('open');
+  themePanel.classList.toggle('open',open);
+  themePanel.setAttribute('aria-hidden',open?'false':'true');
+  themeMenuBtn?.setAttribute('aria-expanded',open?'true':'false');
+}
+installBtn?.addEventListener('click',openInstallMenu);
+themeMenuBtn?.addEventListener('click',toggleThemePanel);
+
+document.querySelectorAll('#themePanel .theme').forEach(btn=>{
+  btn.addEventListener('click',async()=>{
+    const t=btn.dataset.theme;
+    applyTema(t);
+    themePanel?.classList.remove('open');
+    themePanel?.setAttribute('aria-hidden','true');
+    themeMenuBtn?.setAttribute('aria-expanded','false');
+    if(user&&sb){
+      const {error}=await sb.from('profiles').update({theme:t,updated_at:new Date().toISOString()}).eq('id',user.id);
+      if(error) toast(error.message); else toast('Tema '+btn.firstChild.textContent.trim()+' aktif.');
+    }else toast('Tema '+btn.firstChild.textContent.trim()+' aktif.');
+  });
+});
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+});
+window.addEventListener('appinstalled',()=>{
+  deferredInstallPrompt=null;
+  toast('Lexiaa berhasil dipasang di HP 🎉');
+});
+window.addEventListener('load',()=>{
+  if(isStandalone()) installBtn?.classList.add('installed');
+});
+document.addEventListener('click',e=>{
+  if(themePanel?.classList.contains('open') && !themePanel.contains(e.target) && e.target!==themeMenuBtn){
+    themePanel.classList.remove('open');
+    themePanel.setAttribute('aria-hidden','true');
+    themeMenuBtn?.setAttribute('aria-expanded','false');
+  }
+});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
