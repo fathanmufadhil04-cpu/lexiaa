@@ -26,3 +26,4 @@ Fixed service-worker caching so the browser cannot keep serving the old v8 runne
 ## v12 notes
 - If avatar purchase previously showed `column "avatar_id" does not exist`, run `GAME-SHOP-FIX.sql` once in Supabase SQL Editor.
 - Runner includes a lightweight procedural synth backsound using Web Audio, with an ON/OFF toggle. No external audio file is required.
+<!-- Cloudflare deployment trigger -->
