@@ -154,6 +154,17 @@ body.fightImmersive{overflow:hidden}
 @media(orientation:portrait){#fightGamePanel.immersiveFight:before{content:'Putar HP ke samping untuk bermain 🥊';position:fixed;inset:0;z-index:10000;display:grid;place-items:center;background:rgba(3,4,8,.96);color:#fff;font-size:18px;font-weight:900;text-align:center;padding:30px}}
 
 .musicRequestBox{margin:0 0 18px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border-radius:22px;padding:18px}.musicRequestForm{display:flex;gap:9px;margin-top:12px}.musicRequestForm input{flex:1}.requestStatus{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5}.sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 10px}.sectionTitle h3{margin:0}.sectionTitle small{color:var(--muted)}.catalogPlaying{border-color:rgba(157,220,255,.5);box-shadow:0 0 0 1px rgba(157,220,255,.08)}.requestBadge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:800;background:rgba(255,255,255,.06);color:#cfd5e4}.requestBadge.processing{color:#ffe19a}.requestBadge.completed{color:#8ff0b5}.requestBadge.rejected{color:#ff9eb2}@media(max-width:560px){.musicRequestForm{flex-direction:column}.musicRequestForm .btn{width:100%}}
+
+/* Ban overlay: hidden by default; only appears for the currently signed-in user when the ban RPC says banned. */
+#banOverlay{display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;padding:22px;box-sizing:border-box;background:rgba(3,5,10,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);pointer-events:auto;}
+#banOverlay.show{display:flex;}
+#banOverlay .banCard{width:min(520px,100%);box-sizing:border-box;padding:30px 24px;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:linear-gradient(145deg,rgba(25,27,35,.98),rgba(10,11,16,.98));box-shadow:0 24px 80px rgba(0,0,0,.6);text-align:center;}
+#banOverlay .banIcon{font-size:42px;margin-bottom:8px;}
+#banOverlay h2{margin:0 0 10px;font-size:28px;}
+#banOverlay #banReason{margin:0 auto 10px;color:var(--muted,#aeb4c2);line-height:1.55;max-width:430px;}
+#banOverlay .banUntil{margin:0 0 20px;color:#ffb0bf;font-size:13px;}
+#banOverlay .btn{min-width:120px;}
+body.banned{overflow:hidden;}
 </style>
 <style id="install-style">
 .installAppBtn{position:fixed;left:14px;top:50%;transform:translateY(-50%);z-index:9999;display:none;align-items:center;gap:8px;border:1px solid rgba(130,230,255,.25);background:rgba(13,18,28,.88);color:#fff;padding:10px 13px;border-radius:999px;box-shadow:0 14px 45px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(18px);font:600 12px/1 'DM Sans',sans-serif;cursor:pointer;transition:.2s ease}
@@ -356,11 +367,11 @@ async function getMyBan(){
   try{const {data,error}=await sb.rpc('get_my_ban_status');if(error||!data)return null;return data;}catch(e){return null}
 }
 function showBanOverlay(info){
-  const o=$('#banOverlay');if(!o)return;o.classList.add('show');
+  const o=$('#banOverlay');if(!o)return;document.body.classList.add('banned');o.classList.add('show');
   $('#banReason').textContent=info?.reason||'Akun ini sedang dibatasi oleh admin.';
   $('#banUntil').textContent=info?.banned_until?'Berlaku sampai '+new Date(info.banned_until).toLocaleString('id-ID'):'Berlaku tanpa batas waktu';
 }
-function hideBanOverlay(){const o=$('#banOverlay');if(o)o.classList.remove('show')}
+function hideBanOverlay(){const o=$('#banOverlay');document.body.classList.remove('banned');if(o)o.classList.remove('show')}
 $('#banLogout')?.addEventListener('click',async()=>{hideBanOverlay();if(sb)await sb.auth.signOut();showView('home');toast('Kamu sudah keluar.')});
 async function enforceBan(){
   if(!user){hideBanOverlay();return false}
