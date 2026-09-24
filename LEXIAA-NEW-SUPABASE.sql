@@ -46,3 +46,12 @@ drop policy if exists music_storage on storage.objects;
 create policy music_storage on storage.objects for all to authenticated using(bucket_id='music' and (storage.foldername(name))[1]=auth.uid()::text) with check(bucket_id='music' and (storage.foldername(name))[1]=auth.uid()::text);
 drop policy if exists avatars_storage on storage.objects;
 create policy avatars_storage on storage.objects for all to authenticated using(bucket_id='avatars' and (storage.foldername(name))[1]=auth.uid()::text) with check(bucket_id='avatars' and (storage.foldername(name))[1]=auth.uid()::text);
+
+
+-- Leaderboard: expose only game score/display-name fields, not private profile fields.
+drop view if exists public.leaderboard;
+create view public.leaderboard as
+select gs.id, gs.game, gs.user_id, coalesce(nullif(p.display_name,''),'Lexiaa User') as display_name, gs.score, gs.played_at
+from public.game_scores gs
+left join public.profiles p on p.id=gs.user_id;
+grant select on public.leaderboard to authenticated;
