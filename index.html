@@ -157,7 +157,7 @@ body.fightImmersive{overflow:hidden}
 
 /* Ban overlay: hidden by default; only appears for the currently signed-in user when the ban RPC says banned. */
 #banOverlay{display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;padding:22px;box-sizing:border-box;background:rgba(3,5,10,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);pointer-events:auto;}
-#banOverlay.show{display:flex;}
+#banOverlay.show{display:flex!important;}
 #banOverlay .banCard{width:min(520px,100%);box-sizing:border-box;padding:30px 24px;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:linear-gradient(145deg,rgba(25,27,35,.98),rgba(10,11,16,.98));box-shadow:0 24px 80px rgba(0,0,0,.6);text-align:center;}
 #banOverlay .banIcon{font-size:42px;margin-bottom:8px;}
 #banOverlay h2{margin:0 0 10px;font-size:28px;}
@@ -225,7 +225,7 @@ body.pearl .themePanel{background:rgba(255,255,255,.97);color:#111}body.pearl .q
 </style>
 </head>
 <body class="obsidian"><div id="boot"><div class="bootAura"></div><div class="bootCore"><div class="bootLogo">Lexiaa<span class="bootSpark">✦</span></div><div class="bootTag">Ruangmu. Gayamu. Semua milikmu.</div><div class="bootBar"><i></i></div></div></div>
-<div id="banOverlay" aria-live="assertive"><div class="banCard"><div class="banIcon">⛔</div><h2>Akun Dibatasi</h2><p id="banReason">Akun ini sedang dibatasi oleh admin.</p><p class="banUntil" id="banUntil"></p><button class="btn" id="banLogout">Keluar</button></div></div><div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
+<div id="banOverlay" aria-live="assertive" style="display:none!important"><div class="banCard"><div class="banIcon">⛔</div><h2>Akun Dibatasi</h2><p id="banReason">Akun ini sedang dibatasi oleh admin.</p><p class="banUntil" id="banUntil"></p><button class="btn" id="banLogout">Keluar</button></div></div><div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
 <div class="app">
 <header class="top"><div class="brand">Lexiaa<span>✦</span></div><button id="profileBtn" class="profileBtn" aria-label="Profile"><span class="profileDot"></span><span class="profileLabel">Profil</span></button></header>
 <div class="topQuick" id="topQuick"><button class="quickBtn install" id="installAppBtn" type="button">📲 Instal App</button><button class="quickBtn" id="themeMenuBtn" type="button" aria-expanded="false">🎨 Tema</button>
@@ -367,16 +367,16 @@ async function getMyBan(){
   try{const {data,error}=await sb.rpc('get_my_ban_status');if(error||!data)return null;return data;}catch(e){return null}
 }
 function showBanOverlay(info){
-  const o=$('#banOverlay');if(!o)return;document.body.classList.add('banned');o.classList.add('show');
+  const o=$('#banOverlay');if(!o)return;document.body.classList.add('banned');o.classList.add('show');o.style.setProperty('display','flex','important');
   $('#banReason').textContent=info?.reason||'Akun ini sedang dibatasi oleh admin.';
   $('#banUntil').textContent=info?.banned_until?'Berlaku sampai '+new Date(info.banned_until).toLocaleString('id-ID'):'Berlaku tanpa batas waktu';
 }
-function hideBanOverlay(){const o=$('#banOverlay');document.body.classList.remove('banned');if(o)o.classList.remove('show')}
+function hideBanOverlay(){const o=$('#banOverlay');document.body.classList.remove('banned');if(o){o.classList.remove('show');o.style.setProperty('display','none','important')}}
 $('#banLogout')?.addEventListener('click',async()=>{hideBanOverlay();if(sb)await sb.auth.signOut();showView('home');toast('Kamu sudah keluar.')});
 async function enforceBan(){
   if(!user){hideBanOverlay();return false}
   const info=await getMyBan();
-  if(info?.banned){showBanOverlay(info);return true}
+  if(info && info.banned === true){showBanOverlay(info);return true}
   hideBanOverlay();return false;
 }
 async function init(){

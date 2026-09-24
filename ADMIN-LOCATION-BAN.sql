@@ -35,16 +35,28 @@ language sql
 security definer
 set search_path = public
 as $$
-  select coalesce(
-    (select jsonb_build_object('banned', true, 'banned_until', banned_until, 'reason', reason)
-     from public.user_bans b
-     where b.user_id = auth.uid()
-       and (b.banned_until is null or b.banned_until > now())
-     limit 1),
-    jsonb_build_object('banned', false)
+  select jsonb_build_object(
+    'banned', exists(
+      select 1 from public.user_bans b
+      where b.user_id = auth.uid()
+        and (b.banned_until is null or b.banned_until > now())
+    ),
+    'banned_until', (
+      select b.banned_until from public.user_bans b
+      where b.user_id = auth.uid()
+        and (b.banned_until is null or b.banned_until > now())
+      limit 1
+    ),
+    'reason', (
+      select b.reason from public.user_bans b
+      where b.user_id = auth.uid()
+        and (b.banned_until is null or b.banned_until > now())
+      limit 1
+    )
   );
 $$;
 revoke all on function public.get_my_ban_status() from public;
+grant execute on function public.get_my_ban_status() to authenticated;
 grant execute on function public.get_my_ban_status() to authenticated;
 
 drop function if exists public.admin_list_account_controls();
