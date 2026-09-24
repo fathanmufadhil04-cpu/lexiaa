@@ -331,3 +331,144 @@ using (bucket_id='music' and public.is_admin());
 -- Admin may also read storage objects through the public bucket URL.
 -- Existing old catalog rows are treated as global (owner_user_id NULL), so they remain visible to everyone
 -- until the admin deletes them from the Admin Panel.
+
+-- Lexiaa Account Signup Approval
+-- Opsi daftar: konfirmasi Gmail (Supabase bawaan) atau minta ACC admin.
+
+create table if not exists public.signup_requests (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid unique references auth.users(id) on delete set null,
+  email text not null,
+  method text not null default 'admin' check (method = 'admin'),
+  status text not null default 'pending' check (status in ('pending','approved','rejected')),
+  admin_note text null,
+  reviewed_by uuid null references auth.users(id),
+  reviewed_at timestamptz null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.signup_requests alter column user_id drop not null;
+alter table public.signup_requests drop constraint if exists signup_requests_user_id_fkey;
+alter table public.signup_requests add constraint signup_requests_user_id_fkey foreign key (user_id) references auth.users(id) on delete set null;
+
+alter table public.signup_requests enable row level security;
+drop policy if exists "signup_requests_self_select" on public.signup_requests;
+-- Tidak ada policy client. Member menerima status melalui UI hanya jika sudah terautentikasi.
+
+create or replace function public.submit_signup_request(p_user_id uuid, p_email text, p_method text default 'admin')
+returns jsonb
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  v_email text;
+begin
+  if lower(coalesce(p_method,'')) <> 'admin' then
+    raise exception 'Metode pendaftaran tidak valid';
+  end if;
+
+  select u.email::text into v_email from auth.users u where u.id = p_user_id;
+  if v_email is null then raise exception 'Akun pendaftaran tidak ditemukan'; end if;
+  if lower(trim(v_email)) <> lower(trim(coalesce(p_email,''))) then
+    raise exception 'Email pendaftaran tidak cocok';
+  end if;
+
+  insert into public.signup_requests(user_id,email,method,status,admin_note,reviewed_by,reviewed_at,updated_at)
+  values(p_user_id,v_email,'admin','pending',null,null,null,now())
+  on conflict(user_id) do update set email=excluded.email,method='admin',status='pending',admin_note=null,reviewed_by=null,reviewed_at=null,updated_at=now();
+
+  return jsonb_build_object('ok',true,'status','pending');
+end;
+$$;
+revoke all on function public.submit_signup_request(uuid,text,text) from public;
+grant execute on function public.submit_signup_request(uuid,text,text) to anon, authenticated;
+
+drop function if exists public.admin_list_signup_requests();
+create or replace function public.admin_list_signup_requests()
+returns table(
+  id uuid,
+  user_id uuid,
+  email text,
+  method text,
+  status text,
+  admin_note text,
+  created_at timestamptz,
+  reviewed_at timestamptz
+)
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then raise exception 'Not authorized'; end if;
+  return query
+  select r.id,r.user_id,r.email,r.method,r.status,r.admin_note,r.created_at,r.reviewed_at
+  from public.signup_requests r
+  order by case when r.status='pending' then 0 else 1 end, r.created_at desc;
+end;
+$$;
+revoke all on function public.admin_list_signup_requests() from public;
+grant execute on function public.admin_list_signup_requests() to authenticated;
+
+drop function if exists public.admin_approve_signup(uuid);
+create or replace function public.admin_approve_signup(p_request_id uuid)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  r public.signup_requests%rowtype;
+begin
+  if not public.is_admin() then raise exception 'Not authorized'; end if;
+  select * into r from public.signup_requests where id=p_request_id for update;
+  if not found then raise exception 'Pengajuan tidak ditemukan'; end if;
+  if r.status <> 'pending' then raise exception 'Pengajuan sudah diproses'; end if;
+
+  update auth.users
+  set email_confirmed_at=coalesce(email_confirmed_at,now())
+  where id=r.user_id;
+
+  if not found then raise exception 'Akun auth tidak ditemukan'; end if;
+
+  update public.signup_requests
+  set status='approved',admin_note='Disetujui admin.',reviewed_by=auth.uid(),reviewed_at=now(),updated_at=now()
+  where id=p_request_id;
+
+  return jsonb_build_object('ok',true,'status','approved','user_id',r.user_id);
+end;
+$$;
+revoke all on function public.admin_approve_signup(uuid) from public;
+grant execute on function public.admin_approve_signup(uuid) to authenticated;
+
+drop function if exists public.admin_reject_signup(uuid,text);
+create or replace function public.admin_reject_signup(p_request_id uuid,p_note text default 'Pendaftaran ditolak admin.')
+returns jsonb
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  r public.signup_requests%rowtype;
+  v_note text;
+begin
+  if not public.is_admin() then raise exception 'Not authorized'; end if;
+  select * into r from public.signup_requests where id=p_request_id for update;
+  if not found then raise exception 'Pengajuan tidak ditemukan'; end if;
+  if r.status <> 'pending' then raise exception 'Pengajuan sudah diproses'; end if;
+  v_note=coalesce(nullif(trim(p_note),''),'Pendaftaran ditolak admin.');
+
+  -- Hapus akun auth agar akun yang ditolak tidak bisa masuk kemudian setelah email diverifikasi.
+  delete from auth.users where id=r.user_id;
+
+  update public.signup_requests
+  set status='rejected',admin_note=v_note,reviewed_by=auth.uid(),reviewed_at=now(),updated_at=now()
+  where id=p_request_id;
+
+  return jsonb_build_object('ok',true,'status','rejected');
+end;
+$$;
+revoke all on function public.admin_reject_signup(uuid,text) from public;
+grant execute on function public.admin_reject_signup(uuid,text) to authenticated;
