@@ -55,24 +55,30 @@ create policy avatars_view_authenticated on storage.objects for select to authen
 
 -- Leaderboard: public-to-authenticated ranking without exposing email/profile secrets.
 drop view if exists public.leaderboard;
-create or replace function public.get_leaderboard(p_game text)
+drop function if exists public.get_leaderboard(text);
+create function public.get_leaderboard(p_game text)
 returns table(id uuid, game text, display_name text, avatar_path text, score integer, played_at timestamptz)
 language sql
 security definer
 set search_path = public
 as $$
-  select gs.id, gs.game,
-         coalesce(nullif(p.display_name,''),'Lexiaa User') as display_name,
-         p.avatar_path,
-         gs.score, gs.played_at
-  from public.game_scores gs
-  left join public.profiles p on p.id=gs.user_id
-  where gs.game = p_game
-  order by gs.score desc, gs.played_at asc
+  select ranked.id, ranked.game, ranked.display_name, ranked.avatar_path, ranked.score, ranked.played_at
+  from (
+    select distinct on (gs.user_id)
+           gs.id, gs.user_id, gs.game,
+           coalesce(nullif(p.display_name,''),'Lexiaa User') as display_name,
+           p.avatar_path, gs.score, gs.played_at
+    from public.game_scores gs
+    left join public.profiles p on p.id=gs.user_id
+    where gs.game = p_game
+    order by gs.user_id, gs.score desc, gs.played_at asc
+  ) ranked
+  order by ranked.score desc, ranked.played_at asc
   limit 50;
 $$;
 -- Atomic score save + Quick Tap diamond reward. Existing score/history behavior is preserved.
-create or replace function public.save_game_score(p_game text, p_score integer)
+drop function if exists public.save_game_score(text, integer);
+create function public.save_game_score(p_game text, p_score integer)
 returns table(score_id uuid, diamonds_earned integer, diamond_balance integer)
 language plpgsql
 security definer
