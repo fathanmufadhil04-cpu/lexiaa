@@ -6,6 +6,8 @@ create table if not exists public.music(id uuid primary key default gen_random_u
 create table if not exists public.ai_history(id uuid primary key default gen_random_uuid(),user_id uuid not null references auth.users(id) on delete cascade,tool text not null,prompt text,result text,created_at timestamptz not null default now());
 alter table public.ai_history add column if not exists result text;
 create table if not exists public.game_scores(id uuid primary key default gen_random_uuid(),user_id uuid not null references auth.users(id) on delete cascade,game text not null,score integer not null default 0,played_at timestamptz not null default now());
+alter table public.profiles add column if not exists diamonds integer not null default 0;
+alter table public.game_scores add column if not exists diamond_earned integer not null default 0;
 
 create or replace function public.handle_new_user() returns trigger language plpgsql security definer set search_path=public as $$
 begin
@@ -46,18 +48,22 @@ drop policy if exists music_storage on storage.objects;
 create policy music_storage on storage.objects for all to authenticated using(bucket_id='music' and (storage.foldername(name))[1]=auth.uid()::text) with check(bucket_id='music' and (storage.foldername(name))[1]=auth.uid()::text);
 drop policy if exists avatars_storage on storage.objects;
 create policy avatars_storage on storage.objects for all to authenticated using(bucket_id='avatars' and (storage.foldername(name))[1]=auth.uid()::text) with check(bucket_id='avatars' and (storage.foldername(name))[1]=auth.uid()::text);
+-- Logged-in users may view profile avatars used by the leaderboard; uploads/deletes remain owner-only.
+drop policy if exists avatars_view_authenticated on storage.objects;
+create policy avatars_view_authenticated on storage.objects for select to authenticated using(bucket_id='avatars');
 
 
 -- Leaderboard: public-to-authenticated ranking without exposing email/profile secrets.
 drop view if exists public.leaderboard;
 create or replace function public.get_leaderboard(p_game text)
-returns table(id uuid, game text, display_name text, score integer, played_at timestamptz)
+returns table(id uuid, game text, display_name text, avatar_path text, score integer, played_at timestamptz)
 language sql
 security definer
 set search_path = public
 as $$
   select gs.id, gs.game,
          coalesce(nullif(p.display_name,''),'Lexiaa User') as display_name,
+         p.avatar_path,
          gs.score, gs.played_at
   from public.game_scores gs
   left join public.profiles p on p.id=gs.user_id
@@ -65,5 +71,44 @@ as $$
   order by gs.score desc, gs.played_at asc
   limit 50;
 $$;
+-- Atomic score save + Quick Tap diamond reward. Existing score/history behavior is preserved.
+create or replace function public.save_game_score(p_game text, p_score integer)
+returns table(score_id uuid, diamonds_earned integer, diamond_balance integer)
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_id uuid;
+  v_reward integer := 0;
+  v_balance integer := 0;
+  v_score integer := greatest(0, p_score);
+begin
+  if auth.uid() is null then
+    raise exception 'Not authenticated';
+  end if;
+  if p_game not in ('Quick Tap','Quiz') then
+    raise exception 'Invalid game';
+  end if;
+  if p_game = 'Quick Tap' then
+    v_reward := floor(v_score / 10.0)::integer;
+  end if;
+
+  insert into public.game_scores(user_id,game,score,diamond_earned)
+  values(auth.uid(),p_game,v_score,v_reward)
+  returning id into v_id;
+
+  update public.profiles
+     set diamonds = diamonds + v_reward, updated_at = now()
+   where id = auth.uid()
+   returning diamonds into v_balance;
+
+  return query select v_id, v_reward, coalesce(v_balance,0);
+end;
+$$;
+
+revoke all on function public.save_game_score(text,integer) from public;
+grant execute on function public.save_game_score(text,integer) to authenticated;
+
 revoke all on function public.get_leaderboard(text) from public;
 grant execute on function public.get_leaderboard(text) to authenticated;
