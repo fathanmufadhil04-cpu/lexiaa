@@ -119,6 +119,24 @@ async function openAuraShop(){
   let cards=(e.data||[]).map(x=>{let own=owned.has(x.id),equipped=prof.equipped_profile_aura_id===x.id,preview='<div class="aura-preview">'+decoratedAvatarMarkup(av,null,x.id,(prof.display_name||'Lexiaa User')[0])+'</div>',action=equipped?'<button class="btn" onclick="equipProfileAura(null)">Lepas Aura</button>':own?'<button class="btn primary" onclick="equipProfileAura(\''+esc(x.id)+'\')">Pakai Aura</button>':'<button class="btn primary" onclick="buyProfileAura(\''+esc(x.id)+'\')">💠 '+Number(x.price_saldo||0).toLocaleString('id-ID')+' · Beli</button>';return '<div class="aura-card">'+preview+'<div class="aura-name">'+esc(x.name)+'</div><div class="aura-desc">'+esc(x.description||'')+'</div><div class="aura-price '+(own?'aura-owned':'')+'">'+(own?'✓ Dimiliki':'💠 '+Number(x.price_saldo||0).toLocaleString('id-ID'))+'</div>'+action+'</div>'}).join('');
   $('auraBody').innerHTML=wallet+'<div class="effect-grid">'+(cards||'<div class="empty">Belum ada Profile Aura.</div>')+'</div><div class="aura-shop-note">Profile Aura adalah lapisan glow di belakang avatar. Pembayaran menggunakan Spark Saldo.</div>'
 }
+function openExchangeShop(){
+  if(!user)return openAuth();
+  const modal=$('exchangeModal');
+  const body=$('exchangeBody');
+  if(!modal||!body)return;
+  body.innerHTML='<div class="spark-exchange"><div class="ey">Premium Currency</div><div class="card" style="padding:12px;margin:0"><div class="head"><div><b>💎 Tukar Diamond → 💠 Spark Saldo</b><small style="display:block;color:var(--m);margin-top:4px">Rate: 100 Diamond = 10 Spark Saldo. Tidak bisa ditukar balik.</small></div><span class="tag" id="exchangeDiamondBalance">💎 —</span></div><div class="exchange-row" style="margin-top:10px"><button class="btn primary" onclick="exchangeDiamondToSpark(100)">💎 100 → 💠 10</button><button class="btn primary" onclick="exchangeDiamondToSpark(500)">💎 500 → 💠 50</button><button class="btn primary" onclick="exchangeDiamondToSpark(1000)">💎 1.000 → 💠 100</button><button class="btn primary" onclick="exchangeDiamondToSpark(5000)">💎 5.000 → 💠 500</button></div></div><div class="spark-wallet" style="margin-top:10px"><div><small>💠 Spark Saldo</small><b id="exchangeSparkBalance">—</b></div><span class="tag">Dipakai untuk Profile Aura</span></div></div>';
+  modal.classList.add('show');
+  refreshExchangeBalances();
+}
+function closeExchangeShop(){$('exchangeModal').classList.remove('show')}
+async function refreshExchangeBalances(){
+  if(!user)return;
+  let r=await sb.from('profiles').select('diamonds,spark_saldo').eq('id',user.id).maybeSingle();
+  if(r.error)return;
+  if($('exchangeDiamondBalance'))$('exchangeDiamondBalance').textContent='💎 '+Number(r.data?.diamonds||0).toLocaleString('id-ID');
+  if($('exchangeSparkBalance'))$('exchangeSparkBalance').textContent=Number(r.data?.spark_saldo||0).toLocaleString('id-ID');
+}
+
 function closeAuraShop(){$('auraModal').classList.remove('show')}
 async function exchangeDiamondToSpark(amount){
   if(!user)return openAuth();
@@ -130,7 +148,8 @@ async function exchangeDiamondToSpark(amount){
   if(r.error)return msg(r.error.message);
   let row=Array.isArray(r.data)?r.data[0]:r.data;
   msg('Berhasil ditukar · 💠 '+Number(row?.new_spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo');
-  await openAuraShop();
+  closeExchangeShop();
+  await refreshExchangeBalances();
   await profile();
 }
 async function buyProfileAura(id){if(!user)return openAuth();let r=await sb.rpc('buy_profile_aura',{p_aura_id:id});if(r.error)return msg(r.error.message);msg('Profile Aura berhasil dibeli');await openAuraShop();await profile()}
@@ -155,7 +174,7 @@ async function profile(){
     const avatarMarkup=decoratedAvatarMarkup(av,null,p.equipped_profile_aura_id,(p.display_name||'L')[0]);
     box.innerHTML=avatarMarkup+
       '<div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div>'+
-      '<div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openAuraShop()">🌌 Profile Aura Shop</button><button class="btn primary" onclick="openAuraShop()">💎 Tukar Diamond</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div>'+
+      '<div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openAuraShop()">🌌 Profile Aura Shop</button><button class="btn primary" onclick="openExchangeShop()">💎 Tukar Diamond</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div>'+
       '<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag diamond-aura '+diamondAuraClass(p.diamonds)+'"><span class="diamond-icon">💎</span> '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><span class="spark-mini">💠 '+Number(p.spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo</span></div>'+
       '<div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div>'+ 
       '<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn danger" onclick="logout()">Logout</button></div>';
