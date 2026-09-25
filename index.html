@@ -54,42 +54,94 @@ html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--
 @media(max-width:560px){.border-grid{grid-template-columns:1fr 1fr}.border-preview{width:76px;height:76px}.border-card{padding:10px;min-height:178px}}
 @media(min-width:700px){.border-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
-/* LEXIAA V19 — FINAL AVATAR GEOMETRY PATCH */
+/* LEXIAA V20 — BORDER/PHOTO GEOMETRY FIX
+   Keep each existing avatar's ORIGINAL size.
+   The border is the outer frame; the photo is a smaller, clipped inner circle.
+   No JS/data/shop/leaderboard logic is changed. */
 .profile-border{
-  position:relative!important;width:100%!important;height:100%!important;
-  min-width:0!important;min-height:0!important;aspect-ratio:1/1!important;
-  border-radius:50%!important;overflow:visible!important;isolation:isolate!important;
+  position:relative!important;
+  box-sizing:border-box!important;
+  border-radius:50%!important;
+  overflow:visible!important;
+  isolation:isolate!important;
+  min-width:0!important;
+  min-height:0!important;
+  aspect-ratio:1/1!important;
 }
 .profile-border > .avatar-core{
-  position:absolute!important;inset:0!important;width:auto!important;height:auto!important;
-  min-width:0!important;min-height:0!important;aspect-ratio:1/1!important;
-  border-radius:50%!important;overflow:hidden!important;
-  clip-path:circle(50% at 50% 50%)!important;z-index:2!important;
+  position:absolute!important;
+  left:4px!important; top:4px!important;
+  right:4px!important; bottom:4px!important;
+  width:auto!important; height:auto!important;
+  min-width:0!important; min-height:0!important;
+  max-width:none!important; max-height:none!important;
+  box-sizing:border-box!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  clip-path:circle(50% at 50% 50%)!important;
+  z-index:2!important;
 }
 .profile-border > .avatar-core > img{
-  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
-  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
-  object-fit:cover!important;object-position:50% 50%!important;
-  border-radius:50%!important;clip-path:none!important;display:block!important;
+  position:absolute!important;
+  left:0!important; top:0!important;
+  width:100%!important; height:100%!important;
+  min-width:0!important; min-height:0!important;
+  max-width:none!important; max-height:none!important;
+  object-fit:cover!important;
+  object-position:50% 50%!important;
+  display:block!important;
+  border:0!important;
+  border-radius:50%!important;
+  clip-path:none!important;
 }
 .profile-border > .avatar-core > .avatar-fallback{
-  position:absolute!important;inset:0!important;width:auto!important;height:auto!important;
-  border-radius:50%!important;clip-path:none!important;display:grid!important;place-items:center!important;
+  position:absolute!important; inset:0!important;
+  width:auto!important; height:auto!important; margin:0!important;
+  border-radius:50%!important;
+  clip-path:none!important;
+  display:grid!important; place-items:center!important;
 }
-.ava.profile-border{position:relative!important;width:56px!important;height:56px!important;aspect-ratio:1/1!important}
-.ava.profile-border > .avatar-core{position:absolute!important;inset:0!important}
-.leader-avatar.profile-border{position:relative!important;aspect-ratio:1/1!important}
-.leader-avatar.profile-border > .avatar-core{position:absolute!important;inset:0!important}
-.champion-avatar.profile-border{position:relative!important;aspect-ratio:1/1!important}
-.champion-avatar.profile-border > .avatar-core{position:absolute!important;inset:0!important}
-.border-preview.profile-border{position:relative!important;aspect-ratio:1/1!important}
-.border-preview.profile-border > .avatar-core{position:absolute!important;inset:0!important}
-.profile-shell .profile > .avatar-core{
-  position:absolute!important;inset:0!important;width:auto!important;height:auto!important;
-  border-radius:50%!important;overflow:hidden!important;
-  clip-path:circle(50% at 50% 50%)!important;
+.ava.profile-border{
+  width:56px!important;height:56px!important;aspect-ratio:1/1!important;
 }
-.profile-shell .profile{position:relative!important;aspect-ratio:1/1!important}
+.leader-avatar.profile-border{
+  width:68px!important;height:68px!important;aspect-ratio:1/1!important;
+}
+.leader-item.rank-1 .leader-avatar.profile-border{
+  width:76px!important;height:76px!important;
+}
+.leader-item.rank-2 .leader-avatar.profile-border,
+.leader-item.rank-3 .leader-avatar.profile-border{
+  width:72px!important;height:72px!important;
+}
+.champion-avatar.profile-border{
+  width:126px!important;height:126px!important;aspect-ratio:1/1!important;
+}
+.border-preview.profile-border{
+  width:82px!important;height:82px!important;aspect-ratio:1/1!important;
+}
+.profile-shell .profile.profile-border{
+  width:92px!important;height:92px!important;
+  aspect-ratio:1/1!important;position:relative!important;
+}
+@media(max-width:560px){
+  .champion-avatar.profile-border{
+    width:100px!important;height:100px!important;
+  }
+  .border-preview.profile-border{
+    width:76px!important;height:76px!important;
+  }
+}
+.border-preview.profile-border > .avatar-core{
+  width:auto!important;height:auto!important;
+}
+.border-preview.profile-border img,
+.leader-avatar.profile-border img,
+.champion-avatar.profile-border img,
+.profile-shell .profile.profile-border img,
+.ava.profile-border img{
+  max-width:none!important;max-height:none!important;box-sizing:border-box!important;
+}
 </style></head><body>
 <div class="app"><header class="top"><div class="brand"><img src="icon-192.png"><div><b>Lexiaa</b><small>your space, your way.</small></div></div><button class="ava" id="ava" onclick="page('profile')">L</button></header>
 
