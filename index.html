@@ -269,16 +269,18 @@ html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--
 .aura-preview{min-height:116px;display:grid;place-items:center}.aura-preview .avatar-decor{width:96px;height:96px}.aura-card{background:#0f1420;border:1px solid var(--b);border-radius:18px;padding:12px;min-height:235px;display:flex;flex-direction:column;align-items:center;text-align:center}.aura-card .btn{width:100%;margin-top:auto}.aura-card .aura-name{font-weight:900;font-size:14px}.aura-card .aura-desc{font-size:10px;color:var(--m);line-height:1.4;min-height:30px;margin:4px 0 8px}.aura-price{font-size:12px;color:#dcb4ff;font-weight:900;margin-bottom:8px}.aura-owned{color:#7df0cf}.aura-shop-note{font-size:10px;color:var(--m);line-height:1.5;text-align:center;margin-top:10px}
 
 /* V31 — Profile Spark removed; Profile Aura remains. */
-#profileCard > .avatar-decor{width:150px;height:150px;margin:0 auto 16px;}
+#profileCard > .avatar-decor{width:128px;height:128px;margin:0 auto 16px;}
 #profileCard > .avatar-decor .decor-aura{inset:-22%;}
 #profileCard > .avatar-decor .decor-spark{display:none!important;}
+/* V31 cleanup: Profile Spark is retired. */
+.spark-card,.spark-preview,.spark-exchange{display:none!important;}
 .leader-profile .avatar-decor{width:100%;height:100%;display:block;}
 .leader-profile .decor-avatar-core{width:100%;height:100%;aspect-ratio:1/1;border-radius:50%;overflow:hidden;}
 .leader-profile .decor-avatar-core img{width:100%!important;height:100%!important;aspect-ratio:1/1;object-fit:cover!important;border-radius:50%!important;display:block;}
 .champion-avatar .avatar-decor{width:100%;height:100%;display:block;}
 .champion-avatar .decor-avatar-core{width:100%;height:100%;aspect-ratio:1/1;border-radius:50%;overflow:hidden;}
 .champion-avatar .decor-avatar-core img{width:100%!important;height:100%!important;aspect-ratio:1/1;object-fit:cover!important;border-radius:50%!important;display:block;}
-@media(max-width:560px){#profileCard > .avatar-decor{width:128px;height:128px;}}
+@media(max-width:560px){#profileCard > .avatar-decor{width:120px;height:120px;}}
 </style></head><body>
 <div class="app"><header class="top"><div class="brand"><img src="icon-192.png"><div><b>Lexiaa</b><small>your space, your way.</small></div></div><button class="ava" id="ava" onclick="page('profile')">L</button></header>
 
@@ -406,18 +408,35 @@ async function exchangeDiamondToSpark(amount){
 }
 async function buyProfileAura(id){if(!user)return openAuth();let r=await sb.rpc('buy_profile_aura',{p_aura_id:id});if(r.error)return msg(r.error.message);msg('Profile Aura berhasil dibeli');await openAuraShop();await profile()}
 async function equipProfileAura(id){if(!user)return openAuth();let r=await sb.rpc('equip_profile_aura',{p_aura_id:id});if(r.error)return msg(r.error.message);msg(id?'Profile Aura dipasang':'Profile Aura dilepas');closeAuraShop();await profile();await avatar()}
-async function diamondAuraClass(d){d=Number(d||0);if(d>=25000)return 'diamond-aura-eternal';if(d>=10000)return 'diamond-aura-mythic';if(d>=2500)return 'diamond-aura-celestial';if(d>=500)return 'diamond-aura-royal';if(d>=100)return 'diamond-aura-aqua';return 'diamond-aura-soft'}
+function diamondAuraClass(d){d=Number(d||0);if(d>=25000)return 'diamond-aura-eternal';if(d>=10000)return 'diamond-aura-mythic';if(d>=2500)return 'diamond-aura-celestial';if(d>=500)return 'diamond-aura-royal';if(d>=100)return 'diamond-aura-aqua';return 'diamond-aura-soft'}
 async function profile(){
-  if(!user){$('profileCard').innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}
-  await ensure();
-  let r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle(),p=r.data||{};
-  let av='';
-  if(p.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);if(u.data?.signedUrl)av='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
-  let effect=nameEffectClass(p.equipped_name_effect_id);
-  let display=esc(p.display_name||'Lexiaa User');
-  let spark=decoratedAvatarMarkup(av,null,p.equipped_profile_aura_id,(p.display_name||'L')[0]);
-  $('profileCard').innerHTML=spark+'<div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openAuraShop()">🌌 Profile Aura Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag diamond-aura '+diamondAuraClass(p.diamonds)+'"><span class="diamond-icon">💎</span> '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><span class="spark-mini">💠 '+Number(p.spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo</span></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn danger" onclick="logout()">Logout</button></div>';
-  applyTheme(p.theme);
+  const box=$('profileCard');
+  if(!box)return;
+  if(!user){box.innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}
+  try{
+    await ensure();
+    const r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+    if(r.error) throw r.error;
+    const p=r.data||{};
+    let av='';
+    if(p.avatar_path){
+      const u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);
+      if(!u.error&&u.data?.signedUrl) av='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">';
+    }
+    const effect=nameEffectClass(p.equipped_name_effect_id);
+    const display=esc(p.display_name||'Lexiaa User');
+    const avatarMarkup=decoratedAvatarMarkup(av,null,p.equipped_profile_aura_id,(p.display_name||'L')[0]);
+    box.innerHTML=avatarMarkup+
+      '<div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div>'+
+      '<div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openAuraShop()">🌌 Profile Aura Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div>'+
+      '<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag diamond-aura '+diamondAuraClass(p.diamonds)+'"><span class="diamond-icon">💎</span> '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><span class="spark-mini">💠 '+Number(p.spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo</span></div>'+
+      '<div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div>'+ 
+      '<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn danger" onclick="logout()">Logout</button></div>';
+    applyTheme(p.theme);
+  }catch(e){
+    console.error('Profile render:',e);
+    box.innerHTML='<div class="empty">Profil gagal dimuat.<br><small>'+esc(e?.message||'Terjadi kesalahan saat memuat profil.')+'</small><br><button class="btn" style="margin-top:10px" onclick="profile()">Coba lagi</button></div>';
+  }
 }
 async function saveProfile(){let name=$('displayName').value.trim(),theme=$('theme').value;if(!name)return msg('Nama tidak boleh kosong');let r=await sb.from('profiles').update({display_name:name,theme,updated_at:new Date().toISOString()}).eq('id',user.id);if(r.error)return msg(r.error.message);applyTheme(theme);await avatar();msg('Profil disimpan');profile()}
 function applyTheme(theme){document.documentElement.dataset.theme=theme||'obsidian'}
