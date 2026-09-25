@@ -45,6 +45,55 @@ html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--
 @keyframes nameNeon{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
 @media(max-width:560px){.effect-grid{grid-template-columns:1fr 1fr}.effect-card{padding:12px 9px;min-height:158px}.effect-preview-name{font-size:17px}}
 @media(min-width:700px){.effect-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* LEXIAA V22 — LEADERBOARD AVATAR CIRCLE FIX
+   Keep profile photos circular and remove the old rounded-square avatar frame. */
+.leader-profile{
+  width:68px;
+  height:68px;
+  border-radius:50%;
+  overflow:visible;
+}
+.leader-avatar{
+  width:68px;
+  height:68px;
+  border-radius:50%!important;
+  overflow:hidden;
+  background:#1a2130;
+  border:0;
+  display:grid;
+  place-items:center;
+}
+.leader-avatar .avatar-core,
+.leader-avatar .avatar-core>img{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  object-position:center;
+}
+.leader-rank.rank-1 + .leader-profile{
+  width:76px;
+  height:76px;
+}
+.leader-rank.rank-1 + .leader-profile .leader-avatar{
+  width:76px;
+  height:76px;
+  border-radius:50%!important;
+  box-shadow:0 0 0 1px #d6b84a66,0 0 24px #d6b84a33;
+}
+.leader-rank.rank-2 + .leader-profile,
+.leader-rank.rank-3 + .leader-profile{
+  width:72px;
+  height:72px;
+}
+.leader-rank.rank-2 + .leader-profile .leader-avatar,
+.leader-rank.rank-3 + .leader-profile .leader-avatar{
+  width:72px;
+  height:72px;
+  border-radius:50%!important;
+}
+
 </style></head><body>
 <div class="app"><header class="top"><div class="brand"><img src="icon-192.png"><div><b>Lexiaa</b><small>your space, your way.</small></div></div><button class="ava" id="ava" onclick="page('profile')">L</button></header>
 
