@@ -148,6 +148,59 @@ async function loadWallet(){if(!$('diamondBalance'))return;if(!user){$('diamondB
 async function loadScores(){if(!user){$('scores').innerHTML='<div class="empty">Login untuk melihat history.</div>';return}const games=['Quick Tap','Quiz'];const results=await Promise.all(games.map(game=>sb.from('game_scores').select('id,game,score,played_at').eq('user_id',user.id).eq('game',game).order('score',{ascending:false}).order('played_at',{ascending:false}).limit(1)));const failed=results.find(r=>r.error);if(failed){$('scores').innerHTML='<div class="empty">Gagal memuat score.<br><small>'+esc(failed.error.message)+'</small></div>';return}const best=results.map(r=>r.data?.[0]).filter(Boolean);best.sort((a,b)=>{const sa=Number(a.score||0),sb=Number(b.score||0);if(sb!==sa)return sb-sa;return new Date(b.played_at)-new Date(a.played_at)});$('scores').innerHTML=best.length?best.map(x=>`<div class="item"><div class="thumb">◇</div><div class="main"><b>${esc(x.game)}</b><small>${x.score} · ${new Date(x.played_at).toLocaleString('id-ID')}</small></div></div>`).join(''):'<div class="empty">Belum ada score.</div>'}
 async function loadHomeChampion(){const box=$('homeChampion');if(!box)return;if(!user||!sb){box.innerHTML='';return}box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Memuat juara #1…</div></div>';try{let r=await sb.rpc('get_leaderboard',{p_game:'Quick Tap'});if(r.error)throw r.error;if(!Array.isArray(r.data)||!r.data.length){box.innerHTML='';return}let x=r.data[0];let avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile juara 1">'}let score=Number(x.score||0);let title=score>=100?'Sang Kilat Abadi':score>=90?'Si Cepat Kilat':score>=75?'Tangan Petir':score>=60?'Refleks Cahaya':'Pemburu Kecepatan';let diamondBalance=null;try{let dr=await sb.rpc('get_player_diamonds',{p_user_id:x.id});if(!dr.error&&Array.isArray(dr.data)&&dr.data.length)diamondBalance=Number(dr.data[0].diamond_balance||0)}catch(e){console.warn('Champion diamond:',e)}let diamondText=diamondBalance===null?'💎 —':`💎 ${diamondBalance.toLocaleString('id-ID')}`;box.innerHTML=`<section class="champion-card" aria-label="Juara 1 Quick Tap"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="champion-layout"><div class="champion-avatar-wrap"><div class="champion-crown">👑</div><div class="champion-avatar ${borderClass(x.equipped_border_id)}">${avatar||`<span class="avatar-fallback">${esc((x.display_name||'L')[0].toUpperCase())}</span>`}</div></div><div class="champion-copy"><div class="champion-title">JUARA #1 · ${esc(title)}</div><div class="champion-name">${esc(x.display_name||'Lexiaa User')}</div><div class="champion-subtitle">Pemegang score tertinggi Quick Tap di Lexiaa. Kecepatan yang layak dipajang.</div><div class="champion-stats"><div class="champion-score"><span class="champion-score-main">⚡ ${score} TAP</span><span class="champion-score-meta">dalam 10 detik</span></div><div class="champion-diamonds"><span class="diamond-icon">💎</span><span class="diamond-count">${diamondBalance===null?'—':diamondBalance.toLocaleString('id-ID')}</span></div></div></div><div class="champion-badge">TOP PLAYER</div></div></section>`}catch(e){box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Champion belum dapat dimuat.</div></div>';console.error('Champion Spotlight:',e)}}
 async function loadLeaderboard(){if(!$('leaderboard'))return;if(!user){$('leaderboard').innerHTML='<div class="empty">Login untuk melihat leaderboard.</div>';return}let game=$('leaderGame')?.value||'Quick Tap';let r=await sb.rpc('get_leaderboard',{p_game:game});if(r.error){$('leaderboard').innerHTML='<div class="empty">Gagal memuat leaderboard.<br><small>'+esc(r.error.message)+'</small></div>';return}if(!r.data.length){$('leaderboard').innerHTML='<div class="empty">Belum ada score untuk '+esc(game)+'.</div>';return}let rows='';for(let i=0;i<r.data.length;i++){let x=r.data[i];let rank=i+1;let avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile">'}let cls=rank<=3?' rank-'+rank:'';let crown=rank===1?'<span class="leader-crown" aria-label="Juara 1">👑</span>':'';let fallback=rank<=3?String(rank):String(rank);rows+=`<div class="item leader-item${cls}"><div class="leader-rank${cls}">${fallback}</div><div class="leader-profile ${borderClass(x.equipped_border_id)}">${crown}<div class="leader-avatar">${avatar||'<span class="rank-num">'+rank+'</span>'}</div></div><div class="main"><b>${esc(x.display_name||'Lexiaa User')}</b><small>${esc(x.game)} · ${x.score} · ${new Date(x.played_at).toLocaleString('id-ID')}</small></div></div>`}$('leaderboard').innerHTML=rows}
+
+function borderClass(id){
+  return id ? ('profile-border border-'+String(id).replace(/[^a-zA-Z0-9_-]/g,'')) : '';
+}
+async function openShop(){
+  if(!user)return openAuth();
+  $('shopBody').innerHTML='<div class="empty">Memuat border shop…</div>';
+  $('shopModal').classList.add('show');
+  let [b,u,p]=await Promise.all([
+    sb.from('profile_borders').select('*').order('sort_order',{ascending:true}),
+    sb.from('user_profile_borders').select('border_id').eq('user_id',user.id),
+    sb.from('profiles').select('diamonds,display_name,avatar_path,equipped_border_id').eq('id',user.id).maybeSingle()
+  ]);
+  if(b.error){$('shopBody').innerHTML='<div class="empty">Gagal memuat shop.<br><small>'+esc(b.error.message)+'</small></div>';return}
+  let owned=new Set((u.data||[]).map(x=>x.border_id)), prof=p.data||{};
+  let avatar='';
+  if(prof.avatar_path){
+    let s=await sb.storage.from('avatars').createSignedUrl(prof.avatar_path,900);
+    if(s.data?.signedUrl) avatar='<img alt="Preview" src="'+s.data.signedUrl+(s.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">';
+  }
+  let cards=(b.data||[]).map(x=>{
+    let own=owned.has(x.id), equipped=prof.equipped_border_id===x.id;
+    let preview=avatar||'<span class="avatar-fallback">'+esc((prof.display_name||'L')[0].toUpperCase())+'</span>';
+    let action=equipped
+      ? '<button class="btn" disabled>✓ Terpasang</button>'
+      : own
+        ? '<button class="btn primary" onclick="equipBorder(\''+esc(x.id)+'\')">Pakai Border</button>'
+        : '<button class="btn primary" onclick="buyBorder(\''+esc(x.id)+'\')">💎 '+Number(x.price||0).toLocaleString('id-ID')+' · Beli</button>';
+    return '<div class="border-card"><div class="border-preview '+borderClass(x.id)+'">'+preview+'</div><div class="border-name">'+esc(x.name)+'</div><div class="border-desc">'+esc(x.description||'')+'</div><div class="border-price '+(own?'border-owned':'')+'">'+(own?'✓ Dimiliki':'💎 '+Number(x.price||0).toLocaleString('id-ID'))+'</div>'+action+'</div>';
+  }).join('');
+  $('shopBody').innerHTML='<div class="shop-hero"><div><div class="ey">COSMETICS</div><div class="shop-balance">💎 '+Number(prof.diamonds||0).toLocaleString('id-ID')+'</div></div><span class="tag">Private collection</span></div><div class="border-grid">'+(cards||'<div class="empty">Belum ada border.</div>')+'</div><div class="shop-note">Border yang kamu pasang akan terlihat oleh user lain di Profile, Leaderboard, dan Home Spotlight.</div>';
+}
+function closeShop(){$('shopModal').classList.remove('show')}
+async function buyBorder(id){
+  if(!user)return openAuth();
+  let r=await sb.rpc('buy_profile_border',{p_border_id:id});
+  if(r.error){msg(r.error.message);return}
+  msg('Border berhasil dibeli');
+  await openShop();
+  await profile();
+  await avatar();
+}
+async function equipBorder(id){
+  if(!user)return openAuth();
+  let r=await sb.rpc('equip_profile_border',{p_border_id:id});
+  if(r.error){msg(r.error.message);return}
+  msg(id?'Border dipasang':'Border dilepas');
+  closeShop();
+  await profile();
+  await avatar();
+  await loadLeaderboard();
+  await loadHomeChampion();
+}
 async function profile(){if(!user){$('profileCard').innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}await ensure();let r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle(),p=r.data||{};let av='';if(p.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);if(u.data?.signedUrl)av='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}let cls=borderClass(p.equipped_border_id);$('profileCard').innerHTML=`<div class="profile-shell ${cls}"><div class="profile">${av||'<span class="avatar-fallback">'+esc((p.display_name||'L')[0])+'</span>'}</div></div><div style="text-align:center"><h3>${esc(p.display_name||'Lexiaa User')}</h3><div style="color:var(--m);font-size:12px">${esc(user.email||'')}</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Border Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="${esc(p.display_name||'Lexiaa User')}" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" ${p.theme==='obsidian'?'selected':''}>Obsidian</option><option value="midnight" ${p.theme==='midnight'?'selected':''}>Midnight</option><option value="aurora" ${p.theme==='aurora'?'selected':''}>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag">💎 ${Number(p.diamonds||0).toLocaleString('id-ID')} diamond</span><button class="btn danger" onclick="logout()">Logout</button></div>`;applyTheme(p.theme)}
 async function saveProfile(){let name=$('displayName').value.trim(),theme=$('theme').value;if(!name)return msg('Nama tidak boleh kosong');let r=await sb.from('profiles').update({display_name:name,theme,updated_at:new Date().toISOString()}).eq('id',user.id);if(r.error)return msg(r.error.message);applyTheme(theme);await avatar();msg('Profil disimpan');profile()}
 function applyTheme(theme){document.documentElement.dataset.theme=theme||'obsidian'}
