@@ -14,7 +14,7 @@ async function signup(e){e.preventDefault();let f=new FormData(e.target),email=f
 async function init(){let c=window.LEXIAA_CONFIG||{};if(!c.SUPABASE_URL||!c.SUPABASE_PUBLISHABLE_KEY){profile();return}sb=window.supabase.createClient(c.SUPABASE_URL,c.SUPABASE_PUBLISHABLE_KEY);let r=await sb.auth.getSession();apply(r.data.session);sb.auth.onAuthStateChange((_e,s)=>apply(s))}
 async function apply(s){session=s;user=s?.user||null;profile();avatar();loadHomeChampion();if(document.querySelector('#photos.active'))loadPhotos();if(document.querySelector('#music.active'))loadMusic();if(document.querySelector('#games.active')){loadScores();loadLeaderboard();loadWallet()}}
 async function ensure(){if(!user)return;let r=await sb.from('profiles').select('id').eq('id',user.id).maybeSingle();if(!r.data)await sb.from('profiles').insert({id:user.id,display_name:user.user_metadata?.display_name||user.email.split('@')[0]})}
-async function avatar(){if(!user){$('ava').className='ava';$('ava').textContent='L';return}await ensure();let r=await sb.from('profiles').select('avatar_path,display_name').eq('id',user.id).maybeSingle();let el=$('ava');el.className='ava';el.textContent=(r.data?.display_name||'L')[0].toUpperCase();if(r.error||!r.data?.avatar_path)return;let u=await sb.storage.from('avatars').createSignedUrl(r.data.avatar_path,3600);if(u.error||!u.data?.signedUrl)return;el.innerHTML='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
+async function avatar(){if(!user){$('ava').className='ava';$('ava').innerHTML='L';return}await ensure();let r=await sb.from('profiles').select('avatar_path,display_name,equipped_profile_aura_id').eq('id',user.id).maybeSingle();let el=$('ava');el.className='ava';let av='';if(r.data?.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(r.data.avatar_path,3600);if(!u.error&&u.data?.signedUrl)av='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}el.innerHTML=decoratedAvatarMarkup(av,null,r.data?.equipped_profile_aura_id,(r.data?.display_name||'L')[0].toUpperCase());}
 function addPhoto(){if(!user)return openAuth();$('pi').value='';$('pi').click()}$('pi').onchange=async e=>{let f=e.target.files?.[0];if(!f)return;msg('Uploading…');let path=user.id+'/'+crypto.randomUUID()+'-'+f.name.replace(/[^a-zA-Z0-9._-]/g,'_');let u=await sb.storage.from('photos').upload(path,f,{contentType:f.type,upsert:false});if(u.error)return msg(u.error.message);let d=await sb.from('photos').insert({user_id:user.id,storage_path:path,file_name:f.name});if(d.error){await sb.storage.from('photos').remove([path]);return msg(d.error.message)}msg('Foto ditambahkan');loadPhotos()}
 async function loadPhotos(){if(!user){$('photoList').innerHTML='<div class="empty">Login untuk melihat album.</div>';return}let r=await sb.from('photos').select('*').eq('user_id',user.id).order('created_at',{ascending:false});if(r.error){$('photoList').innerHTML='<div class="empty">Gagal memuat foto.<br><small>'+esc(r.error.message)+'</small></div>';return}if(!r.data.length){$('photoList').innerHTML='<div class="empty">Belum ada foto.</div>';return}let out='';for(let x of r.data){let u=await sb.storage.from('photos').createSignedUrl(x.storage_path,3600);let signed=u.data?.signedUrl||'';let safePath=encodeURIComponent(x.storage_path);let safeName=encodeURIComponent(x.file_name);out+=`<div class="item photo-item" onclick="openPhotoByPath('${safePath}','${safeName}')" style="cursor:zoom-in"><div class="thumb">${signed?'<img src="'+signed+(signed.includes('?')?'&':'?')+'v='+Date.now()+'" alt="'+esc(x.file_name)+'">':'◌'}</div><div class="main"><b>${esc(x.file_name)}</b><small>${new Date(x.created_at).toLocaleString('id-ID')} · Ketuk untuk buka & zoom</small></div><button class="btn" onclick="event.stopPropagation();openPhotoByPath('${safePath}','${safeName}')">⌕</button><button class="btn" onclick="event.stopPropagation();dl('${safePath}')">↓</button><button class="btn danger" onclick="event.stopPropagation();delPhoto('${x.id}','${safePath}')">×</button></div>`}$('photoList').innerHTML=out} 
 async function openPhotoByPath(path,name){if(!user)return openAuth();let p=decodeURIComponent(path),n=decodeURIComponent(name||'Photo');let u=await sb.storage.from('photos').createSignedUrl(p,3600);if(u.error||!u.data?.signedUrl)return msg('Foto tidak dapat dibuka: '+(u.error?.message||'signed URL gagal'));openPhoto(encodeURIComponent(u.data.signedUrl),encodeURIComponent(n))}
@@ -50,119 +50,44 @@ function finishQuiz(){let score=qc*100;openM('Quiz — Selesai',`<div class="emp
 async function saveScore(game,score){if(!user)return openAuth();let r=await sb.rpc('save_game_score',{p_game:game,p_score:Math.max(0,Math.floor(score))});if(r.error)return msg('Gagal menyimpan score: '+r.error.message);let result=Array.isArray(r.data)?r.data[0]:r.data;closeM();await loadScores();await loadLeaderboard();await loadWallet();let earned=Number(result?.diamonds_earned||0);await loadHomeChampion();msg(earned>0?`Score tersimpan · +${earned} 💎`:'Score tersimpan')}
 async function loadWallet(){if(!$('diamondBalance'))return;if(!user){$('diamondBalance').textContent='0';return}let r=await sb.from('profiles').select('diamonds').eq('id',user.id).maybeSingle();if(r.error){$('diamondBalance').textContent='—';return}$('diamondBalance').textContent=Number(r.data?.diamonds||0).toLocaleString('id-ID')}
 async function loadScores(){if(!user){$('scores').innerHTML='<div class="empty">Login untuk melihat history.</div>';return}const games=['Quick Tap','Quiz'];const results=await Promise.all(games.map(game=>sb.from('game_scores').select('id,game,score,played_at').eq('user_id',user.id).eq('game',game).order('score',{ascending:false}).order('played_at',{ascending:false}).limit(1)));const failed=results.find(r=>r.error);if(failed){$('scores').innerHTML='<div class="empty">Gagal memuat score.<br><small>'+esc(failed.error.message)+'</small></div>';return}const best=results.map(r=>r.data?.[0]).filter(Boolean);best.sort((a,b)=>{const sa=Number(a.score||0),sb=Number(b.score||0);if(sb!==sa)return sb-sa;return new Date(b.played_at)-new Date(a.played_at)});$('scores').innerHTML=best.length?best.map(x=>`<div class="item"><div class="thumb">◇</div><div class="main"><b>${esc(x.game)}</b><small>${x.score} · ${new Date(x.played_at).toLocaleString('id-ID')}</small></div></div>`).join(''):'<div class="empty">Belum ada score.</div>'}
-async function loadHomeChampion(){const box=$('homeChampion');if(!box)return;if(!user||!sb){box.innerHTML='';return}box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Memuat juara #1…</div></div>';try{let r=await sb.rpc('get_leaderboard',{p_game:'Quick Tap'});if(r.error)throw r.error;if(!Array.isArray(r.data)||!r.data.length){box.innerHTML='';return}let x=r.data[0];let avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile juara 1">'}let score=Number(x.score||0);let title=score>=100?'Sang Kilat Abadi':score>=90?'Si Cepat Kilat':score>=75?'Tangan Petir':score>=60?'Refleks Cahaya':'Pemburu Kecepatan';let diamondBalance=null;try{let dr=await sb.rpc('get_player_diamonds',{p_user_id:x.user_id});if(!dr.error&&Array.isArray(dr.data)&&dr.data.length)diamondBalance=Number(dr.data[0].diamond_balance||0)}catch(e){console.warn('Champion diamond:',e)}let diamondText=diamondBalance===null?'💎 —':`💎 ${diamondBalance.toLocaleString('id-ID')}`;box.innerHTML=`<section class="champion-card" aria-label="Juara 1 Quick Tap"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="champion-layout"><div class="champion-avatar-wrap"><div class="champion-crown">👑</div><div class="champion-avatar"><div class="avatar-core">${avatar||esc((x.display_name||'L')[0].toUpperCase())}</div></div></div><div class="champion-copy"><div class="champion-title">JUARA #1 · ${esc(title)}</div><div class="champion-name ${nameEffectClass(x.equipped_name_effect_id)}">${nameEffectMarkup(x.display_name||'Lexiaa User',x.equipped_name_effect_id)}</div><div class="champion-subtitle">Pemegang score tertinggi Quick Tap di Lexiaa. Kecepatan yang layak dipajang.</div><div class="champion-stats"><div class="champion-score"><span class="champion-score-main">⚡ ${score} TAP</span><span class="champion-score-meta">dalam 10 detik</span></div><div class="champion-diamonds"><span class="diamond-icon">💎</span><span class="diamond-count">${diamondBalance===null?'—':diamondBalance.toLocaleString('id-ID')}</span></div></div></div><div class="champion-badge">TOP PLAYER</div></div></section>`}catch(e){box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Champion belum dapat dimuat.</div></div>';console.error('Champion Spotlight:',e)}} 
-async function loadLeaderboard(){if(!$('leaderboard'))return;if(!user){$('leaderboard').innerHTML='<div class="empty">Login untuk melihat leaderboard.</div>';return}let game=$('leaderGame')?.value||'Quick Tap';let r=await sb.rpc('get_leaderboard',{p_game:game});if(r.error){$('leaderboard').innerHTML='<div class="empty">Gagal memuat leaderboard.<br><small>'+esc(r.error.message)+'</small></div>';return}if(!r.data.length){$('leaderboard').innerHTML='<div class="empty">Belum ada score untuk '+esc(game)+'.</div>';return}let rows='';for(let i=0;i<r.data.length;i++){let x=r.data[i];let rank=i+1;let avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile">'}let cls=rank<=3?' rank-'+rank:'';let crown=rank===1?'<span class="leader-crown" aria-label="Juara 1">👑</span>':'';let fallback=rank<=3?String(rank):String(rank);rows+=`<div class="item leader-item${cls}"><div class="leader-rank${cls}">${fallback}</div><div class="leader-profile">${crown}<div class="leader-avatar"><div class="avatar-core">${avatar||'<span class="rank-num">'+rank+'</span>'}</div></div></div><div class="main"><b class="${nameEffectClass(x.equipped_name_effect_id)}">${nameEffectMarkup(x.display_name||'Lexiaa User',x.equipped_name_effect_id)}</b><small>${esc(x.game)} · ${x.score} · ${new Date(x.played_at).toLocaleString('id-ID')}</small></div></div>`}$('leaderboard').innerHTML=rows}
-
-function nameEffectClass(id){return id?'name-effect-'+String(id).replace(/[^a-zA-Z0-9_-]/g,''):''}
-const ETERNAL_FLOW_EFFECTS=new Set(['eternal_inferno','eternal_thunder','eternal_cryo','eternal_aqua','eternal_storm','eternal_cosmic','eternal_void','eternal_apocalypse']);
-function nameEffectMarkup(name,id){
-  const safe=String(name??'');
-  if(!ETERNAL_FLOW_EFFECTS.has(String(id||''))) return esc(safe);
-  return Array.from(safe).map((ch,i)=>`<span class="flow-char" style="--flow-i:${i}">${ch===' '? '&nbsp;' : esc(ch)}</span>`).join('');
-}
-async function openShop(){
+async function getCosmetics(ids){const map=new Map();const clean=[...new Set((ids||[]).filter(Boolean))];if(!clean.length)return map;const r=await sb.from('profiles').select('id,equipped_profile_aura_id').in('id',clean);if(r.error){console.warn('Profile cosmetics:',r.error);return map}(r.data||[]).forEach(x=>map.set(x.id,x));return map}
+function decoratedAvatarMarkup(avatarHtml,sparkId,auraId,fallback){const a=String(auraId||'');const s=String(sparkId||'');const safe=esc(fallback||'L');const aura=a?'<span class="decor-aura aura-'+a+'"></span>':'';let spark='';if(s){const angles=s==='blackhole'?[0,60,120,180,240,300]:[0,72,144,216,288];spark='<span class="decor-spark spark-'+s+'">'+angles.map((a,i)=>'<i class="spark-particle" style="--a:'+a+'deg;--spark-delay:'+(i*.35).toFixed(2)+'s"></i>').join('')+'</span>'}return '<span class="avatar-decor">'+aura+spark+'<span class="decor-avatar-core">'+(avatarHtml||safe)+'</span></span>'}
+async function loadHomeChampion(){const box=$('homeChampion');if(!box)return;if(!user||!sb){box.innerHTML='';return}box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Memuat juara #1…</div></div>';try{let r=await sb.rpc('get_leaderboard',{p_game:'Quick Tap'});if(r.error)throw r.error;if(!Array.isArray(r.data)||!r.data.length){box.innerHTML='';return}let x=r.data[0],avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile juara 1">'}let c=(await getCosmetics([x.user_id])).get(x.user_id)||{},score=Number(x.score||0),title=score>=100?'Sang Kilat Abadi':score>=90?'Si Cepat Kilat':score>=75?'Tangan Petir':score>=60?'Refleks Cahaya':'Pemburu Kecepatan',diamondBalance=null;try{let dr=await sb.rpc('get_player_diamonds',{p_user_id:x.user_id});if(!dr.error&&Array.isArray(dr.data)&&dr.data.length)diamondBalance=Number(dr.data[0].diamond_balance||0)}catch(e){}box.innerHTML='<section class="champion-card" aria-label="Juara 1 Quick Tap"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="champion-layout"><div class="champion-avatar-wrap"><div class="champion-crown">👑</div><div class="champion-avatar">'+decoratedAvatarMarkup(avatar,null,c.equipped_profile_aura_id,esc((x.display_name||'L')[0].toUpperCase()))+'</div></div><div class="champion-copy"><div class="champion-title">JUARA #1 · '+esc(title)+'</div><div class="champion-name '+nameEffectClass(x.equipped_name_effect_id)+'">'+nameEffectMarkup(x.display_name||'Lexiaa User',x.equipped_name_effect_id)+'</div><div class="champion-subtitle">Pemegang score tertinggi Quick Tap di Lexiaa. Kecepatan yang layak dipajang.</div><div class="champion-stats"><div class="champion-score"><span class="champion-score-main">⚡ '+score+' TAP</span><span class="champion-score-meta">dalam 10 detik</span></div><div class="champion-diamonds"><span class="diamond-icon">💎</span><span class="diamond-count">'+(diamondBalance===null?'—':diamondBalance.toLocaleString('id-ID'))+'</span></div></div></div><div class="champion-badge">TOP PLAYER</div></div></section>'}catch(e){box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Champion belum dapat dimuat.</div></div>';console.error('Champion Spotlight:',e)}}
+async function loadLeaderboard(){if(!$('leaderboard'))return;if(!user){$('leaderboard').innerHTML='<div class="empty">Login untuk melihat leaderboard.</div>';return}let game=$('leaderGame')?.value||'Quick Tap';let r=await sb.rpc('get_leaderboard',{p_game:game});if(r.error){$('leaderboard').innerHTML='<div class="empty">Gagal memuat leaderboard.<br><small>'+esc(r.error.message)+'</small></div>';return}if(!r.data.length){$('leaderboard').innerHTML='<div class="empty">Belum ada score untuk '+esc(game)+'.</div>';return}let cosmetics=await getCosmetics(r.data.map(x=>x.user_id)),rows='';for(let i=0;i<r.data.length;i++){let x=r.data[i],rank=i+1,avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile">'}let c=cosmetics.get(x.user_id)||{},cls=rank<=3?' rank-'+rank:'',crown=rank===1?'<span class="leader-crown" aria-label="Juara 1">👑</span>':'';rows+='<div class="item leader-item'+cls+'"><div class="leader-rank'+cls+'">'+rank+'</div><div class="leader-profile">'+crown+'<div class="leader-avatar">'+decoratedAvatarMarkup(avatar,null,c.equipped_profile_aura_id,'#'+rank)+'</div></div><div class="main"><b class="'+nameEffectClass(x.equipped_name_effect_id)+'">'+nameEffectMarkup(x.display_name||'Lexiaa User',x.equipped_name_effect_id)+'</b><small>'+esc(x.game)+' · '+x.score+' · '+new Date(x.played_at).toLocaleString('id-ID')+'</small></div></div>'}$('leaderboard').innerHTML=rows}
+async function openAuraShop(){
   if(!user)return openAuth();
-  $('shopBody').innerHTML='<div class="empty">Memuat name effect shop…</div>';
-  $('shopModal').classList.add('show');
+  $('auraBody').innerHTML='<div class="empty">Memuat Profile Aura Shop…</div>';
+  $('auraModal').classList.add('show');
   let [e,u,p]=await Promise.all([
-    sb.from('profile_name_effects').select('*').order('sort_order',{ascending:true}),
-    sb.from('user_profile_name_effects').select('effect_id').eq('user_id',user.id),
-    sb.from('profiles').select('diamonds,display_name,equipped_name_effect_id').eq('id',user.id).maybeSingle()
+    sb.from('profile_auras').select('*').order('sort_order',{ascending:true}),
+    sb.from('user_profile_auras').select('aura_id').eq('user_id',user.id),
+    sb.from('profiles').select('diamonds,spark_saldo,display_name,avatar_path,equipped_profile_aura_id').eq('id',user.id).maybeSingle()
   ]);
-  if(e.error){$('shopBody').innerHTML='<div class="empty">Gagal memuat shop.<br><small>'+esc(e.error.message)+'</small></div>';return}
-  let owned=new Set((u.data||[]).map(x=>x.effect_id)),prof=p.data||{};
-  let sample=esc(prof.display_name||'Lexiaa User');
-  let cards=(e.data||[]).map(x=>{
-    let own=owned.has(x.id),equipped=prof.equipped_name_effect_id===x.id;
-    let preview='<span class="effect-preview-name '+nameEffectClass(x.id)+'">'+nameEffectMarkup(prof.display_name||'Lexiaa User',x.id)+'</span>';
-    let action=equipped
-      ? '<button class="btn" onclick="equipNameEffect(null)">Lepas Efek</button>'
-      : own
-        ? '<button class="btn primary" onclick="equipNameEffect(\''+esc(x.id)+'\')">Pakai Efek</button>'
-        : '<button class="btn primary" onclick="buyNameEffect(\''+esc(x.id)+'\')">💎 '+Number(x.price||0).toLocaleString('id-ID')+' · Beli</button>';
-    return '<div class="effect-card"><div class="effect-preview">'+preview+'</div><div class="effect-name">'+esc(x.name)+'</div><div class="effect-desc">'+esc(x.description||'')+'</div><div class="effect-price '+(own?'effect-owned':'')+'">'+(own?'✓ Dimiliki':'💎 '+Number(x.price||0).toLocaleString('id-ID'))+'</div>'+action+'</div>';
-  }).join('');
-  $('shopBody').innerHTML='<div class="shop-hero"><div><div class="ey">NAME COSMETICS</div><div class="shop-balance">💎 '+Number(prof.diamonds||0).toLocaleString('id-ID')+'</div></div><span class="tag">Private collection</span></div><div class="effect-grid">'+(cards||'<div class="empty">Belum ada efek nama.</div>')+'</div><div class="shop-note">Efek nama hanya mengubah tampilan nama akun. Foto profil tetap bulat tanpa border.</div>';
-}
-function closeShop(){$('shopModal').classList.remove('show')}
-async function buyNameEffect(id){
-  if(!user)return openAuth();
-  let r=await sb.rpc('buy_name_effect',{p_effect_id:id});
-  if(r.error)return msg(r.error.message);
-  msg('Efek nama berhasil dibeli');
-  await openShop();await profile();await loadLeaderboard();await loadHomeChampion();
-}
-async function equipNameEffect(id){
-  if(!user)return openAuth();
-  let r=await sb.rpc('equip_name_effect',{p_effect_id:id});
-  if(r.error)return msg(r.error.message);
-  msg(id?'Efek nama dipasang':'Efek nama dilepas');
-  closeShop();
-  await profile();await avatar();await loadLeaderboard();await loadHomeChampion();
-}
-
-function profileSparkClass(id){return id?'spark-'+String(id).replace(/[^a-zA-Z0-9_-]/g,''):''}
-function profileSparkMarkup(avatarHtml,id,fallback){
-  const safeFallback=esc(fallback||'L');
-  const cls=profileSparkClass(id);
-  if(!cls) return '<div class="profile-shell"><div class="profile"><div class="avatar-core">'+(avatarHtml||'<span class="avatar-fallback">'+safeFallback+'</span>')+'</div></div></div>';
-  const angles=[0,90,180,270];
-  const delays=[0,-1.15,-2.3,-3.45];
-  const particles=angles.map((a,i)=>'<span class="spark-particle" style="--spark-angle:'+a+'deg;--spark-delay:'+delays[i]+'s"></span>').join('');
-  return '<div class="profile-spark '+cls+'">'+particles+'<div class="spark-avatar">'+(avatarHtml||'<span class="avatar-fallback">'+safeFallback+'</span>')+'</div></div>';
-}
-function sparkPreviewMarkup(avatarHtml,id,fallback){return profileSparkMarkup(avatarHtml,id,fallback)}
-async function openSparkShop(){
-  if(!user)return openAuth();
-  $('sparkBody').innerHTML='<div class="empty">Memuat Profile Spark Shop…</div>';
-  $('sparkModal').classList.add('show');
-  let [e,u,p]=await Promise.all([
-    sb.from('profile_sparks').select('*').order('sort_order',{ascending:true}),
-    sb.from('user_profile_sparks').select('spark_id').eq('user_id',user.id),
-    sb.from('profiles').select('spark_saldo,diamonds,display_name,avatar_path,equipped_profile_spark_id').eq('id',user.id).maybeSingle()
-  ]);
-  if(e.error){$('sparkBody').innerHTML='<div class="empty">Gagal memuat Profile Spark Shop.<br><small>'+esc(e.error.message)+'</small></div>';return}
-  if(p.error){$('sparkBody').innerHTML='<div class="empty">Gagal memuat saldo.<br><small>'+esc(p.error.message)+'</small></div>';return}
-  let prof=p.data||{},owned=new Set((u.data||[]).map(x=>x.spark_id));
-  let av='';
+  if(e.error){$('auraBody').innerHTML='<div class="empty">Gagal memuat Aura Shop.<br><small>'+esc(e.error.message)+'</small></div>';return}
+  if(p.error){$('auraBody').innerHTML='<div class="empty">Gagal memuat saldo.<br><small>'+esc(p.error.message)+'</small></div>';return}
+  let prof=p.data||{},owned=new Set((u.data||[]).map(x=>x.aura_id)),av='';
   if(prof.avatar_path){let au=await sb.storage.from('avatars').createSignedUrl(prof.avatar_path,900);if(au.data?.signedUrl)av='<img alt="Profile" src="'+au.data.signedUrl+(au.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
-  let exchange='<div class="spark-exchange"><div class="ey">Premium Currency</div><div class="spark-wallet"><div><small>💠 Spark Saldo</small><b>'+Number(prof.spark_saldo||0).toLocaleString('id-ID')+'</b></div><span class="tag">10 💎 = 1 💠</span></div><div class="exchange-row"><button class="btn" onclick="exchangeSpark(100)">💎 100 → 💠 10</button><button class="btn" onclick="exchangeSpark(500)">💎 500 → 💠 50</button><button class="btn" onclick="exchangeSpark(1000)">💎 1.000 → 💠 100</button><button class="btn" onclick="exchangeSpark(5000)">💎 5.000 → 💠 500</button></div></div>';
-  let cards=(e.data||[]).map(x=>{
-    let own=owned.has(x.id),equipped=prof.equipped_profile_spark_id===x.id;
-    let preview=sparkPreviewMarkup(av,x.id,(prof.display_name||'Lexiaa User')[0]);
-    let action=equipped
-      ? '<button class="btn" onclick="equipProfileSpark(null)">Lepas Efek</button>'
-      : own
-        ? '<button class="btn primary" onclick="equipProfileSpark(\''+esc(x.id)+'\')">Pakai Efek</button>'
-        : '<button class="btn primary" onclick="buyProfileSpark(\''+esc(x.id)+'\')">💠 '+Number(x.price_saldo||0).toLocaleString('id-ID')+' · Beli</button>';
-    return '<div class="spark-card"><div class="spark-preview">'+preview+'</div><div class="spark-name">'+esc(x.name)+'</div><div class="spark-desc">'+esc(x.description||'')+'</div><div class="spark-price '+(own?'spark-owned':'')+'">'+(own?'✓ Dimiliki':'💠 '+Number(x.price_saldo||0).toLocaleString('id-ID'))+'</div>'+action+'</div>';
-  }).join('');
-  $('sparkBody').innerHTML=exchange+'<div class="effect-grid">'+(cards||'<div class="empty">Belum ada Profile Spark.</div>')+'</div><div class="spark-note">Spark Saldo adalah currency premium khusus Profile Spark. Diamond bisa ditukar menjadi Spark Saldo, tetapi tidak sebaliknya.</div>';
+  let wallet='<div class="spark-exchange"><div class="ey">Premium Aura Currency</div><div class="spark-wallet"><div><small>💠 Spark Saldo</small><b>'+Number(prof.spark_saldo||0).toLocaleString('id-ID')+'</b></div><span class="tag">Dipakai untuk Aura</span></div><div class="card" style="padding:12px;margin:0"><div class="head"><div><b>💎 Tukar Diamond → 💠 Spark Saldo</b><small style="display:block;color:var(--m);margin-top:4px">Rate: 100 Diamond = 10 Spark Saldo. Tidak bisa ditukar balik.</small></div><span class="tag">💎 '+Number(prof.diamonds||0).toLocaleString('id-ID')+'</span></div><div class="exchange-row" style="margin-top:10px"><button class="btn primary" onclick="exchangeDiamondToSpark(100)">💎 100 → 💠 10</button><button class="btn primary" onclick="exchangeDiamondToSpark(500)">💎 500 → 💠 50</button><button class="btn primary" onclick="exchangeDiamondToSpark(1000)">💎 1.000 → 💠 100</button><button class="btn primary" onclick="exchangeDiamondToSpark(5000)">💎 5.000 → 💠 500</button></div></div></div>';
+  let cards=(e.data||[]).map(x=>{let own=owned.has(x.id),equipped=prof.equipped_profile_aura_id===x.id,preview='<div class="aura-preview">'+decoratedAvatarMarkup(av,null,x.id,(prof.display_name||'Lexiaa User')[0])+'</div>',action=equipped?'<button class="btn" onclick="equipProfileAura(null)">Lepas Aura</button>':own?'<button class="btn primary" onclick="equipProfileAura(\''+esc(x.id)+'\')">Pakai Aura</button>':'<button class="btn primary" onclick="buyProfileAura(\''+esc(x.id)+'\')">💠 '+Number(x.price_saldo||0).toLocaleString('id-ID')+' · Beli</button>';return '<div class="aura-card">'+preview+'<div class="aura-name">'+esc(x.name)+'</div><div class="aura-desc">'+esc(x.description||'')+'</div><div class="aura-price '+(own?'aura-owned':'')+'">'+(own?'✓ Dimiliki':'💠 '+Number(x.price_saldo||0).toLocaleString('id-ID'))+'</div>'+action+'</div>'}).join('');
+  $('auraBody').innerHTML=wallet+'<div class="effect-grid">'+(cards||'<div class="empty">Belum ada Profile Aura.</div>')+'</div><div class="aura-shop-note">Profile Aura adalah lapisan glow di belakang avatar. Pembayaran menggunakan Spark Saldo.</div>'
 }
-function closeSparkShop(){$('sparkModal').classList.remove('show')}
-async function exchangeSpark(diamonds){
+function closeAuraShop(){$('auraModal').classList.remove('show')}
+async function exchangeDiamondToSpark(amount){
   if(!user)return openAuth();
-  if(!Number.isInteger(diamonds)||diamonds<=0)return;
-  let r=await sb.rpc('exchange_diamonds_to_spark_saldo',{p_diamonds:diamonds});
+  amount=Number(amount||0);
+  if(!Number.isInteger(amount)||amount<=0||amount%100!==0)return msg('Jumlah Diamond harus kelipatan 100');
+  let spark=Math.floor(amount/10);
+  if(!confirm('Tukar '+amount.toLocaleString('id-ID')+' Diamond menjadi '+spark.toLocaleString('id-ID')+' Spark Saldo?\n\nPenukaran tidak bisa dibatalkan.'))return;
+  let r=await sb.rpc('exchange_diamond_to_spark',{p_diamond_amount:amount});
   if(r.error)return msg(r.error.message);
-  let x=Array.isArray(r.data)?r.data[0]:r.data;
-  msg('Berhasil ditukar · +'+Number(x?.saldo_added||0).toLocaleString('id-ID')+' Spark Saldo');
-  await openSparkShop();await profile();
+  let row=Array.isArray(r.data)?r.data[0]:r.data;
+  msg('Berhasil ditukar · 💠 '+Number(row?.new_spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo');
+  await openAuraShop();
+  await profile();
 }
-async function buyProfileSpark(id){
-  if(!user)return openAuth();
-  let r=await sb.rpc('buy_profile_spark',{p_spark_id:id});
-  if(r.error)return msg(r.error.message);
-  msg('Profile Spark berhasil dibeli');
-  await openSparkShop();await profile();
-}
-async function equipProfileSpark(id){
-  if(!user)return openAuth();
-  let r=await sb.rpc('equip_profile_spark',{p_spark_id:id});
-  if(r.error)return msg(r.error.message);
-  msg(id?'Profile Spark dipasang':'Profile Spark dilepas');
-  closeSparkShop();await profile();await avatar();
-}
+async function buyProfileAura(id){if(!user)return openAuth();let r=await sb.rpc('buy_profile_aura',{p_aura_id:id});if(r.error)return msg(r.error.message);msg('Profile Aura berhasil dibeli');await openAuraShop();await profile()}
+async function equipProfileAura(id){if(!user)return openAuth();let r=await sb.rpc('equip_profile_aura',{p_aura_id:id});if(r.error)return msg(r.error.message);msg(id?'Profile Aura dipasang':'Profile Aura dilepas');closeAuraShop();await profile();await avatar()}
+async function diamondAuraClass(d){d=Number(d||0);if(d>=25000)return 'diamond-aura-eternal';if(d>=10000)return 'diamond-aura-mythic';if(d>=2500)return 'diamond-aura-celestial';if(d>=500)return 'diamond-aura-royal';if(d>=100)return 'diamond-aura-aqua';return 'diamond-aura-soft'}
 async function profile(){
   if(!user){$('profileCard').innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}
   await ensure();
@@ -171,8 +96,8 @@ async function profile(){
   if(p.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);if(u.data?.signedUrl)av='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
   let effect=nameEffectClass(p.equipped_name_effect_id);
   let display=esc(p.display_name||'Lexiaa User');
-  let spark=profileSparkMarkup(av,p.equipped_profile_spark_id,(p.display_name||'L')[0]);
-  $('profileCard').innerHTML=spark+'<div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openSparkShop()">✦ Profile Spark Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag diamond-aura '+diamondAuraClass(p.diamonds)+'"><span class="diamond-icon">💎</span> '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><span class="spark-mini">💠 '+Number(p.spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo</span></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn danger" onclick="logout()">Logout</button></div>';
+  let spark=decoratedAvatarMarkup(av,null,p.equipped_profile_aura_id,(p.display_name||'L')[0]);
+  $('profileCard').innerHTML=spark+'<div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openAuraShop()">🌌 Profile Aura Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag diamond-aura '+diamondAuraClass(p.diamonds)+'"><span class="diamond-icon">💎</span> '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><span class="spark-mini">💠 '+Number(p.spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo</span></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn danger" onclick="logout()">Logout</button></div>';
   applyTheme(p.theme);
 }
 async function saveProfile(){let name=$('displayName').value.trim(),theme=$('theme').value;if(!name)return msg('Nama tidak boleh kosong');let r=await sb.from('profiles').update({display_name:name,theme,updated_at:new Date().toISOString()}).eq('id',user.id);if(r.error)return msg(r.error.message);applyTheme(theme);await avatar();msg('Profil disimpan');profile()}
