@@ -59,6 +59,47 @@ function nameEffectMarkup(name,id){
   if(!ETERNAL_FLOW_EFFECTS.has(String(id||''))) return esc(safe);
   return Array.from(safe).map((ch,i)=>`<span class="flow-char" style="--flow-i:${i}">${ch===' '? '&nbsp;' : esc(ch)}</span>`).join('');
 }
+
+async function openShop(){
+  if(!user)return openAuth();
+  $('shopBody').innerHTML='<div class="empty">Memuat name effect shop…</div>';
+  $('shopModal').classList.add('show');
+  let [e,u,p]=await Promise.all([
+    sb.from('profile_name_effects').select('*').order('sort_order',{ascending:true}),
+    sb.from('user_profile_name_effects').select('effect_id').eq('user_id',user.id),
+    sb.from('profiles').select('diamonds,display_name,equipped_name_effect_id').eq('id',user.id).maybeSingle()
+  ]);
+  if(e.error){$('shopBody').innerHTML='<div class="empty">Gagal memuat shop.<br><small>'+esc(e.error.message)+'</small></div>';return}
+  if(p.error){$('shopBody').innerHTML='<div class="empty">Gagal memuat saldo.<br><small>'+esc(p.error.message)+'</small></div>';return}
+  let owned=new Set((u.data||[]).map(x=>x.effect_id)),prof=p.data||{};
+  let cards=(e.data||[]).map(x=>{
+    let own=owned.has(x.id),equipped=prof.equipped_name_effect_id===x.id;
+    let preview='<span class="effect-preview-name '+nameEffectClass(x.id)+'">'+nameEffectMarkup(prof.display_name||'Lexiaa User',x.id)+'</span>';
+    let action=equipped
+      ? '<button class="btn" onclick="equipNameEffect(null)">Lepas Efek</button>'
+      : own
+        ? '<button class="btn primary" onclick="equipNameEffect(\''+esc(x.id)+'\')">Pakai Efek</button>'
+        : '<button class="btn primary" onclick="buyNameEffect(\''+esc(x.id)+'\')">💎 '+Number(x.price||0).toLocaleString('id-ID')+' · Beli</button>';
+    return '<div class="effect-card"><div class="effect-preview">'+preview+'</div><div class="effect-name">'+esc(x.name)+'</div><div class="effect-desc">'+esc(x.description||'')+'</div><div class="effect-price '+(own?'effect-owned':'')+'">'+(own?'✓ Dimiliki':'💎 '+Number(x.price||0).toLocaleString('id-ID'))+'</div>'+action+'</div>';
+  }).join('');
+  $('shopBody').innerHTML='<div class="shop-hero"><div><div class="ey">NAME COSMETICS</div><div class="shop-balance">💎 '+Number(prof.diamonds||0).toLocaleString('id-ID')+'</div></div><span class="tag">Private collection</span></div><div class="effect-grid">'+(cards||'<div class="empty">Belum ada efek nama.</div>')+'</div><div class="shop-note">Efek nama hanya mengubah tampilan nama akun. Foto profil tetap bulat tanpa border.</div>';
+}
+function closeShop(){$('shopModal').classList.remove('show')}
+async function buyNameEffect(id){
+  if(!user)return openAuth();
+  let r=await sb.rpc('buy_name_effect',{p_effect_id:id});
+  if(r.error)return msg(r.error.message);
+  msg('Efek nama berhasil dibeli');
+  await openShop();await profile();await loadLeaderboard();await loadHomeChampion();
+}
+async function equipNameEffect(id){
+  if(!user)return openAuth();
+  let r=await sb.rpc('equip_name_effect',{p_effect_id:id});
+  if(r.error)return msg(r.error.message);
+  msg(id?'Efek nama dipasang':'Efek nama dilepas');
+  closeShop();
+  await profile();await avatar();await loadLeaderboard();await loadHomeChampion();
+}
 async function loadHomeChampion(){const box=$('homeChampion');if(!box)return;if(!user||!sb){box.innerHTML='';return}box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Memuat juara #1…</div></div>';try{let r=await sb.rpc('get_leaderboard',{p_game:'Quick Tap'});if(r.error)throw r.error;if(!Array.isArray(r.data)||!r.data.length){box.innerHTML='';return}let x=r.data[0],avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile juara 1">'}let c=(await getCosmetics([x.user_id])).get(x.user_id)||{},score=Number(x.score||0),title=score>=100?'Sang Kilat Abadi':score>=90?'Si Cepat Kilat':score>=75?'Tangan Petir':score>=60?'Refleks Cahaya':'Pemburu Kecepatan',diamondBalance=null;try{let dr=await sb.rpc('get_player_diamonds',{p_user_id:x.user_id});if(!dr.error&&Array.isArray(dr.data)&&dr.data.length)diamondBalance=Number(dr.data[0].diamond_balance||0)}catch(e){}box.innerHTML='<section class="champion-card" aria-label="Juara 1 Quick Tap"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="champion-layout"><div class="champion-avatar-wrap"><div class="champion-crown">👑</div><div class="champion-avatar">'+decoratedAvatarMarkup(avatar,null,c.equipped_profile_aura_id,esc((x.display_name||'L')[0].toUpperCase()))+'</div></div><div class="champion-copy"><div class="champion-title">JUARA #1 · '+esc(title)+'</div><div class="champion-name '+nameEffectClass(x.equipped_name_effect_id)+'">'+nameEffectMarkup(x.display_name||'Lexiaa User',x.equipped_name_effect_id)+'</div><div class="champion-subtitle">Pemegang score tertinggi Quick Tap di Lexiaa. Kecepatan yang layak dipajang.</div><div class="champion-stats"><div class="champion-score"><span class="champion-score-main">⚡ '+score+' TAP</span><span class="champion-score-meta">dalam 10 detik</span></div><div class="champion-diamonds"><span class="diamond-icon">💎</span><span class="diamond-count">'+(diamondBalance===null?'—':diamondBalance.toLocaleString('id-ID'))+'</span></div></div></div><div class="champion-badge">TOP PLAYER</div></div></section>'}catch(e){box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Champion belum dapat dimuat.</div></div>';console.error('Champion Spotlight:',e)}}
 async function loadLeaderboard(){if(!$('leaderboard'))return;if(!user){$('leaderboard').innerHTML='<div class="empty">Login untuk melihat leaderboard.</div>';return}let game=$('leaderGame')?.value||'Quick Tap';let r=await sb.rpc('get_leaderboard',{p_game:game});if(r.error){$('leaderboard').innerHTML='<div class="empty">Gagal memuat leaderboard.<br><small>'+esc(r.error.message)+'</small></div>';return}if(!r.data.length){$('leaderboard').innerHTML='<div class="empty">Belum ada score untuk '+esc(game)+'.</div>';return}let cosmetics=await getCosmetics(r.data.map(x=>x.user_id)),rows='';for(let i=0;i<r.data.length;i++){let x=r.data[i],rank=i+1,avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile">'}let c=cosmetics.get(x.user_id)||{},cls=rank<=3?' rank-'+rank:'',crown=rank===1?'<span class="leader-crown" aria-label="Juara 1">👑</span>':'';rows+='<div class="item leader-item'+cls+'"><div class="leader-rank'+cls+'">'+rank+'</div><div class="leader-profile">'+crown+'<div class="leader-avatar">'+decoratedAvatarMarkup(avatar,null,c.equipped_profile_aura_id,'#'+rank)+'</div></div><div class="main"><b class="'+nameEffectClass(x.equipped_name_effect_id)+'">'+nameEffectMarkup(x.display_name||'Lexiaa User',x.equipped_name_effect_id)+'</b><small>'+esc(x.game)+' · '+x.score+' · '+new Date(x.played_at).toLocaleString('id-ID')+'</small></div></div>'}$('leaderboard').innerHTML=rows}
 async function openAuraShop(){
@@ -94,18 +135,35 @@ async function exchangeDiamondToSpark(amount){
 }
 async function buyProfileAura(id){if(!user)return openAuth();let r=await sb.rpc('buy_profile_aura',{p_aura_id:id});if(r.error)return msg(r.error.message);msg('Profile Aura berhasil dibeli');await openAuraShop();await profile()}
 async function equipProfileAura(id){if(!user)return openAuth();let r=await sb.rpc('equip_profile_aura',{p_aura_id:id});if(r.error)return msg(r.error.message);msg(id?'Profile Aura dipasang':'Profile Aura dilepas');closeAuraShop();await profile();await avatar()}
-async function diamondAuraClass(d){d=Number(d||0);if(d>=25000)return 'diamond-aura-eternal';if(d>=10000)return 'diamond-aura-mythic';if(d>=2500)return 'diamond-aura-celestial';if(d>=500)return 'diamond-aura-royal';if(d>=100)return 'diamond-aura-aqua';return 'diamond-aura-soft'}
+function diamondAuraClass(d){d=Number(d||0);if(d>=25000)return 'diamond-aura-eternal';if(d>=10000)return 'diamond-aura-mythic';if(d>=2500)return 'diamond-aura-celestial';if(d>=500)return 'diamond-aura-royal';if(d>=100)return 'diamond-aura-aqua';return 'diamond-aura-soft'}
 async function profile(){
-  if(!user){$('profileCard').innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}
-  await ensure();
-  let r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle(),p=r.data||{};
-  let av='';
-  if(p.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);if(u.data?.signedUrl)av='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
-  let effect=nameEffectClass(p.equipped_name_effect_id);
-  let display=esc(p.display_name||'Lexiaa User');
-  let spark=decoratedAvatarMarkup(av,null,p.equipped_profile_aura_id,(p.display_name||'L')[0]);
-  $('profileCard').innerHTML=spark+'<div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openAuraShop()">🌌 Profile Aura Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag diamond-aura '+diamondAuraClass(p.diamonds)+'"><span class="diamond-icon">💎</span> '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><span class="spark-mini">💠 '+Number(p.spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo</span></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn danger" onclick="logout()">Logout</button></div>';
-  applyTheme(p.theme);
+  const box=$('profileCard');
+  if(!box)return;
+  if(!user){box.innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}
+  try{
+    await ensure();
+    const r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+    if(r.error) throw r.error;
+    const p=r.data||{};
+    let av='';
+    if(p.avatar_path){
+      const u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);
+      if(!u.error&&u.data?.signedUrl) av='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">';
+    }
+    const effect=nameEffectClass(p.equipped_name_effect_id);
+    const display=esc(p.display_name||'Lexiaa User');
+    const avatarMarkup=decoratedAvatarMarkup(av,null,p.equipped_profile_aura_id,(p.display_name||'L')[0]);
+    box.innerHTML=avatarMarkup+
+      '<div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div>'+
+      '<div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openAuraShop()">🌌 Profile Aura Shop</button><button class="btn primary" onclick="openAuraShop()">💎 Tukar Diamond</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div>'+
+      '<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag diamond-aura '+diamondAuraClass(p.diamonds)+'"><span class="diamond-icon">💎</span> '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><span class="spark-mini">💠 '+Number(p.spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo</span></div>'+
+      '<div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div>'+ 
+      '<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn danger" onclick="logout()">Logout</button></div>';
+    applyTheme(p.theme);
+  }catch(e){
+    console.error('Profile render:',e);
+    box.innerHTML='<div class="empty">Profil gagal dimuat.<br><small>'+esc(e?.message||'Terjadi kesalahan saat memuat profil.')+'</small><br><button class="btn" style="margin-top:10px" onclick="profile()">Coba lagi</button></div>';
+  }
 }
 async function saveProfile(){let name=$('displayName').value.trim(),theme=$('theme').value;if(!name)return msg('Nama tidak boleh kosong');let r=await sb.from('profiles').update({display_name:name,theme,updated_at:new Date().toISOString()}).eq('id',user.id);if(r.error)return msg(r.error.message);applyTheme(theme);await avatar();msg('Profil disimpan');profile()}
 function applyTheme(theme){document.documentElement.dataset.theme=theme||'obsidian'}
