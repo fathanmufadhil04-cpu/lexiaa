@@ -14,6 +14,11 @@ html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--
 .profile-border::before{inset:-3px;border:2px solid var(--bc1);box-shadow:0 0 10px var(--bglo),0 0 24px var(--bglo);animation:lexBorderPulse 2.8s ease-in-out infinite}
 .profile-border::after{inset:-6px;border:1px solid var(--bc2);opacity:.75;animation:lexBorderSpin 7s linear infinite}
 .profile-border>img,.profile-border>.avatar-fallback{position:relative;z-index:2;border-radius:50%!important;clip-path:circle(50% at 50% 50%)}
+.avatar-core{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;display:block;flex:none}
+.profile-border>.avatar-core{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;overflow:hidden}
+.profile-border>.avatar-core>img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center;display:block;border-radius:50%!important;clip-path:none!important}
+.profile-border>.avatar-core>.avatar-fallback{width:100%;height:100%;display:grid;place-items:center;border-radius:50%!important;clip-path:none!important}
+.avatar-core>img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;border-radius:50%}
 .border-aurora{--bc1:#b98cff;--bc2:#61f2dc;--bglo:#a67cff88}
 .border-aurora::before{background:conic-gradient(#b98cff,#61f2dc,#7cecff,#b98cff);border:0;padding:2px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 .border-galaxy{--bc1:#9d7cff;--bc2:#54c7ff;--bglo:#7b5cff99}
