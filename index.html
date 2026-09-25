@@ -450,6 +450,7 @@ async function equipProfileSpark(id){
   msg(id?'Profile Spark dipasang':'Profile Spark dilepas');
   closeSparkShop();await profile();await avatar();
 }
+async function diamondAuraClass(d){d=Number(d||0);if(d>=25000)return 'diamond-aura-eternal';if(d>=10000)return 'diamond-aura-mythic';if(d>=2500)return 'diamond-aura-celestial';if(d>=500)return 'diamond-aura-royal';if(d>=100)return 'diamond-aura-aqua';return 'diamond-aura-soft'}
 async function profile(){
   if(!user){$('profileCard').innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}
   await ensure();
