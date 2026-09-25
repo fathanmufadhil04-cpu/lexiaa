@@ -53,6 +53,43 @@ html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--
 .border-name{font-weight:900;font-size:14px}.border-desc{font-size:10px;color:var(--m);line-height:1.4;margin:3px 0 8px;min-height:28px}.border-price{font-size:12px;color:#ffe38a;font-weight:900;margin-bottom:8px}.border-owned{color:#7df0cf}.border-card .btn{width:100%}.shop-note{font-size:10px;color:var(--m);line-height:1.5;margin-top:10px;text-align:center}
 @media(max-width:560px){.border-grid{grid-template-columns:1fr 1fr}.border-preview{width:76px;height:76px}.border-card{padding:10px;min-height:178px}}
 @media(min-width:700px){.border-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* LEXIAA V19 — FINAL AVATAR GEOMETRY PATCH */
+.profile-border{
+  position:relative!important;width:100%!important;height:100%!important;
+  min-width:0!important;min-height:0!important;aspect-ratio:1/1!important;
+  border-radius:50%!important;overflow:visible!important;isolation:isolate!important;
+}
+.profile-border > .avatar-core{
+  position:absolute!important;inset:0!important;width:auto!important;height:auto!important;
+  min-width:0!important;min-height:0!important;aspect-ratio:1/1!important;
+  border-radius:50%!important;overflow:hidden!important;
+  clip-path:circle(50% at 50% 50%)!important;z-index:2!important;
+}
+.profile-border > .avatar-core > img{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
+  object-fit:cover!important;object-position:50% 50%!important;
+  border-radius:50%!important;clip-path:none!important;display:block!important;
+}
+.profile-border > .avatar-core > .avatar-fallback{
+  position:absolute!important;inset:0!important;width:auto!important;height:auto!important;
+  border-radius:50%!important;clip-path:none!important;display:grid!important;place-items:center!important;
+}
+.ava.profile-border{position:relative!important;width:56px!important;height:56px!important;aspect-ratio:1/1!important}
+.ava.profile-border > .avatar-core{position:absolute!important;inset:0!important}
+.leader-avatar.profile-border{position:relative!important;aspect-ratio:1/1!important}
+.leader-avatar.profile-border > .avatar-core{position:absolute!important;inset:0!important}
+.champion-avatar.profile-border{position:relative!important;aspect-ratio:1/1!important}
+.champion-avatar.profile-border > .avatar-core{position:absolute!important;inset:0!important}
+.border-preview.profile-border{position:relative!important;aspect-ratio:1/1!important}
+.border-preview.profile-border > .avatar-core{position:absolute!important;inset:0!important}
+.profile-shell .profile > .avatar-core{
+  position:absolute!important;inset:0!important;width:auto!important;height:auto!important;
+  border-radius:50%!important;overflow:hidden!important;
+  clip-path:circle(50% at 50% 50%)!important;
+}
+.profile-shell .profile{position:relative!important;aspect-ratio:1/1!important}
 </style></head><body>
 <div class="app"><header class="top"><div class="brand"><img src="icon-192.png"><div><b>Lexiaa</b><small>your space, your way.</small></div></div><button class="ava" id="ava" onclick="page('profile')">L</button></header>
 

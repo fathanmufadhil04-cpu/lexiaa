@@ -1,3 +1,4 @@
+// LEXIAA V19 - avatar render wrappers preserved from verified V18 build.
 
 let sb=null,session=null,user=null;
 const $=x=>document.getElementById(x);
