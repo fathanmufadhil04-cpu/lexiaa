@@ -8,140 +8,43 @@
 html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--a:#6ea8ff;--c:#67e8f9}html[data-theme="aurora"]{--bg:#0a0b12;--p:#12101d;--p2:#1b1727;--b:#38324c;--a:#d28cff;--c:#70f0d0}
 .navin{grid-template-columns:repeat(5,1fr)}
 .champion-stats{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin-top:10px}.champion-score,.champion-diamonds{min-height:50px;box-sizing:border-box;border-radius:15px}.champion-score{display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;margin-top:0;padding:7px 13px;border:1px solid #e6c85f55;background:linear-gradient(135deg,#e6c85f16,#e6c85f08);color:#ffeaa5;font-weight:900;box-shadow:0 0 18px #e6c85f12}.champion-score-main{font-size:14px;line-height:1.1;letter-spacing:.02em;white-space:nowrap}.champion-score-meta{font-size:9px;line-height:1.2;color:#c9bfa0;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}.champion-diamonds{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:7px 14px;border:1px solid rgba(255,220,90,.25);background:linear-gradient(135deg,rgba(255,215,80,.10),rgba(255,215,80,.04));color:#ffe58a;font-weight:900;letter-spacing:.2px;box-shadow:0 0 18px rgba(255,210,70,.08);white-space:nowrap}.champion-diamonds .diamond-icon{font-size:18px;line-height:1;filter:drop-shadow(0 0 5px rgba(100,210,255,.35))}.champion-diamonds .diamond-count{font-size:14px;line-height:1}
-/* PROFILE BORDER SHOP — additive only */
-.profile-border{position:relative;isolation:isolate;overflow:visible!important;border-radius:50%!important;--bc1:#9d8cff;--bc2:#63d8ff;--bglo:#8e6cff66}
-.profile-border::before,.profile-border::after{content:"";position:absolute;pointer-events:none;border-radius:inherit;z-index:4;box-sizing:border-box}
-.profile-border::before{inset:-3px;border:2px solid var(--bc1);box-shadow:0 0 10px var(--bglo),0 0 24px var(--bglo);animation:lexBorderPulse 2.8s ease-in-out infinite}
-.profile-border::after{inset:-6px;border:1px solid var(--bc2);opacity:.75;animation:lexBorderSpin 7s linear infinite}
-.profile-border>img,.profile-border>.avatar-fallback{position:relative;z-index:2;border-radius:50%!important;clip-path:circle(50% at 50% 50%)}
+
+/* LEXIAA V21 — NAME EFFECT SHOP + TRUE CIRCULAR PROFILE */
 .avatar-core{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;display:block;flex:none}
-.profile-border>.avatar-core{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;overflow:hidden}
-.profile-border>.avatar-core>img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center;display:block;border-radius:50%!important;clip-path:none!important}
-.profile-border>.avatar-core>.avatar-fallback{width:100%;height:100%;display:grid;place-items:center;border-radius:50%!important;clip-path:none!important}
 .avatar-core>img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;border-radius:50%}
-.border-aurora{--bc1:#b98cff;--bc2:#61f2dc;--bglo:#a67cff88}
-.border-aurora::before{background:conic-gradient(#b98cff,#61f2dc,#7cecff,#b98cff);border:0;padding:2px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
-.border-galaxy{--bc1:#9d7cff;--bc2:#54c7ff;--bglo:#7b5cff99}
-.border-galaxy::before{background:conic-gradient(#7b5cff,#e0aaff,#55d9ff,#7b5cff);border:0;padding:2px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
-.border-thunder{--bc1:#ffe36a;--bc2:#6fdcff;--bglo:#ffe36a99}
-.border-thunder::before{border:2px solid #ffe36a;border-radius:inherit;box-shadow:0 0 10px #ffe36aaa,0 0 26px #6fdcff66}
-.border-inferno{--bc1:#ff8a4c;--bc2:#ff3b6b;--bglo:#ff4d4d99}.border-inferno::before{border-color:#ff7a4d;box-shadow:0 0 12px #ff5a4d99,0 0 28px #ff3b6b66;animation:lexBorderFire 1.6s ease-in-out infinite}
-.border-frost{--bc1:#e8fbff;--bc2:#70ddff;--bglo:#72ddff99}.border-frost::before{border-color:#c9f7ff;box-shadow:0 0 12px #8beaff99,0 0 28px #5bcfff66}
-.border-royal{--bc1:#ffe47a;--bc2:#ffb52e;--bglo:#ffc83d99}.border-royal::before{border-width:3px;box-shadow:0 0 12px #ffd34f99,0 0 28px #ff9f1c66}
-.border-prism{--bc1:#ff77d9;--bc2:#6ff7ff;--bglo:#ff77d988}.border-prism::before{background:conic-gradient(#ff77d9,#7b7dff,#6ff7ff,#8dff9c,#ffe477,#ff77d9);border:0;padding:2px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:lexBorderSpin 4.5s linear infinite}
-.border-cosmic{--bc1:#d58cff;--bc2:#ff5bd7;--bglo:#b95cff99}.border-cosmic::before{border-style:dashed;border-width:2px;box-shadow:0 0 12px #c45cff99,0 0 30px #ff5bd766}
-.border-void{--bc1:#a68cff;--bc2:#35235e;--bglo:#8b5cff88}.border-void::before{border-color:#8e6cff;box-shadow:inset 0 0 10px #000,0 0 12px #7a50cc99,0 0 26px #3a1c7d88}
-.border-emerald{--bc1:#7affbd;--bc2:#3ce0a0;--bglo:#43f0aa88}.border-emerald::before{border-color:#63f0b4;box-shadow:0 0 12px #43f0aa99,0 0 28px #26c98b66}
-@keyframes lexBorderPulse{0%,100%{opacity:.82;transform:scale(1)}50%{opacity:1;transform:scale(1.025)}}
-@keyframes lexBorderSpin{to{transform:rotate(360deg)}}
-@keyframes lexBorderFire{0%,100%{transform:scale(1) rotate(-.5deg);filter:saturate(1)}50%{transform:scale(1.035) rotate(.5deg);filter:saturate(1.35)}}
-.ava.profile-border{overflow:visible!important;border:0;background:transparent;box-shadow:none}
-.ava.profile-border img{position:relative;z-index:2;border-radius:50%}
-.leader-avatar.profile-border{overflow:visible;border-radius:50%!important}
-.leader-avatar.profile-border img{position:relative;z-index:2;border-radius:50%!important;clip-path:circle(50% at 50% 50%)}
-.leader-avatar.profile-border .rank-num{position:relative;z-index:2}
-.champion-avatar.profile-border{overflow:visible;border-radius:50%!important;border:0;box-shadow:none}
-.champion-avatar.profile-border img{position:relative;z-index:2;border-radius:50%!important;clip-path:circle(50% at 50% 50%)}
 .profile-shell{width:96px;height:96px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;overflow:visible}
-.profile-shell .profile{width:96px;height:96px;margin:0;border:0;overflow:visible}
+.profile-shell .profile{width:96px!important;height:96px!important;margin:0;border:0;border-radius:50%!important;overflow:hidden!important;display:grid;place-items:center;background:#1a2130}
+.profile-shell .profile .avatar-core{width:100%;height:100%}
+.profile-shell .profile img{width:100%;height:100%;border-radius:50%!important;object-fit:cover;object-position:center}
 .profile-shop-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}
 .shop-hero{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
-.shop-balance{font-size:22px;font-weight:950}.border-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.border-card{background:#0f1420;border:1px solid var(--b);border-radius:18px;padding:12px;min-height:185px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.border-preview{width:82px;height:82px;border-radius:50%;background:#1a2130;display:grid;place-items:center;margin:5px 0 10px;flex:none;overflow:visible}
-.border-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%!important;clip-path:circle(50% at 50% 50%);position:relative;z-index:2}.border-preview .avatar-fallback{width:100%;height:100%;display:grid;place-items:center;border-radius:50%;clip-path:circle(50% at 50% 50%);background:#20283a;color:#cdd4e2;font-size:25px;font-weight:900;position:relative;z-index:2}
-.border-name{font-weight:900;font-size:14px}.border-desc{font-size:10px;color:var(--m);line-height:1.4;margin:3px 0 8px;min-height:28px}.border-price{font-size:12px;color:#ffe38a;font-weight:900;margin-bottom:8px}.border-owned{color:#7df0cf}.border-card .btn{width:100%}.shop-note{font-size:10px;color:var(--m);line-height:1.5;margin-top:10px;text-align:center}
-@media(max-width:560px){.border-grid{grid-template-columns:1fr 1fr}.border-preview{width:76px;height:76px}.border-card{padding:10px;min-height:178px}}
-@media(min-width:700px){.border-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-
-/* LEXIAA V20 — BORDER/PHOTO GEOMETRY FIX
-   Keep each existing avatar's ORIGINAL size.
-   The border is the outer frame; the photo is a smaller, clipped inner circle.
-   No JS/data/shop/leaderboard logic is changed. */
-.profile-border{
-  position:relative!important;
-  box-sizing:border-box!important;
-  border-radius:50%!important;
-  overflow:visible!important;
-  isolation:isolate!important;
-  min-width:0!important;
-  min-height:0!important;
-  aspect-ratio:1/1!important;
-}
-.profile-border > .avatar-core{
-  position:absolute!important;
-  left:4px!important; top:4px!important;
-  right:4px!important; bottom:4px!important;
-  width:auto!important; height:auto!important;
-  min-width:0!important; min-height:0!important;
-  max-width:none!important; max-height:none!important;
-  box-sizing:border-box!important;
-  border-radius:50%!important;
-  overflow:hidden!important;
-  clip-path:circle(50% at 50% 50%)!important;
-  z-index:2!important;
-}
-.profile-border > .avatar-core > img{
-  position:absolute!important;
-  left:0!important; top:0!important;
-  width:100%!important; height:100%!important;
-  min-width:0!important; min-height:0!important;
-  max-width:none!important; max-height:none!important;
-  object-fit:cover!important;
-  object-position:50% 50%!important;
-  display:block!important;
-  border:0!important;
-  border-radius:50%!important;
-  clip-path:none!important;
-}
-.profile-border > .avatar-core > .avatar-fallback{
-  position:absolute!important; inset:0!important;
-  width:auto!important; height:auto!important; margin:0!important;
-  border-radius:50%!important;
-  clip-path:none!important;
-  display:grid!important; place-items:center!important;
-}
-.ava.profile-border{
-  width:56px!important;height:56px!important;aspect-ratio:1/1!important;
-}
-.leader-avatar.profile-border{
-  width:68px!important;height:68px!important;aspect-ratio:1/1!important;
-}
-.leader-item.rank-1 .leader-avatar.profile-border{
-  width:76px!important;height:76px!important;
-}
-.leader-item.rank-2 .leader-avatar.profile-border,
-.leader-item.rank-3 .leader-avatar.profile-border{
-  width:72px!important;height:72px!important;
-}
-.champion-avatar.profile-border{
-  width:126px!important;height:126px!important;aspect-ratio:1/1!important;
-}
-.border-preview.profile-border{
-  width:82px!important;height:82px!important;aspect-ratio:1/1!important;
-}
-.profile-shell .profile.profile-border{
-  width:92px!important;height:92px!important;
-  aspect-ratio:1/1!important;position:relative!important;
-}
-@media(max-width:560px){
-  .champion-avatar.profile-border{
-    width:100px!important;height:100px!important;
-  }
-  .border-preview.profile-border{
-    width:76px!important;height:76px!important;
-  }
-}
-.border-preview.profile-border > .avatar-core{
-  width:auto!important;height:auto!important;
-}
-.border-preview.profile-border img,
-.leader-avatar.profile-border img,
-.champion-avatar.profile-border img,
-.profile-shell .profile.profile-border img,
-.ava.profile-border img{
-  max-width:none!important;max-height:none!important;box-sizing:border-box!important;
-}
+.shop-balance{font-size:22px;font-weight:950}
+.effect-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.effect-card{background:#0f1420;border:1px solid var(--b);border-radius:18px;padding:14px 12px 12px;min-height:166px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.effect-preview{width:100%;min-height:62px;display:grid;place-items:center;padding:4px 6px 8px;box-sizing:border-box;overflow:hidden}
+.effect-preview-name{font-size:20px;line-height:1.15;font-weight:950;letter-spacing:-.025em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.effect-name{font-weight:900;font-size:14px;line-height:1.2}
+.effect-desc{font-size:10px;color:var(--m);line-height:1.4;margin:4px 0 8px;min-height:28px}
+.effect-price{font-size:12px;color:#ffe38a;font-weight:900;margin-bottom:8px}
+.effect-owned{color:#7df0cf}
+.effect-card .btn{width:100%}
+.shop-note{font-size:10px;color:var(--m);line-height:1.5;margin-top:10px;text-align:center}
+.name-effect-aurora{background:linear-gradient(90deg,#c28cff,#71f2dc,#9fd7ff,#c28cff);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:nameAurora 4s linear infinite;text-shadow:0 0 22px #9b7cff33}
+.name-effect-neon{color:#8dfcff!important;text-shadow:0 0 5px #53f5ff,0 0 14px #4a7dff,0 0 28px #c85cff66;animation:nameNeon 2.2s ease-in-out infinite}
+.name-effect-gold{background:linear-gradient(90deg,#fff0a8,#ffd34f,#fff4bd,#d99524,#fff0a8);background-size:240% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:nameGold 4s linear infinite;text-shadow:0 0 18px #ffd34f33}
+.name-effect-inferno{background:linear-gradient(90deg,#ffd17a,#ff8a4c,#ff416c,#ffcf70);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:nameInferno 2.8s ease-in-out infinite;text-shadow:0 0 20px #ff5a3d44}
+.name-effect-frost{background:linear-gradient(90deg,#dfffff,#72ddff,#b9c8ff,#efffff);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:nameFrost 4s linear infinite;text-shadow:0 0 18px #67ddff44}
+.name-effect-void{background:linear-gradient(90deg,#f0d7ff,#a98bff,#ff70db,#d8c4ff);background-size:240% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:nameVoid 4.5s linear infinite;text-shadow:0 0 22px #a75cff44}
+.name-effect-royal{background:linear-gradient(90deg,#fff0a1,#dca83c,#fff5c4,#9d6a19,#fff0a1);background-size:240% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:nameRoyal 4.2s linear infinite;text-shadow:0 0 18px #d9aa3b44}
+@keyframes nameAurora{to{background-position:220% center}}
+@keyframes nameGold{to{background-position:240% center}}
+@keyframes nameInferno{0%,100%{filter:saturate(1)}50%{filter:saturate(1.3) brightness(1.08)}}
+@keyframes nameFrost{to{background-position:220% center}}
+@keyframes nameVoid{to{background-position:240% center}}
+@keyframes nameRoyal{to{background-position:240% center}}
+@keyframes nameNeon{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+@media(max-width:560px){.effect-grid{grid-template-columns:1fr 1fr}.effect-card{padding:12px 9px;min-height:158px}.effect-preview-name{font-size:17px}}
+@media(min-width:700px){.effect-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style></head><body>
 <div class="app"><header class="top"><div class="brand"><img src="icon-192.png"><div><b>Lexiaa</b><small>your space, your way.</small></div></div><button class="ava" id="ava" onclick="page('profile')">L</button></header>
 
@@ -174,10 +77,11 @@ html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--
 </div>
 
 <nav class="nav"><div class="navin"><button class="on" data-page="home" onclick="page('home',this)"><i>⌂</i>Home</button><button data-page="photos" onclick="page('photos',this)"><i>◌</i>Photos</button><button data-page="music" onclick="page('music',this)"><i>♪</i>Music</button><button data-page="games" onclick="page('games',this)"><i>◇</i>Games</button><button data-page="profile" onclick="page('profile',this)"><i>○</i>Profile</button></div></nav>
-<div class="photo-modal" id="photoModal" onclick="if(event.target===this)closePhoto()"><div class="photo-viewer"><div class="photo-modal-head"><div><b id="photoTitle">Photo</b></div><button class="btn" onclick="closePhoto()">✕</button></div><div class="photo-stage" id="photoStage"><img id="photoViewerImg" alt="Photo preview"></div><div class="zoom-controls"><button class="btn" onclick="zoomPhoto(-0.25)">−</button><button class="btn" onclick="resetPhotoZoom()">100%</button><button class="btn" onclick="zoomPhoto(0.25)">＋</button><button class="btn" onclick="zoomPhoto(0.5)">2×</button></div></div></div><div class="modal" id="modal"><div class="sheet"><div class="head"><h3 id="mt">Lexiaa</h3><button class="btn" onclick="closeM()">✕</button></div><div id="mb"></div></div></div><div class="modal" id="shopModal"><div class="sheet"><div class="head"><div><h3 style="margin:0">✨ Profile Border Shop</h3><small style="color:var(--m)">Border yang dipasang terlihat di Profile, Leaderboard, dan Spotlight.</small></div><button class="btn" onclick="closeShop()">✕</button></div><div id="shopBody" style="margin-top:14px"></div></div></div><div class="toast" id="toast"></div>
+<div class="photo-modal" id="photoModal" onclick="if(event.target===this)closePhoto()"><div class="photo-viewer"><div class="photo-modal-head"><div><b id="photoTitle">Photo</b></div><button class="btn" onclick="closePhoto()">✕</button></div><div class="photo-stage" id="photoStage"><img id="photoViewerImg" alt="Photo preview"></div><div class="zoom-controls"><button class="btn" onclick="zoomPhoto(-0.25)">−</button><button class="btn" onclick="resetPhotoZoom()">100%</button><button class="btn" onclick="zoomPhoto(0.25)">＋</button><button class="btn" onclick="zoomPhoto(0.5)">2×</button></div></div></div><div class="modal" id="modal"><div class="sheet"><div class="head"><h3 id="mt">Lexiaa</h3><button class="btn" onclick="closeM()">✕</button></div><div id="mb"></div></div></div><div class="modal" id="shopModal"><div class="sheet"><div class="head"><div><h3 style="margin:0">✨ Name Effect Shop</h3><small style="color:var(--m)">Efek nama yang kamu pasang akan terlihat oleh user lain di Profile, Leaderboard, dan Home Spotlight.</small></div><button class="btn" onclick="closeShop()">✕</button></div><div id="shopBody" style="margin-top:14px"></div></div></div><div class="toast" id="toast"></div>
 <input id="pi" type="file" accept="image/*" hidden><input id="mi" type="file" accept="audio/*" hidden>
 <script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
+<script>// LEXIAA V19 - avatar render wrappers preserved from verified V18 build.
+
 let sb=null,session=null,user=null;
 const $=x=>document.getElementById(x);
 function msg(x){$('toast').textContent=x;$('toast').classList.add('show');clearTimeout(window.tm);window.tm=setTimeout(()=>$('toast').classList.remove('show'),3000)}
@@ -192,7 +96,7 @@ async function signup(e){e.preventDefault();let f=new FormData(e.target),email=f
 async function init(){let c=window.LEXIAA_CONFIG||{};if(!c.SUPABASE_URL||!c.SUPABASE_PUBLISHABLE_KEY){profile();return}sb=window.supabase.createClient(c.SUPABASE_URL,c.SUPABASE_PUBLISHABLE_KEY);let r=await sb.auth.getSession();apply(r.data.session);sb.auth.onAuthStateChange((_e,s)=>apply(s))}
 async function apply(s){session=s;user=s?.user||null;profile();avatar();loadHomeChampion();if(document.querySelector('#photos.active'))loadPhotos();if(document.querySelector('#music.active'))loadMusic();if(document.querySelector('#games.active')){loadScores();loadLeaderboard();loadWallet()}}
 async function ensure(){if(!user)return;let r=await sb.from('profiles').select('id').eq('id',user.id).maybeSingle();if(!r.data)await sb.from('profiles').insert({id:user.id,display_name:user.user_metadata?.display_name||user.email.split('@')[0]})}
-async function avatar(){if(!user){$('ava').className='ava';$('ava').textContent='L';return}await ensure();let r=await sb.from('profiles').select('avatar_path,display_name,equipped_border_id').eq('id',user.id).maybeSingle();let el=$('ava');el.className='ava '+borderClass(r.data?.equipped_border_id);el.textContent=(r.data?.display_name||'L')[0].toUpperCase();if(r.error||!r.data?.avatar_path)return;let u=await sb.storage.from('avatars').createSignedUrl(r.data.avatar_path,3600);if(u.error||!u.data?.signedUrl)return;el.innerHTML='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
+async function avatar(){if(!user){$('ava').className='ava';$('ava').textContent='L';return}await ensure();let r=await sb.from('profiles').select('avatar_path,display_name').eq('id',user.id).maybeSingle();let el=$('ava');el.className='ava';el.textContent=(r.data?.display_name||'L')[0].toUpperCase();if(r.error||!r.data?.avatar_path)return;let u=await sb.storage.from('avatars').createSignedUrl(r.data.avatar_path,3600);if(u.error||!u.data?.signedUrl)return;el.innerHTML='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
 function addPhoto(){if(!user)return openAuth();$('pi').value='';$('pi').click()}$('pi').onchange=async e=>{let f=e.target.files?.[0];if(!f)return;msg('Uploading…');let path=user.id+'/'+crypto.randomUUID()+'-'+f.name.replace(/[^a-zA-Z0-9._-]/g,'_');let u=await sb.storage.from('photos').upload(path,f,{contentType:f.type,upsert:false});if(u.error)return msg(u.error.message);let d=await sb.from('photos').insert({user_id:user.id,storage_path:path,file_name:f.name});if(d.error){await sb.storage.from('photos').remove([path]);return msg(d.error.message)}msg('Foto ditambahkan');loadPhotos()}
 async function loadPhotos(){if(!user){$('photoList').innerHTML='<div class="empty">Login untuk melihat album.</div>';return}let r=await sb.from('photos').select('*').eq('user_id',user.id).order('created_at',{ascending:false});if(r.error){$('photoList').innerHTML='<div class="empty">Gagal memuat foto.<br><small>'+esc(r.error.message)+'</small></div>';return}if(!r.data.length){$('photoList').innerHTML='<div class="empty">Belum ada foto.</div>';return}let out='';for(let x of r.data){let u=await sb.storage.from('photos').createSignedUrl(x.storage_path,3600);let signed=u.data?.signedUrl||'';let safePath=encodeURIComponent(x.storage_path);let safeName=encodeURIComponent(x.file_name);out+=`<div class="item photo-item" onclick="openPhotoByPath('${safePath}','${safeName}')" style="cursor:zoom-in"><div class="thumb">${signed?'<img src="'+signed+(signed.includes('?')?'&':'?')+'v='+Date.now()+'" alt="'+esc(x.file_name)+'">':'◌'}</div><div class="main"><b>${esc(x.file_name)}</b><small>${new Date(x.created_at).toLocaleString('id-ID')} · Ketuk untuk buka & zoom</small></div><button class="btn" onclick="event.stopPropagation();openPhotoByPath('${safePath}','${safeName}')">⌕</button><button class="btn" onclick="event.stopPropagation();dl('${safePath}')">↓</button><button class="btn danger" onclick="event.stopPropagation();delPhoto('${x.id}','${safePath}')">×</button></div>`}$('photoList').innerHTML=out} 
 async function openPhotoByPath(path,name){if(!user)return openAuth();let p=decodeURIComponent(path),n=decodeURIComponent(name||'Photo');let u=await sb.storage.from('photos').createSignedUrl(p,3600);if(u.error||!u.data?.signedUrl)return msg('Foto tidak dapat dibuka: '+(u.error?.message||'signed URL gagal'));openPhoto(encodeURIComponent(u.data.signedUrl),encodeURIComponent(n))}
@@ -228,43 +132,60 @@ function finishQuiz(){let score=qc*100;openM('Quiz — Selesai',`<div class="emp
 async function saveScore(game,score){if(!user)return openAuth();let r=await sb.rpc('save_game_score',{p_game:game,p_score:Math.max(0,Math.floor(score))});if(r.error)return msg('Gagal menyimpan score: '+r.error.message);let result=Array.isArray(r.data)?r.data[0]:r.data;closeM();await loadScores();await loadLeaderboard();await loadWallet();let earned=Number(result?.diamonds_earned||0);await loadHomeChampion();msg(earned>0?`Score tersimpan · +${earned} 💎`:'Score tersimpan')}
 async function loadWallet(){if(!$('diamondBalance'))return;if(!user){$('diamondBalance').textContent='0';return}let r=await sb.from('profiles').select('diamonds').eq('id',user.id).maybeSingle();if(r.error){$('diamondBalance').textContent='—';return}$('diamondBalance').textContent=Number(r.data?.diamonds||0).toLocaleString('id-ID')}
 async function loadScores(){if(!user){$('scores').innerHTML='<div class="empty">Login untuk melihat history.</div>';return}const games=['Quick Tap','Quiz'];const results=await Promise.all(games.map(game=>sb.from('game_scores').select('id,game,score,played_at').eq('user_id',user.id).eq('game',game).order('score',{ascending:false}).order('played_at',{ascending:false}).limit(1)));const failed=results.find(r=>r.error);if(failed){$('scores').innerHTML='<div class="empty">Gagal memuat score.<br><small>'+esc(failed.error.message)+'</small></div>';return}const best=results.map(r=>r.data?.[0]).filter(Boolean);best.sort((a,b)=>{const sa=Number(a.score||0),sb=Number(b.score||0);if(sb!==sa)return sb-sa;return new Date(b.played_at)-new Date(a.played_at)});$('scores').innerHTML=best.length?best.map(x=>`<div class="item"><div class="thumb">◇</div><div class="main"><b>${esc(x.game)}</b><small>${x.score} · ${new Date(x.played_at).toLocaleString('id-ID')}</small></div></div>`).join(''):'<div class="empty">Belum ada score.</div>'}
-async function loadHomeChampion(){const box=$('homeChampion');if(!box)return;if(!user||!sb){box.innerHTML='';return}box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Memuat juara #1…</div></div>';try{let r=await sb.rpc('get_leaderboard',{p_game:'Quick Tap'});if(r.error)throw r.error;if(!Array.isArray(r.data)||!r.data.length){box.innerHTML='';return}let x=r.data[0];let avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile juara 1">'}let score=Number(x.score||0);let title=score>=100?'Sang Kilat Abadi':score>=90?'Si Cepat Kilat':score>=75?'Tangan Petir':score>=60?'Refleks Cahaya':'Pemburu Kecepatan';let diamondBalance=null;try{let dr=await sb.rpc('get_player_diamonds',{p_user_id:x.id});if(!dr.error&&Array.isArray(dr.data)&&dr.data.length)diamondBalance=Number(dr.data[0].diamond_balance||0)}catch(e){console.warn('Champion diamond:',e)}let diamondText=diamondBalance===null?'💎 —':`💎 ${diamondBalance.toLocaleString('id-ID')}`;box.innerHTML=`<section class="champion-card" aria-label="Juara 1 Quick Tap"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="champion-layout"><div class="champion-avatar-wrap"><div class="champion-crown">👑</div><div class="champion-avatar ${borderClass(x.equipped_border_id)}">${avatar||esc((x.display_name||'L')[0].toUpperCase())}</div></div><div class="champion-copy"><div class="champion-title">JUARA #1 · ${esc(title)}</div><div class="champion-name">${esc(x.display_name||'Lexiaa User')}</div><div class="champion-subtitle">Pemegang score tertinggi Quick Tap di Lexiaa. Kecepatan yang layak dipajang.</div><div class="champion-stats"><div class="champion-score"><span class="champion-score-main">⚡ ${score} TAP</span><span class="champion-score-meta">dalam 10 detik</span></div><div class="champion-diamonds"><span class="diamond-icon">💎</span><span class="diamond-count">${diamondBalance===null?'—':diamondBalance.toLocaleString('id-ID')}</span></div></div></div><div class="champion-badge">TOP PLAYER</div></div></section>`}catch(e){box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Champion belum dapat dimuat.</div></div>';console.error('Champion Spotlight:',e)}} 
-async function loadLeaderboard(){if(!$('leaderboard'))return;if(!user){$('leaderboard').innerHTML='<div class="empty">Login untuk melihat leaderboard.</div>';return}let game=$('leaderGame')?.value||'Quick Tap';let r=await sb.rpc('get_leaderboard',{p_game:game});if(r.error){$('leaderboard').innerHTML='<div class="empty">Gagal memuat leaderboard.<br><small>'+esc(r.error.message)+'</small></div>';return}if(!r.data.length){$('leaderboard').innerHTML='<div class="empty">Belum ada score untuk '+esc(game)+'.</div>';return}let rows='';for(let i=0;i<r.data.length;i++){let x=r.data[i];let rank=i+1;let avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile">'}let cls=rank<=3?' rank-'+rank:'';let crown=rank===1?'<span class="leader-crown" aria-label="Juara 1">👑</span>':'';let fallback=rank<=3?String(rank):String(rank);rows+=`<div class="item leader-item${cls}"><div class="leader-rank${cls}">${fallback}</div><div class="leader-profile">${crown}<div class="leader-avatar ${borderClass(x.equipped_border_id)}">${avatar||'<span class="rank-num">'+rank+'</span>'}</div></div><div class="main"><b>${esc(x.display_name||'Lexiaa User')}</b><small>${esc(x.game)} · ${x.score} · ${new Date(x.played_at).toLocaleString('id-ID')}</small></div></div>`}$('leaderboard').innerHTML=rows}
+async function loadHomeChampion(){const box=$('homeChampion');if(!box)return;if(!user||!sb){box.innerHTML='';return}box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Memuat juara #1…</div></div>';try{let r=await sb.rpc('get_leaderboard',{p_game:'Quick Tap'});if(r.error)throw r.error;if(!Array.isArray(r.data)||!r.data.length){box.innerHTML='';return}let x=r.data[0];let avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile juara 1">'}let score=Number(x.score||0);let title=score>=100?'Sang Kilat Abadi':score>=90?'Si Cepat Kilat':score>=75?'Tangan Petir':score>=60?'Refleks Cahaya':'Pemburu Kecepatan';let diamondBalance=null;try{let dr=await sb.rpc('get_player_diamonds',{p_user_id:x.id});if(!dr.error&&Array.isArray(dr.data)&&dr.data.length)diamondBalance=Number(dr.data[0].diamond_balance||0)}catch(e){console.warn('Champion diamond:',e)}let diamondText=diamondBalance===null?'💎 —':`💎 ${diamondBalance.toLocaleString('id-ID')}`;box.innerHTML=`<section class="champion-card" aria-label="Juara 1 Quick Tap"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="champion-layout"><div class="champion-avatar-wrap"><div class="champion-crown">👑</div><div class="champion-avatar"><div class="avatar-core">${avatar||esc((x.display_name||'L')[0].toUpperCase())}</div></div></div><div class="champion-copy"><div class="champion-title">JUARA #1 · ${esc(title)}</div><div class="champion-name ${nameEffectClass(x.equipped_name_effect_id)}">${esc(x.display_name||'Lexiaa User')}</div><div class="champion-subtitle">Pemegang score tertinggi Quick Tap di Lexiaa. Kecepatan yang layak dipajang.</div><div class="champion-stats"><div class="champion-score"><span class="champion-score-main">⚡ ${score} TAP</span><span class="champion-score-meta">dalam 10 detik</span></div><div class="champion-diamonds"><span class="diamond-icon">💎</span><span class="diamond-count">${diamondBalance===null?'—':diamondBalance.toLocaleString('id-ID')}</span></div></div></div><div class="champion-badge">TOP PLAYER</div></div></section>`}catch(e){box.innerHTML='<div class="champion-card"><div class="champion-kicker">👑 Champion Spotlight · Quick Tap</div><div class="empty" style="margin-top:10px">Champion belum dapat dimuat.</div></div>';console.error('Champion Spotlight:',e)}} 
+async function loadLeaderboard(){if(!$('leaderboard'))return;if(!user){$('leaderboard').innerHTML='<div class="empty">Login untuk melihat leaderboard.</div>';return}let game=$('leaderGame')?.value||'Quick Tap';let r=await sb.rpc('get_leaderboard',{p_game:game});if(r.error){$('leaderboard').innerHTML='<div class="empty">Gagal memuat leaderboard.<br><small>'+esc(r.error.message)+'</small></div>';return}if(!r.data.length){$('leaderboard').innerHTML='<div class="empty">Belum ada score untuk '+esc(game)+'.</div>';return}let rows='';for(let i=0;i<r.data.length;i++){let x=r.data[i];let rank=i+1;let avatar='';if(x.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(x.avatar_path,900);if(u.data?.signedUrl)avatar='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'" alt="Profile">'}let cls=rank<=3?' rank-'+rank:'';let crown=rank===1?'<span class="leader-crown" aria-label="Juara 1">👑</span>':'';let fallback=rank<=3?String(rank):String(rank);rows+=`<div class="item leader-item${cls}"><div class="leader-rank${cls}">${fallback}</div><div class="leader-profile">${crown}<div class="leader-avatar"><div class="avatar-core">${avatar||'<span class="rank-num">'+rank+'</span>'}</div></div></div><div class="main"><b class="${nameEffectClass(x.equipped_name_effect_id)}">${esc(x.display_name||'Lexiaa User')}</b><small>${esc(x.game)} · ${x.score} · ${new Date(x.played_at).toLocaleString('id-ID')}</small></div></div>`}$('leaderboard').innerHTML=rows}
 
-function borderClass(id){return id?'profile-border border-'+String(id).replace(/[^a-zA-Z0-9_-]/g,''):''}
+function nameEffectClass(id){return id?'name-effect-'+String(id).replace(/[^a-zA-Z0-9_-]/g,''):''}
 async function openShop(){
   if(!user)return openAuth();
-  $('shopBody').innerHTML='<div class="empty">Memuat border shop…</div>';
+  $('shopBody').innerHTML='<div class="empty">Memuat name effect shop…</div>';
   $('shopModal').classList.add('show');
-  let [b,u,p]=await Promise.all([
-    sb.from('profile_borders').select('*').order('sort_order',{ascending:true}),
-    sb.from('user_profile_borders').select('border_id').eq('user_id',user.id),
-    sb.from('profiles').select('diamonds,display_name,avatar_path,equipped_border_id').eq('id',user.id).maybeSingle()
+  let [e,u,p]=await Promise.all([
+    sb.from('profile_name_effects').select('*').order('sort_order',{ascending:true}),
+    sb.from('user_profile_name_effects').select('effect_id').eq('user_id',user.id),
+    sb.from('profiles').select('diamonds,display_name,equipped_name_effect_id').eq('id',user.id).maybeSingle()
   ]);
-  if(b.error){$('shopBody').innerHTML='<div class="empty">Gagal memuat shop.<br><small>'+esc(b.error.message)+'</small></div>';return}
-  let owned=new Set((u.data||[]).map(x=>x.border_id)),prof=p.data||{};
-  let avatar='';
-  if(prof.avatar_path){let s=await sb.storage.from('avatars').createSignedUrl(prof.avatar_path,900);if(s.data?.signedUrl)avatar='<img alt="Preview" src="'+s.data.signedUrl+(s.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
-  let cards=(b.data||[]).map(x=>{
-    let own=owned.has(x.id),equipped=prof.equipped_border_id===x.id;
-    let preview=avatar||'<span class="avatar-fallback">'+esc((prof.display_name||'L')[0].toUpperCase())+'</span>';
-    let action=equipped?'<button class="btn" onclick="equipBorder(null)">Lepas Border</button>':own?'<button class="btn primary" onclick="equipBorder(\''+esc(x.id)+'\')">Pakai Border</button>':'<button class="btn primary" onclick="buyBorder(\''+esc(x.id)+'\')">💎 '+Number(x.price||0).toLocaleString('id-ID')+' · Beli</button>';
-    return '<div class="border-card"><div class="border-preview '+borderClass(x.id)+'">'+preview+'</div><div class="border-name">'+esc(x.name)+'</div><div class="border-desc">'+esc(x.description||'')+'</div><div class="border-price '+(own?'border-owned':'')+'">'+(own?'✓ Dimiliki':'💎 '+Number(x.price||0).toLocaleString('id-ID'))+'</div>'+action+'</div>';
+  if(e.error){$('shopBody').innerHTML='<div class="empty">Gagal memuat shop.<br><small>'+esc(e.error.message)+'</small></div>';return}
+  let owned=new Set((u.data||[]).map(x=>x.effect_id)),prof=p.data||{};
+  let sample=esc(prof.display_name||'Lexiaa User');
+  let cards=(e.data||[]).map(x=>{
+    let own=owned.has(x.id),equipped=prof.equipped_name_effect_id===x.id;
+    let preview='<span class="effect-preview-name '+nameEffectClass(x.id)+'">'+sample+'</span>';
+    let action=equipped
+      ? '<button class="btn" onclick="equipNameEffect(null)">Lepas Efek</button>'
+      : own
+        ? '<button class="btn primary" onclick="equipNameEffect(\''+esc(x.id)+'\')">Pakai Efek</button>'
+        : '<button class="btn primary" onclick="buyNameEffect(\''+esc(x.id)+'\')">💎 '+Number(x.price||0).toLocaleString('id-ID')+' · Beli</button>';
+    return '<div class="effect-card"><div class="effect-preview">'+preview+'</div><div class="effect-name">'+esc(x.name)+'</div><div class="effect-desc">'+esc(x.description||'')+'</div><div class="effect-price '+(own?'effect-owned':'')+'">'+(own?'✓ Dimiliki':'💎 '+Number(x.price||0).toLocaleString('id-ID'))+'</div>'+action+'</div>';
   }).join('');
-  $('shopBody').innerHTML='<div class="shop-hero"><div><div class="ey">COSMETICS</div><div class="shop-balance">💎 '+Number(prof.diamonds||0).toLocaleString('id-ID')+'</div></div><span class="tag">Private collection</span></div><div class="border-grid">'+(cards||'<div class="empty">Belum ada border.</div>')+'</div><div class="shop-note">Border yang kamu pasang akan terlihat oleh user lain di Profile, Leaderboard, dan Home Spotlight.</div>';
+  $('shopBody').innerHTML='<div class="shop-hero"><div><div class="ey">NAME COSMETICS</div><div class="shop-balance">💎 '+Number(prof.diamonds||0).toLocaleString('id-ID')+'</div></div><span class="tag">Private collection</span></div><div class="effect-grid">'+(cards||'<div class="empty">Belum ada efek nama.</div>')+'</div><div class="shop-note">Efek nama hanya mengubah tampilan nama akun. Foto profil tetap bulat tanpa border.</div>';
 }
 function closeShop(){$('shopModal').classList.remove('show')}
-async function buyBorder(id){if(!user)return openAuth();let r=await sb.rpc('buy_profile_border',{p_border_id:id});if(r.error)return msg(r.error.message);msg('Border berhasil dibeli');await openShop();await profile();await avatar()}
-async function equipBorder(id){if(!user)return openAuth();let r=await sb.rpc('equip_profile_border',{p_border_id:id});if(r.error)return msg(r.error.message);msg(id?'Border dipasang':'Border dilepas');closeShop();await profile();await avatar();await loadLeaderboard();await loadHomeChampion()}
+async function buyNameEffect(id){
+  if(!user)return openAuth();
+  let r=await sb.rpc('buy_name_effect',{p_effect_id:id});
+  if(r.error)return msg(r.error.message);
+  msg('Efek nama berhasil dibeli');
+  await openShop();await profile();await loadLeaderboard();await loadHomeChampion();
+}
+async function equipNameEffect(id){
+  if(!user)return openAuth();
+  let r=await sb.rpc('equip_name_effect',{p_effect_id:id});
+  if(r.error)return msg(r.error.message);
+  msg(id?'Efek nama dipasang':'Efek nama dilepas');
+  closeShop();
+  await profile();await avatar();await loadLeaderboard();await loadHomeChampion();
+}
 async function profile(){
   if(!user){$('profileCard').innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}
   await ensure();
   let r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle(),p=r.data||{};
   let av='';
   if(p.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);if(u.data?.signedUrl)av='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
-  let cls=borderClass(p.equipped_border_id);
-  $('profileCard').innerHTML='<div class="profile-shell"><div class="profile '+cls+'">'+(av||'<span class="avatar-fallback">'+esc((p.display_name||'L')[0])+'</span>')+'</div></div><div style="text-align:center"><h3>'+esc(p.display_name||'Lexiaa User')+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Border Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+esc(p.display_name||'Lexiaa User')+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag">💎 '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><button class="btn danger" onclick="logout()">Logout</button></div>';
-  applyTheme(p.theme)
+  let effect=nameEffectClass(p.equipped_name_effect_id);
+  let display=esc(p.display_name||'Lexiaa User');
+  $('profileCard').innerHTML='<div class="profile-shell"><div class="profile"><div class="avatar-core">'+(av||'<span class="avatar-fallback">'+esc((p.display_name||'L')[0])+'</span>')+'</div></div></div><div style="text-align:center"><h3 class="'+effect+'">'+display+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag">💎 '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><button class="btn danger" onclick="logout()">Logout</button></div>';
+  applyTheme(p.theme);
 }
 async function saveProfile(){let name=$('displayName').value.trim(),theme=$('theme').value;if(!name)return msg('Nama tidak boleh kosong');let r=await sb.from('profiles').update({display_name:name,theme,updated_at:new Date().toISOString()}).eq('id',user.id);if(r.error)return msg(r.error.message);applyTheme(theme);await avatar();msg('Profil disimpan');profile()}
 function applyTheme(theme){document.documentElement.dataset.theme=theme||'obsidian'}
