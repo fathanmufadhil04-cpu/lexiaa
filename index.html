@@ -224,6 +224,29 @@ html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--
 @keyframes eternalApocalypseSpark{0%,100%{opacity:0;transform:translate(-50%,10px) scale(.35)}18%{opacity:1;transform:translate(-50%,-4px) scale(1.05)}25%{opacity:.1}32%{opacity:1}45%{opacity:.4;transform:translate(-50%,-18px) scale(.8)}62%{opacity:0;transform:translate(-50%,-31px) scale(.45)}}
 @media(prefers-reduced-motion:reduce){.flow-char,.flow-char:before,.flow-char:after{animation:none!important}.flow-char{filter:none!important}}
 
+
+/* V29 — Profile Spark */
+.profile-spark{position:relative;width:96px;height:96px;margin:0 auto 14px;display:grid;place-items:center;isolation:isolate}
+.profile-spark .spark-avatar{position:relative;z-index:2;width:96px;height:96px;border-radius:50%;overflow:hidden;background:#1a2130;display:grid;place-items:center;box-shadow:0 0 0 1px #ffffff12,0 0 30px var(--spark-glow,#62eaff33)}
+.profile-spark .spark-avatar img{width:100%;height:100%;object-fit:cover;object-position:center;border-radius:50%}
+.profile-spark .spark-avatar .avatar-fallback{font-size:28px;font-weight:900;color:#dce7f8}
+.spark-particle{position:absolute;left:50%;top:50%;z-index:3;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:var(--spark-color,#7cecff);box-shadow:0 0 6px var(--spark-color,#7cecff),0 0 16px var(--spark-color,#7cecff);transform:rotate(var(--spark-angle,0deg)) translateX(56px);animation:sparkOrbit var(--spark-speed,4s) linear infinite;animation-delay:var(--spark-delay,0s);pointer-events:none}
+.spark-particle:nth-child(2){width:5px;height:5px}.spark-particle:nth-child(3){width:8px;height:8px}.spark-particle:nth-child(4){width:4px;height:4px}
+.profile-spark:after{content:"";position:absolute;inset:-12px;border-radius:50%;z-index:1;background:radial-gradient(circle,var(--spark-glow,#62eaff18) 0,transparent 68%);filter:blur(8px);animation:sparkPulse 2.6s ease-in-out infinite;pointer-events:none}
+@keyframes sparkOrbit{from{transform:rotate(var(--spark-angle,0deg)) translateX(56px)}to{transform:rotate(calc(var(--spark-angle,0deg) + 360deg)) translateX(56px)}}
+@keyframes sparkPulse{0%,100%{transform:scale(.9);opacity:.55}50%{transform:scale(1.08);opacity:1}}
+.spark-stardust{--spark-color:#bfefff;--spark-glow:#63d8ff55;--spark-speed:5.2s}
+.spark-aurora{--spark-color:#9b8cff;--spark-glow:#8d7cff66;--spark-speed:4.7s}
+.spark-gold{--spark-color:#ffe18a;--spark-glow:#ffc94f66;--spark-speed:4.2s}
+.spark-inferno{--spark-color:#ff734c;--spark-glow:#ff4e3d66;--spark-speed:3.8s}
+.spark-frost{--spark-color:#c9ffff;--spark-glow:#66eaff66;--spark-speed:4.8s}
+.spark-royal{--spark-color:#e7c2ff;--spark-glow:#a56cff77;--spark-speed:3.9s}
+.spark-cosmic{--spark-color:#d7a0ff;--spark-glow:#8b5cff88;--spark-speed:3.4s}
+.spark-eternal{--spark-color:#fff0a8;--spark-glow:#ff77e988;--spark-speed:2.9s}
+.spark-eternal .spark-particle{width:6px;height:6px;box-shadow:0 0 7px #fff0a8,0 0 18px #ff77e9,0 0 28px #63eaff}
+.spark-preview{display:grid;place-items:center;min-height:116px;padding:8px}.spark-preview .profile-spark{transform:scale(.72);transform-origin:center;margin:-2px auto}.spark-card{background:#0f1420;border:1px solid var(--b);border-radius:18px;padding:12px;min-height:240px;display:flex;flex-direction:column;align-items:center;text-align:center}.spark-card .btn{width:100%;margin-top:auto}.spark-card .spark-name{font-weight:900;font-size:14px}.spark-card .spark-desc{font-size:10px;color:var(--m);line-height:1.4;min-height:30px;margin:4px 0 8px}.spark-price{font-size:12px;color:#ffe38a;font-weight:900;margin-bottom:8px}.spark-owned{color:#7df0cf}.spark-wallet{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border:1px solid #ffffff12;background:#0e1420;border-radius:16px;margin-bottom:12px}.spark-wallet b{font-size:22px}.spark-wallet small{display:block;color:var(--m);margin-top:2px}.spark-exchange{display:grid;gap:8px;margin-bottom:14px}.spark-exchange .exchange-row{display:flex;gap:8px;flex-wrap:wrap}.spark-exchange .exchange-row .btn{flex:1;min-width:120px}.spark-note{font-size:10px;color:var(--m);line-height:1.5;text-align:center;margin-top:10px}
+.profile-spark-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.spark-mini{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;border:1px solid #ffffff16;background:#ffffff06;color:#e8eaf1;font-weight:800;font-size:11px}
 </style></head><body>
 <div class="app"><header class="top"><div class="brand"><img src="icon-192.png"><div><b>Lexiaa</b><small>your space, your way.</small></div></div><button class="ava" id="ava" onclick="page('profile')">L</button></header>
 
@@ -259,7 +282,7 @@ html[data-theme="midnight"]{--bg:#070b12;--p:#0d1420;--p2:#121c2a;--b:#26384e;--
 </div>
 
 <nav class="nav"><div class="navin"><button class="on" data-page="home" onclick="page('home',this)"><i>⌂</i>Home</button><button data-page="photos" onclick="page('photos',this)"><i>◌</i>Photos</button><button data-page="music" onclick="page('music',this)"><i>♪</i>Music</button><button data-page="games" onclick="page('games',this)"><i>◇</i>Games</button><button data-page="profile" onclick="page('profile',this)"><i>○</i>Profile</button></div></nav>
-<div class="photo-modal" id="photoModal" onclick="if(event.target===this)closePhoto()"><div class="photo-viewer"><div class="photo-modal-head"><div><b id="photoTitle">Photo</b></div><button class="btn" onclick="closePhoto()">✕</button></div><div class="photo-stage" id="photoStage"><img id="photoViewerImg" alt="Photo preview"></div><div class="zoom-controls"><button class="btn" onclick="zoomPhoto(-0.25)">−</button><button class="btn" onclick="resetPhotoZoom()">100%</button><button class="btn" onclick="zoomPhoto(0.25)">＋</button><button class="btn" onclick="zoomPhoto(0.5)">2×</button></div></div></div><div class="modal" id="modal"><div class="sheet"><div class="head"><h3 id="mt">Lexiaa</h3><button class="btn" onclick="closeM()">✕</button></div><div id="mb"></div></div></div><div class="modal" id="shopModal"><div class="sheet"><div class="head"><div><h3 style="margin:0">✨ Name Effect Shop</h3><small style="color:var(--m)">Efek nama yang kamu pasang akan terlihat oleh user lain di Profile, Leaderboard, dan Home Spotlight.</small></div><button class="btn" onclick="closeShop()">✕</button></div><div id="shopBody" style="margin-top:14px"></div></div></div><div class="toast" id="toast"></div>
+<div class="photo-modal" id="photoModal" onclick="if(event.target===this)closePhoto()"><div class="photo-viewer"><div class="photo-modal-head"><div><b id="photoTitle">Photo</b></div><button class="btn" onclick="closePhoto()">✕</button></div><div class="photo-stage" id="photoStage"><img id="photoViewerImg" alt="Photo preview"></div><div class="zoom-controls"><button class="btn" onclick="zoomPhoto(-0.25)">−</button><button class="btn" onclick="resetPhotoZoom()">100%</button><button class="btn" onclick="zoomPhoto(0.25)">＋</button><button class="btn" onclick="zoomPhoto(0.5)">2×</button></div></div></div><div class="modal" id="modal"><div class="sheet"><div class="head"><h3 id="mt">Lexiaa</h3><button class="btn" onclick="closeM()">✕</button></div><div id="mb"></div></div></div><div class="modal" id="shopModal"><div class="sheet"><div class="head"><div><h3 style="margin:0">✨ Name Effect Shop</h3><small style="color:var(--m)">Efek nama yang kamu pasang akan terlihat oleh user lain di Profile, Leaderboard, dan Home Spotlight.</small></div><button class="btn" onclick="closeShop()">✕</button></div><div id="shopBody" style="margin-top:14px"></div></div></div><div class="modal" id="sparkModal"><div class="sheet"><div class="head"><div><h3 style="margin:0">✦ Profile Spark Shop</h3><small style="color:var(--m)">Partikel premium yang mengorbit avatar profile.</small></div><button class="btn" onclick="closeSparkShop()">✕</button></div><div id="sparkBody" style="margin-top:14px"></div></div></div><div class="toast" id="toast"></div>
 <input id="pi" type="file" accept="image/*" hidden><input id="mi" type="file" accept="audio/*" hidden>
 <script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>// LEXIAA V19 - avatar render wrappers preserved from verified V18 build.
@@ -364,15 +387,79 @@ async function equipNameEffect(id){
   closeShop();
   await profile();await avatar();await loadLeaderboard();await loadHomeChampion();
 }
+
+function profileSparkClass(id){return id?'spark-'+String(id).replace(/[^a-zA-Z0-9_-]/g,''):''}
+function profileSparkMarkup(avatarHtml,id,fallback){
+  const safeFallback=esc(fallback||'L');
+  const cls=profileSparkClass(id);
+  if(!cls) return '<div class="profile-shell"><div class="profile"><div class="avatar-core">'+(avatarHtml||'<span class="avatar-fallback">'+safeFallback+'</span>')+'</div></div></div>';
+  const angles=[0,90,180,270];
+  const delays=[0,-1.15,-2.3,-3.45];
+  const particles=angles.map((a,i)=>'<span class="spark-particle" style="--spark-angle:'+a+'deg;--spark-delay:'+delays[i]+'s"></span>').join('');
+  return '<div class="profile-spark '+cls+'">'+particles+'<div class="spark-avatar">'+(avatarHtml||'<span class="avatar-fallback">'+safeFallback+'</span>')+'</div></div>';
+}
+function sparkPreviewMarkup(avatarHtml,id,fallback){return profileSparkMarkup(avatarHtml,id,fallback)}
+async function openSparkShop(){
+  if(!user)return openAuth();
+  $('sparkBody').innerHTML='<div class="empty">Memuat Profile Spark Shop…</div>';
+  $('sparkModal').classList.add('show');
+  let [e,u,p]=await Promise.all([
+    sb.from('profile_sparks').select('*').order('sort_order',{ascending:true}),
+    sb.from('user_profile_sparks').select('spark_id').eq('user_id',user.id),
+    sb.from('profiles').select('spark_saldo,diamonds,display_name,avatar_path,equipped_profile_spark_id').eq('id',user.id).maybeSingle()
+  ]);
+  if(e.error){$('sparkBody').innerHTML='<div class="empty">Gagal memuat Profile Spark Shop.<br><small>'+esc(e.error.message)+'</small></div>';return}
+  if(p.error){$('sparkBody').innerHTML='<div class="empty">Gagal memuat saldo.<br><small>'+esc(p.error.message)+'</small></div>';return}
+  let prof=p.data||{},owned=new Set((u.data||[]).map(x=>x.spark_id));
+  let av='';
+  if(prof.avatar_path){let au=await sb.storage.from('avatars').createSignedUrl(prof.avatar_path,900);if(au.data?.signedUrl)av='<img alt="Profile" src="'+au.data.signedUrl+(au.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
+  let exchange='<div class="spark-exchange"><div class="ey">Premium Currency</div><div class="spark-wallet"><div><small>💠 Spark Saldo</small><b>'+Number(prof.spark_saldo||0).toLocaleString('id-ID')+'</b></div><span class="tag">10 💎 = 1 💠</span></div><div class="exchange-row"><button class="btn" onclick="exchangeSpark(100)">💎 100 → 💠 10</button><button class="btn" onclick="exchangeSpark(500)">💎 500 → 💠 50</button><button class="btn" onclick="exchangeSpark(1000)">💎 1.000 → 💠 100</button><button class="btn" onclick="exchangeSpark(5000)">💎 5.000 → 💠 500</button></div></div>';
+  let cards=(e.data||[]).map(x=>{
+    let own=owned.has(x.id),equipped=prof.equipped_profile_spark_id===x.id;
+    let preview=sparkPreviewMarkup(av,x.id,(prof.display_name||'Lexiaa User')[0]);
+    let action=equipped
+      ? '<button class="btn" onclick="equipProfileSpark(null)">Lepas Efek</button>'
+      : own
+        ? '<button class="btn primary" onclick="equipProfileSpark(\''+esc(x.id)+'\')">Pakai Efek</button>'
+        : '<button class="btn primary" onclick="buyProfileSpark(\''+esc(x.id)+'\')">💠 '+Number(x.price_saldo||0).toLocaleString('id-ID')+' · Beli</button>';
+    return '<div class="spark-card"><div class="spark-preview">'+preview+'</div><div class="spark-name">'+esc(x.name)+'</div><div class="spark-desc">'+esc(x.description||'')+'</div><div class="spark-price '+(own?'spark-owned':'')+'">'+(own?'✓ Dimiliki':'💠 '+Number(x.price_saldo||0).toLocaleString('id-ID'))+'</div>'+action+'</div>';
+  }).join('');
+  $('sparkBody').innerHTML=exchange+'<div class="effect-grid">'+(cards||'<div class="empty">Belum ada Profile Spark.</div>')+'</div><div class="spark-note">Spark Saldo adalah currency premium khusus Profile Spark. Diamond bisa ditukar menjadi Spark Saldo, tetapi tidak sebaliknya.</div>';
+}
+function closeSparkShop(){$('sparkModal').classList.remove('show')}
+async function exchangeSpark(diamonds){
+  if(!user)return openAuth();
+  if(!Number.isInteger(diamonds)||diamonds<=0)return;
+  let r=await sb.rpc('exchange_diamonds_to_spark_saldo',{p_diamonds:diamonds});
+  if(r.error)return msg(r.error.message);
+  let x=Array.isArray(r.data)?r.data[0]:r.data;
+  msg('Berhasil ditukar · +'+Number(x?.saldo_added||0).toLocaleString('id-ID')+' Spark Saldo');
+  await openSparkShop();await profile();
+}
+async function buyProfileSpark(id){
+  if(!user)return openAuth();
+  let r=await sb.rpc('buy_profile_spark',{p_spark_id:id});
+  if(r.error)return msg(r.error.message);
+  msg('Profile Spark berhasil dibeli');
+  await openSparkShop();await profile();
+}
+async function equipProfileSpark(id){
+  if(!user)return openAuth();
+  let r=await sb.rpc('equip_profile_spark',{p_spark_id:id});
+  if(r.error)return msg(r.error.message);
+  msg(id?'Profile Spark dipasang':'Profile Spark dilepas');
+  closeSparkShop();await profile();await avatar();
+}
 async function profile(){
   if(!user){$('profileCard').innerHTML='<div class="empty">Belum login.<br><button class="btn primary" style="margin-top:10px" onclick="openAuth()">Login / Daftar</button></div>';return}
   await ensure();
   let r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle(),p=r.data||{};
   let av='';
-  if(p.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);if(u.data?.signedUrl)av='<img src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
+  if(p.avatar_path){let u=await sb.storage.from('avatars').createSignedUrl(p.avatar_path,900);if(u.data?.signedUrl)av='<img alt="Profile" src="'+u.data.signedUrl+(u.data.signedUrl.includes('?')?'&':'?')+'v='+Date.now()+'">'}
   let effect=nameEffectClass(p.equipped_name_effect_id);
   let display=esc(p.display_name||'Lexiaa User');
-  $('profileCard').innerHTML='<div class="profile-shell"><div class="profile"><div class="avatar-core">'+(av||'<span class="avatar-fallback">'+esc((p.display_name||'L')[0])+'</span>')+'</div></div></div><div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag">💎 '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><button class="btn danger" onclick="logout()">Logout</button></div>';
+  let spark=profileSparkMarkup(av,p.equipped_profile_spark_id,(p.display_name||'L')[0]);
+  $('profileCard').innerHTML=spark+'<div style="text-align:center"><h3 class="'+effect+'">'+nameEffectMarkup(p.display_name||'Lexiaa User',p.equipped_name_effect_id)+'</h3><div style="color:var(--m);font-size:12px">'+esc(user.email||'')+'</div></div><div class="profile-shop-actions"><button class="btn primary" onclick="openShop()">✨ Name Effect Shop</button><button class="btn primary" onclick="openSparkShop()">✦ Profile Spark Shop</button><button class="btn" onclick="setAvatar()">Pasang/Ganti Foto</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="tag diamond-aura '+diamondAuraClass(p.diamonds)+'"><span class="diamond-icon">💎</span> '+Number(p.diamonds||0).toLocaleString('id-ID')+' diamond</span><span class="spark-mini">💠 '+Number(p.spark_saldo||0).toLocaleString('id-ID')+' Spark Saldo</span></div><div class="form" style="margin-top:16px"><label>Nama tampilan<input id="displayName" value="'+display+'" maxlength="80"></label><label>Tema<select id="theme" style="width:100%;margin-top:5px;background:#0b0f18;border:1px solid var(--b);color:var(--t);padding:11px;border-radius:10px"><option value="obsidian" '+(p.theme==='obsidian'?'selected':'')+'>Obsidian</option><option value="midnight" '+(p.theme==='midnight'?'selected':'')+'>Midnight</option><option value="aurora" '+(p.theme==='aurora'?'selected':'')+'>Aurora</option></select></label><button class="btn primary" onclick="saveProfile()">Simpan profil</button></div><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn danger" onclick="logout()">Logout</button></div>';
   applyTheme(p.theme);
 }
 async function saveProfile(){let name=$('displayName').value.trim(),theme=$('theme').value;if(!name)return msg('Nama tidak boleh kosong');let r=await sb.from('profiles').update({display_name:name,theme,updated_at:new Date().toISOString()}).eq('id',user.id);if(r.error)return msg(r.error.message);applyTheme(theme);await avatar();msg('Profil disimpan');profile()}
